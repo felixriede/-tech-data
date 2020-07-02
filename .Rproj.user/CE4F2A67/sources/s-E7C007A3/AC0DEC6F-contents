@@ -1,6 +1,0 @@
-
-if(!require("rio")) install.packages('rio', repos='http://cran.us.r-project.org')
-
-library(rio)
-
-data <- import("https://raw.githubusercontent.com/CSHoggard/-tech-data/master/database.csv", setclass = "tbl_df")
