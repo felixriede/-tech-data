@@ -1,0 +1,115 @@
+---
+title: '**Federmesser vs. Bromme**'
+author:
+- Dr. Christian Steven Hoggard (University of Southampton)
+- Prof. Felix Riede (Aarhus University)
+date: "`r format(Sys.time(), '%B %Y')`"
+output:
+  html_document:
+subtitle: A morphometric and technological analysis of Final Palaeolithic material
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, dev="cairo_pdf")
+```
+
+```{r chunk1, echo = FALSE, message = FALSE}
+library(rio)
+library(tidyverse)
+library(gt)
+library(FactoMineR)
+library(factoextra)
+```
+
+# About the data
+
+This document is an exploratory analysis of blade, core, tanged point and backed point data from Denmark, Sweden and Germany collected from 2017-2019. All data is stored on GitHub in an open-access repository: https://github.com/CSHoggard/-tech-data. The data is brought into this RMarkdown document via the `rio::import` package. The `tidyverse`, `factoMineR`, `factoextra` and `gt` packages were also used throughout this document; please ensure both are downloaded to explore the data in RStudio.
+
+In total there are six hundred complete artefacts (599 excluding a shouldered point). See Table 1 and Table 2 for more information.
+
+```{r chunk2, echo = FALSE, message = FALSE}
+
+data <- import("https://raw.githubusercontent.com/CSHoggard/-tech-data/master/database.csv", na.strings=c(""), setclass = "tbl_df", encoding = "UTF-8")
+
+cols <- c("CODE", 
+          "CONTEXT", 
+          "COUNTRY", 
+          "CONDITION", 
+          "ARTEFACT", 
+          "SUB_CATEGORY", 
+          "RECOVERY_METHOD", 
+          "CLASSIFICATION", 
+          "BP_ASSOCIATION", 
+          "TP_ASSOCIATION", 
+          "ABS_DATE_METHOD", 
+          "RELAT_DATE_METHOD", 
+          "RELAT_DATE_CHRONO", 
+          "RAW_MAT", 
+          "DORS_BLADE_PROF", 
+          "BLADE_DET", 
+          "BLADE_CURV", 
+          "DORSAL_PATTERN", 
+          "BULB_MORPH", 
+          "CONUS_FORM", 
+          "BUTT_MORPH", 
+          "BUTT_PREP_1", 
+          "BUTT_PREP_2", 
+          "CORE_MORPH", 
+          "PLAT_REJUV", 
+          "CORE_METHOD", 
+          "CORE_DIRECTIONALITY", 
+          "CORE_TABLET_REJUV", 
+          "CORE_FLAKE_REJUV", 
+          "CORE_FRONT_REJUV", 
+          "CORE_DIST_REJUV", 
+          "CORE_SIDE_REJUV", 
+          "ORIENTATION", 
+          "BURINATION")
+
+data[cols] <- lapply(data[cols], factor)
+
+data %>% 
+  rename(Context = CONTEXT) %>%
+  group_by(ARTEFACT) %>%
+  filter(!ARTEFACT %in% "Shouldered Point") %>%
+  count(Context) %>%
+  pivot_wider(names_from = ARTEFACT, values_from = n) %>%
+  gt() %>%
+  tab_header(title = "Table 1. Artefact vs. Context (n = 599)")
+```
+
+Sassenholz makes up the greatest proportion of the database featuring 219 artefacts, followed by the Rietberg complex (111), Søvind (93) and Häcklingen (67).
+
+```{r chunk3, echo = FALSE, message = FALSE}
+data %>% 
+  rename(Classification = CLASSIFICATION) %>%
+  group_by(ARTEFACT) %>%
+  filter(!ARTEFACT %in% "Shouldered Point") %>%
+  count(Classification) %>%
+  pivot_wider(names_from = ARTEFACT, values_from = n) %>%
+  gt() %>%
+  tab_header(title = "Table 2. Artefact vs. Classification (n = 599)")
+```
+
+In total 383 originate from a presupposed Bromme context, representing 63.83% of all material. The Federmesser is here represented by 217 artefacts, representing 36.17% of all material.
+
+```{r chunk4, echo = FALSE, message = FALSE}
+blade_data <- filter(data, ARTEFACT == "Blade")
+core_data <- filter(data, ARTEFACT == "Core")
+bp_data <- filter(data, ARTEFACT == "Backed Point")
+tp_data <- filter(data, ARTEFACT == "Tanged Point")
+```
+
+**Aims**  
+* To examine the robustness of Federmesser and Bromme division as grounded on technological and morphometric characteristics.  
+* To assess typologically-awkward sites e.g. Häcklingen.  
+
+**Methodology**
+The following methodology is employed here:  
+* Technological characteristics are examined through visual summaries of data and Mann-Whitney pairwise tests (Bonferroni-correct p values).  
+* Gini–Simpson and Morisita–Horn diversity indices are employed to examine intra-site variability (calculated using the function H in the vegetarian
+package); past applications in Crema (2014) and Maiorano et al. (2020). 
+* Multiple Correspondence Analysis (MCA) is then performed for all categorical technological data for each data type (core, blade, backed point, tanged point); this will examine individual contexts and their classification.   
+* Principal Component Analysis (PCA) is performed for all quantitative (morphometric) data, again for each data type; this will also examine individual contexts and their classification.    
+* Multiple Factor Analysis (MFA) will then be employed to test all variables in one analytical protocol (qualitative and quantitative).  
+* A MANOVA is employed in this latter process for a statistical framework.
