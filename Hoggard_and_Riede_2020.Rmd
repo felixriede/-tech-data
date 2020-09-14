@@ -25,11 +25,11 @@ library(factoextra)
 
 This document is an exploratory analysis of blade, core, tanged point and backed point data from Denmark, Sweden and Germany collected from 2017-2019. All data is stored on GitHub in an open-access repository: https://github.com/CSHoggard/-tech-data. The data is brought into this RMarkdown document via the `rio::import` package. The `tidyverse`, `factoMineR`, `factoextra` and `gt` packages were also used throughout this document; please ensure both are downloaded to explore the data in RStudio.
 
-In total there are six hundred complete artefacts (599 excluding a shouldered point). See Table 1 and Table 2 for more information.
+In total there are 599 complete artefacts. See Table 1 and Table 2 for more information.
 
 ```{r chunk2, echo = FALSE, message = FALSE}
 
-data <- import("https://raw.githubusercontent.com/CSHoggard/-tech-data/master/database.csv", na.strings=c(""), setclass = "tbl_df", encoding = "UTF-8")
+data <- import("https://raw.githubusercontent.com/CSHoggard/-tech-data/master/Hoggard_and_Riede_2020.csv", na.strings=c(""), setclass = "tbl_df", encoding = "UTF-8")
 
 cols <- c("CODE", 
           "CONTEXT", 
@@ -63,7 +63,6 @@ cols <- c("CODE",
           "CORE_FRONT_REJUV", 
           "CORE_DIST_REJUV", 
           "CORE_SIDE_REJUV", 
-          "ORIENTATION", 
           "BURINATION")
 
 data[cols] <- lapply(data[cols], factor)
@@ -71,7 +70,6 @@ data[cols] <- lapply(data[cols], factor)
 data %>% 
   rename(Context = CONTEXT) %>%
   group_by(ARTEFACT) %>%
-  filter(!ARTEFACT %in% "Shouldered Point") %>%
   count(Context) %>%
   pivot_wider(names_from = ARTEFACT, values_from = n) %>%
   gt() %>%
@@ -84,7 +82,6 @@ Sassenholz makes up the greatest proportion of the database featuring 219 artefa
 data %>% 
   rename(Classification = CLASSIFICATION) %>%
   group_by(ARTEFACT) %>%
-  filter(!ARTEFACT %in% "Shouldered Point") %>%
   count(Classification) %>%
   pivot_wider(names_from = ARTEFACT, values_from = n) %>%
   gt() %>%
