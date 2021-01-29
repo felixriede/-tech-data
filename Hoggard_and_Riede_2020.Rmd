@@ -1,5 +1,5 @@
 ---
-title: 'An Extended Morphometric and Technological Analysis \ of Bromme and Federmesser Assemblages'
+title: 'Understanding Typologically Awkward Final Palaeolithic Assemblages'
 author:
 - Dr. Christian Steven Hoggard (University of Southampton, UK.)
 - Prof. Felix Riede (Aarhus University, DK.)
@@ -13,26 +13,63 @@ output:
 knitr::opts_chunk$set(echo = TRUE, dev="cairo_pdf")
 ```
 
-```{r chunk1, echo = FALSE, message = FALSE}
+```{r packages, echo = FALSE, message = FALSE, warning = FALSE}
 library(rio)
 library(tidyverse)
 library(gt)
+library(doBy)
 library(FactoMineR)
 library(factoextra)
+library(diverse)
+library(vegan)
+library(tidymodels)
+library(broom)
+library(tidytext)
 ```
 
-# About the data
+# Introduction
 
-This is an initial exploratory exercise into the technological and morphological differences of Federmesser and Bromme contexts, using blade, core and point (tanged and backed) data from sites in Denmark, Germany and Sweden. It aims to examine how 'different' these categories are, and aims to shed light on the ambiguous classification of typologically awkward contexts.  
+The Late Glacial, defined as occurring from the first pronounced warming after the Last Glacial Maximum (LGM) to the beginning of the Holocene period (c. 16,000-11,700 cal BP), is traditionally viewed as a period of great cultural diversity in northern Europe, with groups belonging to the Magdalenian and Epigravettian beginning to migrate northwards (Gamble et al. 2005; Riede, 2014; Wygal and Heidenreich, 2014). During this phase, groups occupying particular regions in northern Europe began to develop consistent differences in their toolkits, with variances in shouldered points (e.g. the Creswellian and Hamburgian: Burdukiewicz, 1986), backed points (e.g. the Federmessergruppen and Azilian: Schild, 1996), large tanged points (e.g. the Bromme: Taute, 1968) and small tanged points (e.g. the Ahrensburgian and Swiderian: Taute, 1968; Kobusiewicz, 2002).
 
-All data and supporting material used throughout this exercise is stored on a GitHub open-access repository: https://github.com/CSHoggard/-tech-data. 
+As highlighted by Ivanovaite et al (2019), these regional cultural entities provide the framework for understanding and inferring patterns and processes of migration, adaptation, and potentially even emerging ethnicity for this period. Cultural units are not static, and once their attendant territories are defined, cultures can move around, their economic focus can change, and cultures can interact. It is for this reason that robust archaeological taxonomic units are a fundamental precondition; without these units, the goal of understanding such past processes cannot be realised (Roberts and Vander Linden, 2011).
 
-Only complete examples are examined here, and total 599 artefacts. See Table 1 and Table 2 for more information.  
+Yet, techno-typological classifications for the European Palaeolithic (and further afield) have been repeatedly critiqued (Otte and Keeley, 1990; Neeley and Barton, 1994; Barton and Neeley, 1996; Felgenhauer, 1996; Clark, 1999, Vasil'ev, 2001; 2009; Tomášková, 2013; Clark and Riel-Salvatore, 2006; Shea, 2014; Lisitsyn, 2017; Ivanovaitė and Riede, 2018; Reynolds and Riede, 2019). Otte and Keeley (1990) note that many of the taxonomic units for the Final Palaeolithic, and subsequently *fossiles directeurs* for ethno-geographic variability, are usually based on early antiquarian excavations but of a few key sites (reflected in the practice of naming them after after *loci classici*), while Sauer and Riede (2019) highlight that, for the Final Palaeolithic of Central Europe, units appear to reflect differing research histories more than empirical variation between assemblages. A more acerbic critique has been voiced by Houtsma and colleagues, who argued that '[o]nly when researchers of the Late Palaeolithic habitation of the Northwest European Plain escape the constraints of contemporary national borders and the paradigmatic straight-jackets of provincialism and regional chauvinism, which lead to insularity, will we be in a position to gain analytical control of the totality of extant data partitioned into uniform and mutually comparable sets of demonstrably relevant attributes' (Houtsma et al. 1996: 143). With a lack of genetic material available to contribute to the understanding of the chronologies, movements and behaviours of these communities, stone tool variants remain the premier proxies for inferring population structure.
 
-&nbsp;
+Attempts are underway to provide a more objective framework for the Final Palaeolithic, founded on conceptualising material culture as underwritten by a system of information transmission across generations, and producing reproducible, objective phylogenetic assessments of archaeological taxonomic units (Riede et al. 2019; Ivanovaite et al. 2019). This article, through the same theoretical framework, considers a parallel issue, specifically that of 'typologically awkward' assemblages, i.e. archaeological contexts which do not reflect strictly one cultural unit. A variety of pereceived Federmesser and Bromme contexts, some with previously catalogued artefact types from other cultural units, are here investigated, through extensive technological and morphological analyses, in order to understand their true degree of variation of these liminal lithic assemblages.
 
+All data and supporting material used throughout this exercise is stored on a GitHub open-access repository: <https://github.com/CSHoggard/-tech-data>.
 
-```{r chunk2, echo = FALSE, message = FALSE}
+Only complete examples are examined here, and total 599 artefacts. See Table 1 and Table 2 for more information.
+
+# Materials and Methods
+
+For this analysis, 10 archaeological contexts, constituting 15 unique horizons, are examined:
+
+Previously classified Federmesser material
+
+1)  **Bienenbüttel (FStNr. 15)** (Lower Saxony, Germany):
+
+2)  **Häcklingen (FStNr. 19)** (Lower Saxony, Germany):
+
+3)  **Rietberg (1/2/5/Other/Spoil)** (North Rhine-Westphalia, Germany):
+
+4)  **Rothenkirchen** (Hesse, Germany):
+
+Previously classified Bromme material
+
+5)  **Brümmerhof (FStNr. 16)** (Lower Saxony, Germany): ADD CONTEXT HERE
+
+6)  **Højgård** (Zealand, Denmark): ADD CONTEXT HERE
+
+7)  **Sassenholz (FStNr. 78/82)** (Lower Saxony, Germany): ADD CONTEXT HERE
+
+8)  **Skovmosen I** (Zealand, Denmark): A Final Palaeolithic assemblage comprising of tanged points, scrapers, burins, and primary reduction products including blades and cores (Boye, 2006; Hilgart, 2003; Eggers-Kaas et al. 2019). Can be traditionally placed within the Bromme culture (Hilgart, 2003; Boye, 2006; Brinch Petersen, 2009), however caution has been noted in its classification (Eggers-Kaas et al. 2019).
+
+9)  **Søvind** (Jutland, Denmark): ADD CONTEXT HERE
+
+10) **Segebro** (Malmö, Sweden): ADD CONTEXT HERE
+
+```{r data import, echo = FALSE, message = FALSE}
 
 data <- import("https://raw.githubusercontent.com/CSHoggard/-tech-data/master/Hoggard_and_Riede_2020.csv", na.strings=c(""), setclass = "tbl_df", encoding = "UTF-8")
 
@@ -72,6 +109,9 @@ cols <- c("CODE",
 
 data[cols] <- lapply(data[cols], factor)
 
+```
+
+```{r overview, echo = FALSE, message = FALSE}
 data %>% 
   rename(Context = CONTEXT) %>%
   group_by(ARTEFACT) %>%
@@ -81,12 +121,10 @@ data %>%
   tab_header(title = "Table 1. Artefact Breakdown", subtitle = "Context") %>%
   opt_align_table_header(align = "left")
 ```
-  
-Sassenholz makes up the greatest proportion of the database featuring 219 artefacts, followed by the Rietberg complex (111), Søvind (93) and Häcklingen (67).  
 
-&nbsp;
+Sassenholz makes up the greatest proportion of the database featuring 219 artefacts, followed by the Rietberg complex (111), Søvind (93) and Häcklingen (67).
 
-```{r chunk3, echo = FALSE, message = FALSE}
+```{r breakdown, echo = FALSE, message = FALSE}
 data %>% 
   rename(Classification = CLASSIFICATION) %>%
   group_by(ARTEFACT) %>%
@@ -96,51 +134,2124 @@ data %>%
   tab_header(title = "Table 2. Artefact Breakdown", subtitle = "Technology") %>%
   opt_align_table_header(align = "left")
 ```
-  
-&nbsp;
 
 In total 383 originate from a presupposed Bromme context, representing 63.83% of all material. The Federmesser is here represented by 217 artefacts, representing 36.17% of all material.
 
-&nbsp;
-
-```{r chunk4, echo = FALSE, message = FALSE}
-blade_data <- filter(data, ARTEFACT == "Blade")
-core_data <- filter(data, ARTEFACT == "Core")
-bp_data <- filter(data, ARTEFACT == "Backed Point")
-tp_data <- filter(data, ARTEFACT == "Tanged Point")
+```{r file creation, echo = FALSE, message = FALSE}
+blade_data <- filter(data, ARTEFACT == "Blade") %>% droplevels()
+core_data <- filter(data, ARTEFACT == "Core") %>% droplevels()
+bp_data <- filter(data, ARTEFACT == "Backed Point") %>% droplevels()
+tp_data <- filter(data, ARTEFACT == "Tanged Point") %>% droplevels()
 ```
-&nbsp;
 
-# Technological attributes  
+# Technological attributes
 
-The following attributes are recorded in the database:  
+In understanding the underlying *chaînes opératoires*, and in adopting a common terminology for identifying technological signatures and characteristics, attributes originate from the Nordic Blade Technology Network (REFERENCE). Minor amendments, and the extension of categories in a small number of instances were necessary to reflect Final Palaeolithic variability e.g. dorsal scar directionality.
 
-| Attribute | Variable(s) |
-| ----------- | ----------- |
-| *ID* | Catalogue Number / Identification Number |
-| *CODE* | Site Code |
-| *CONTEXT* | Archaeological Context |
-| *COUTNRY* | Country |
-| *LONGITUDE*|  Longitude |
-| *LATITUDE* | Latitude |
-| *RECOVERY METHOD* | Recovery Method - 1: **Excavation**; 2: **Surface Collection** |
-| *CLASSIFICATION* | Taxonomic Unit e.g. Bromme |
-| *BP_ASSOCIATION* | Association of backed points - 1: **Yes**; 2: **No** |
-| *TP_ASSOCIATION* | Association of tanged points - 1: **Yes**; 2: **No** |
-| *POINT_TYPE* | Point type - 1: **Backed Point**; 2: **Tanged Point** |
-| *NAMED_ARTEFACT_TYPE* | Classification e.g. Federmesser Point |
+The following attributes are recorded for all artefacts:
+
+| Attribute | Variable(s)|
+|-----------------------|----------------------------------------------------------------|
+| *ID*                  | Catalogue Number / Identification Number|
+| *CODE*                | Site Code|
+| *CONTEXT*             | Archaeological Context|
+| *COUTNRY*             | Country|
+| *LONGITUDE*           | Longitude|
+| *LATITUDE*            | Latitude|
+| *RECOVERY METHOD*     | Recovery Method - 1: **Excavation**; 2: **Surface Collection**|
+| *CLASSIFICATION*      | Taxonomic Unit e.g. Bromme|
+| *BP_ASSOCIATION*      | Association of backed points - 1: **Yes**; 2: **No**|
+| *TP_ASSOCIATION*      | Association of tanged points - 1: **Yes**; 2: **No**|
+| *POINT_TYPE*          | Point type - 1: **Backed Point**; 2: **Tanged Point**|
+| *NAMED_ARTEFACT_TYPE* | Classification e.g. Federmesser Point|
+| *ABS_DATE_METHOD*     | Absolute dating method (if provided)|
+| *ABS_DATE*            | Absolute date (as provided)|
+| *ABS_DATE_STD*        | Absolute date standard deviation (as provided)|
+| *RELAT_DATE_METHOD*   | Relative dating method (if provided)|
+| *RELAT_DATE_CHRONO*   | Relative date (as provided)|
+| *RAW_MAT*             | Raw material e.g. flint|
+
+The following additional attributes are recorded for all **blades**:
 
 
-# Methodology  
+| Attribute             | Variable(s)|
+|-----------------------|----------------------------------------------------------------|
+| *WEIGHT*              | Weight (g)|                                                                   | *LENGTH*              | Length (mm)|                                                                  
+| *WIDTH*               | Width (mm)|                                                                   
+| *THICKNESS*           | Thickness (mm)|                                                               | *ELONGATION*          | Elongation Index (Length/Width)|                                              
+| *PLAT_DEPTH*          | Platform Depth (mm)|                                                          
+| *DORS_BLADE_PROF*     | Dorsal blade characterisation - 1: **Full Cortical Dorsal Face (FC)**; 2: **Two Dorsal Faces - One Cortex (TDOC)**; 3: **Three Dorsal Faces - One Cortex (THDOC)**; 4: **Two Dorsal Faces - No Cortex (TDNC)**; 5: **Three Dorsal Faces - No Cortex (THDNC)**; 6: **Multiple Dorsal Faces (MDF)**; 7: **Bilateral Crested Blade (BCB)**; 8: **Crested Blade - One Flaked And One Uncortical (CBOU)**; 9: **Crested Blade - Three Flaked Faces (CBTHF)**; 10: **Crested Blade - One Flaked And One Cortical (CBOFOC)**; 11: **Crested Blade - Flaked And Trimmed (CBFT)**|
+| *BLADE_DET*           | Blade determination - 1: **Ideal (ID)**; 2: **Feathered (FE)**; 3: **Plunged (PL)**; 4: **Hinged (HI)**       
+| *BLADE_CURV*          | Blade curvature - 1: **Straight (ST)**; 2: **Distal (DI)**; 3: **Even (EV)**; 4: **Ventral 'Belly' (VB)**     
+| *DORSAL_PATTERN*      | Dorsal scar pattern - 1: **Centripetal (CE)**; 2: **3-Way Centripetal (TWC)**; 3: **Bidirectional (BI)**; 4: **Convergent (CON)**; 5: **Convergent And Bidirectional (CONBI)**; 6: **Convergent And Perpendicular (CONPE)**; 7: **Double Perpendicular (DP)**; 8: **Straight And Perpendicular (SAP)**; 9: **Unidirectional (UNI)**; 10: **Undetermined (UND)**              
+| *BULB_MORPH*          | Bulb and lip characteristics - 1: **Bulb Formation (BF)**; 2: **Pronounced Bulb Formation (PBF)**; 3: **Bulb And Lip Formation (BLF)**; 4: **Lip Formation (LF)**; 5: **Pronounced Lip Formation (PLF)**; 6: **Diffused Bulb (DB)**; 7: **No Bulb Or Lip (NBOL)**|        
+| *CONUS_FORM*    | Cone Formation - 1: **No Formation (NFO)**; 2: **Ring Crack On Butt (RCB)**; 3: **Ring Crack And Ventral Fissures (RCVF)**; 4: **Detached Bulb (DB)**|                                  
+| *BUTT_MORPH*          | Butt morphology - 1: **Large And Thick Butt (LTB)**; 2: **Large Oval Butt (LOB)**; 3: **Thin Oval Butt (TOB)**; 4: **Small Thick Butt (STB)**; 5: **Small Butt (SB)**; 6: **Punctiform Butt (PUNB)**; 7: **Broken/Absent Butt (BAB)**      
+| *BUTT_PREP_1*         | Butt preparation #1 - 1: **Plain (PLA)**; 2: **Facetted With Two Scars (FTS)**; 3: **Facetted With Greater Than Two Scars (FGTTS)**; 4: **Broken (B)**|                       
+| *BUTT_PREP_2*         | Butt preparation #2 - 1: **Cortical Unprepared (CU)**; 2: **Non-Cortical Unprepared (NCU)**; 3: **Dorsal Trimming (DT)**; 4: **Dorsal Abrasion (DA)**; 5: **Dorsal Abrasion And Grinding (DAG)**; 6; **Dorsal Abrasion And Trimming (DATR)**; 7: **Dorsal Abrasion, Trimming And Grinding (DATG)**; 8: **Broken (B)**|                                                                                                                                                                                            
 
-A variety of technological and morphological analyses are performed here: 
+Note: Blades are here defined as any previously assigned or reclassified material with an elongation index of 2:1, exhibits parallel lateral edges and appears to be derived from a scheme of stereotyped elongation production.
 
-1) Technological and morphological characteristics are first examined through **visual summaries of data**. The significance of differences in the distribution of continuous variables across assemblages were assessed using **pairwise Mann–Whitney** testing (with Bonferroni-corrected *p* values).
+The following additional attributes are recorded for all **cores**:
 
-2) **Gini–Simpson** and **Morisita–Horn diversity indices** are employed to examine intra-site variability; past applications in Crema (2014), Maiorano et al. (2020) and Leplongeon et al. (2020). 
+| Attribute             | Variable(s)|
+|-----------------------|----------------------------------------------------------------|
+| *WEIGHT*              | Weight (g)|                                                                   
+| *CORE_LENGTH*         | Core length (mm) as oriented on morphological axis (max length) and flaking surface (most blade removals)|
+| *CORE_WIDTH*          | Core width (mm) as oriented on morphological axis (max length) and flaking surface (most blade removals)|
+| *CORE_BREADTH*        | Core breadth (mm) as oriented on morphological axis (max length) and flaking surface (most blade removals)|
+| *CORE_MORPH*          | Platform count: 1: **One Platform (OP)**; 2: **Two Platforms (TP)**|          
+| *PLAT_REJUV*          | Platform description: 1: **Single Smooth (SS)**; 2: **Double Smooth (DS)**; 3: **Single Facetted/Flaked (SF)**; 4: **Double Facetted/Flaked (DF)**; 5: **Single Systematic (SSY)**; 6: **Double Systematic (DSY)**; 7: **Double Smooth And Facetted (DSF)**; 8: **Double Smooth And Systematic (DSS)**; 9: **Double Facetted And Systematic (DFSY)**|
+| *CORE_METHOD*         | Core exploitation method - 1: **Semi-Rotating (SRO)**; 2: **Full-Rotating (FURO)**; 3: **Frontal (FRO)**; 4: **Facial (FAC)**; 5: **Multi-Facial (MFAC)**|
+| *CORE_DIRECTIONALITY* | Scar directionality - 1: **Unidirectional (CUNI)**; 2: **Bidirectional (CBI)**; 3: **Mixed (CM)**|
+| *CORE_TABLET_REJUV*   | Evidence for core tablet removals -- 1) **Yes (Y)**; 2) **No (N)**|           
+| *CORE_FLAKE_REJUV*    | Evidence for preparatory flake rejuvenation -- 1) **Yes (Y)**; 2) **No (N)**|
+| *CORE_FRONT_REJUV*    | Evidence for core frontal rejuvenation -- 1) **Yes (Y)**; 2) **No (N)**|
+| *CORE_DIST_REJUV*     | Evidence for core distal rejuvenation -- 1) **Yes (Y); 2) No (N)**|
+| *CORE_SIDE_REJUV*     | Evidence for core lateral rejuvenation -- 1) **Yes (Y); 2) No (N)**|
 
-3) **Multiple Correspondence Analysis (MCA)** is then employed for all categorical technological data, and for each data type (core, blade, backed point, tanged point); this will examine the degree of association between individual contexts and their technological make-up. 
+Note: Blade cores are here defined as material which exhibits the production of stereotyped elongated material around the core's circumference.
 
-4) **Principal Component Analysis (PCA)** is performed for all quantitative (morphometric) data, again for each data type; this will also examine individual contexts and their classification. PCA is analogous to MCA but for quantitative variables.  
+The following additional attributes are recorded for all **tanged and backed points**:
 
-5) **Multiple Factor Analysis (MFA)** will then be employed to test all variables in one analytical protocol. MFA is a global analysis, where multiple quantitative and qualitative variables are simultaneously examined - as such normalisation and weighting are required. MFA produces dimensions (equivalent to PCs) and calculates MFA coordinates (scores), allowing further analyses of the MFA data. A **MANOVA** will be employed in this instance. MFA is used in a variety of fields including survey analysis, sensory analysis, ecology and in time series applications of data analysis (Pagés 2002). For more information on MFA see Abdi and Valentin (2007), Abdi et al. (2013), Escofier and Pagés, (1998) and Pagés (2002). See Marcelo et al. (2015) for an archaeological application of MFA.
+| Attribute             | Variable(s)|
+|-----------------------|----------------------------------------------------------------|
+| *WEIGHT*              | Weight (g)|
+| *LENGTH*              | Length (mm)|
+| *WIDTH*               | Width (mm)|
+| *THICKNESS*           | Thickness (mm)|
+| *ELONGATION*          | Elongation Index (Length/Width)|
+| *TANG_ORIENTATION*    | Orientation of tang or base - 1) **Proximal**; 2) **Distal**; 3) **Lateral**| 
+| *TCSA*                | Maximum tip cross-sectional area (mm²) *sensu* Shea (2006)|
+| *TCSP*                | Maximum tip cross-sectional perimeter (mm) *sensu* Shea (2006)|
+| *BURINATION*          | Presence of burination -- 1) **Yes (Y)**; 2) **No (N)**|
+
+# Methodology
+
+A variety of technological and morphological analyses are performed here:
+
+1)  Technological and morphological characteristics are first examined through **visual and descriptive summaries of data**. The significance of differences in the distribution of continuous variables across assemblages were assessed using **pairwise Mann--Whitney** testing (with Bonferroni-corrected *p* values).
+
+2)  A **Gini-Simpson** index is employed to examine intrasite variability while a **Morisita-Horn diversity index** is used to examine inter-assemblage dissimilarity; past applications in Crema (2014), Maiorano et al. (2020) and Leplongeon et al. (2020).
+
+3)  **Multiple Correspondence Analysis (MCA)** is then employed for all categorical technological data, and for each data type (core, blade, backed point, tanged point); this will examine the degree of association between individual contexts and their technological make-up.
+
+4)  **Principal Component Analysis (PCA)** is performed for all quantitative (morphometric) data, again for each data type; this will also examine individual contexts and their classification. PCA is analogous to MCA but for quantitative variables.
+
+# Analysis: Blades (exc. Crested Blades and Broken Pieces)
+
+## Visual and Descriptive Summaries of Data
+
+```{r blade clean and display, echo = FALSE, message = FALSE}
+
+blade_data_clean <- blade_data %>%
+  filter(!DORS_BLADE_PROF == "BCB",
+         !DORS_BLADE_PROF == "CBOU",
+         !DORS_BLADE_PROF == "CBTHF",
+         !DORS_BLADE_PROF == "CBOFOC",
+         !DORS_BLADE_PROF == "CBFT",
+         !BUTT_MORPH == "BAB", 
+         !BUTT_PREP_1 == "B", 
+         !BUTT_PREP_2 == "B")
+
+blade_data_clean %>% 
+  group_by(CONTEXT) %>% 
+  summarise(n_obs = n(),
+            min = round(min(WEIGHT),2),
+            max = round(max(WEIGHT),2),
+            mean = round(mean(WEIGHT),2),
+            med = round(median(WEIGHT),2),
+            sd = round(sd(WEIGHT),2),
+            var = round(var(WEIGHT),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 3. Descriptive Statistics: Blade Weight (g)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+blade_data_clean %>% 
+  group_by(CONTEXT) %>% 
+  summarise(n_obs = n(),
+            min = round(min(LENGTH),2),
+            max = round(max(LENGTH),2),
+            mean = round(mean(LENGTH),2),
+            med = round(median(LENGTH,2)),
+            sd = round(sd(LENGTH),2),
+            var = round(var(LENGTH),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 4. Descriptive Statistics: Blade Length (mm)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+blade_data_clean %>% 
+  group_by(CONTEXT) %>% 
+  summarise(n_obs = n(),
+            min = round(min(WIDTH),2),
+            max = round(max(WIDTH),2),
+            mean = round(mean(WIDTH),2),
+            med = round(median(WIDTH),2),
+            sd = round(sd(WIDTH),2),
+            var = round(var(WIDTH),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 5. Descriptive Statistics: Blade Width (mm)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+            
+blade_data_clean %>% 
+  group_by(CONTEXT) %>% 
+  summarise(n_obs = n(),
+            min = round(min(ELONGATION),2),
+            max = round(max(ELONGATION),2),
+            mean = round(mean(ELONGATION),2),
+            med = round(median(ELONGATION),2),
+            sd = round(sd(ELONGATION),2),
+            var = round(var(ELONGATION),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 6. Descriptive Statistics: Blade Elongation Index (L/W)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+blade_data_clean %>% 
+  group_by(CONTEXT) %>% 
+  summarise(n_obs = n(),
+            min = round(min(THICKNESS),2),
+            max = round(max(THICKNESS),2),
+            mean = round(mean(THICKNESS),2),
+            med = round(median(THICKNESS),2),
+            sd = round(sd(THICKNESS),2),
+            var = round(var(THICKNESS),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 7. Descriptive Statistics: Blade Thickness (mm)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+blade_data_clean %>% 
+  group_by(CONTEXT) %>% 
+  summarise(n_obs = n(),
+            min = round(min(PLAT_DEPTH),2),
+            max = round(max(PLAT_DEPTH),2),
+            mean = round(mean(PLAT_DEPTH),2),
+            med = round(median(PLAT_DEPTH),2),
+            sd = round(sd(PLAT_DEPTH),2),
+            var = round(var(PLAT_DEPTH),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 8. Descriptive Statistics: Blade Platform Depth (mm)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+```
+
+```{r blade summary 1, echo = FALSE, message = FALSE, fig.width = 6, fig.height = 4, fig.align = "center"}
+ggplot(blade_data_clean, aes(CODE, WEIGHT, fill = CLASSIFICATION)) +
+         geom_boxplot(width = 0.3) +
+         labs(x = "", y = "Weight (g)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  scale_fill_grey(start = 0.4, end = 0.8) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(blade_data_clean, aes(CODE, LENGTH, fill = CLASSIFICATION)) +
+         geom_boxplot(width = 0.3) +
+         labs(x = "", y = "Length (mm)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  scale_fill_grey(start = 0.4, end = 0.8) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(blade_data_clean, aes(CODE, WIDTH, fill = CLASSIFICATION)) +
+         geom_boxplot(width = 0.3) +
+         labs(x = "", y = "Width (mm)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  scale_fill_grey(start = 0.4, end = 0.8) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(blade_data_clean, aes(CODE, ELONGATION, fill = CLASSIFICATION)) +
+         geom_boxplot(width = 0.3) +
+         labs(x = "", y = "Elongation (L/W)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  scale_fill_grey(start = 0.4, end = 0.8) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(blade_data_clean, aes(CODE, THICKNESS, fill = CLASSIFICATION)) +
+         geom_boxplot(width = 0.3) +
+         labs(x = "", y = "Thickness (mm)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  scale_fill_grey(start = 0.4, end = 0.8) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(blade_data_clean, aes(CODE, PLAT_DEPTH, fill = CLASSIFICATION)) +
+         geom_boxplot(width = 0.3) +
+         labs(x = "", y = "Platform Depth (mm)", fill = "Taxonomic Unit") +
+  theme_minimal() +
+  scale_fill_grey(start = 0.4, end = 0.8) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+```
+```{r blade l w plot, echo = FALSE, message = FALSE, fig.width = 6, fig.height = 6, fig.align = "center"}
+ggplot(blade_data_clean, aes(WIDTH, LENGTH, colour = CLASSIFICATION, shape = CLASSIFICATION)) +
+         geom_point() +
+         labs(x = "Blade Width (mm)", y = "Blade Length (mm)") +
+  stat_ellipse(type = "norm", linetype = 2) +
+  lims(x = c(0,65), y = c(0,130)) +
+  theme_minimal() + 
+  scale_colour_grey(start = 0.4, end = 0.8) +
+  geom_abline(intercept = 0, slope = 2, colour = "grey50") +
+  theme(legend.position = "bottom")
+
+ggplot(blade_data_clean, aes(WIDTH, LENGTH, colour = CODE, shape = CODE)) +
+         geom_point() +
+         labs(x = "Blade Width (mm)", y = "Blade Length (mm)") +
+  lims(x = c(0,65), y = c(0,130)) +
+  theme_minimal() + 
+  scale_colour_manual(values = c("grey90", "grey80", "grey70", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10")) +
+  scale_shape_manual(values = c(1,2,3,4,5,6,7,8,9)) + 
+  geom_abline(intercept = 0, slope = 2, colour = "grey50") +
+  theme(legend.position = "bottom")
+
+```
+
+```{r blade tests, echo = FALSE, message = FALSE, warning = FALSE}
+
+pairwise.wilcox.test(blade_data_clean$WEIGHT, blade_data_clean$CODE, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(blade_data_clean$LENGTH, blade_data_clean$CODE, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(blade_data_clean$WIDTH, blade_data_clean$CODE, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(blade_data_clean$ELONGATION, blade_data_clean$CODE, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(blade_data_clean$THICKNESS, blade_data_clean$CODE, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(blade_data_clean$PLAT_DEPTH, blade_data_clean$CODE, p.adj = "bonf", exact = FALSE)
+
+pairwise.wilcox.test(blade_data_clean$WEIGHT, blade_data_clean$CLASSIFICATION, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(blade_data_clean$LENGTH, blade_data_clean$CLASSIFICATION, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(blade_data_clean$WIDTH, blade_data_clean$CLASSIFICATION, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(blade_data_clean$ELONGATION, blade_data_clean$CLASSIFICATION, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(blade_data_clean$THICKNESS, blade_data_clean$CLASSIFICATION, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(blade_data_clean$PLAT_DEPTH, blade_data_clean$CLASSIFICATION, p.adj = "bonf", exact = FALSE)
+
+```
+
+```{r blade summary 2, echo = FALSE, message = FALSE, fig.width = 6, fig.height = 4, fig.align = "center"}
+
+ggplot(blade_data_clean, aes(fill = RAW_MAT, x = CODE)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Raw Material", x = "", y = "Count", fill = "Type") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(blade_data_clean, aes(fill = DORS_BLADE_PROF, x = CODE)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Dorsal Blade Profile", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(blade_data_clean, aes(fill = BLADE_DET, x = CODE)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Blade Determination Profile", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(blade_data_clean, aes(fill = BLADE_CURV, x = CODE)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Blade Curvature", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(blade_data_clean, aes(fill = DORSAL_PATTERN, x = CODE)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Dorsal Pattern Profile", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(blade_data_clean, aes(fill = BULB_MORPH, x = CODE)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Bulb Morphology", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(blade_data_clean, aes(fill = BUTT_PREP_1, x = CODE)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Butt Preparation Method #1", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(blade_data_clean, aes(fill = BUTT_PREP_2, x = CODE)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Butt Preparation Method #2", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(blade_data_clean, aes(fill = RAW_MAT, x = CLASSIFICATION)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Raw Material", x = "", y = "Count", fill = "Type") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(blade_data_clean, aes(fill = DORS_BLADE_PROF, x = CLASSIFICATION)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Dorsal Blade Profile", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(blade_data_clean, aes(fill = BLADE_DET, x = CLASSIFICATION)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Blade Determination Profile", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(blade_data_clean, aes(fill = BLADE_CURV, x = CLASSIFICATION)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Blade Curvature", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(blade_data_clean, aes(fill = DORSAL_PATTERN, x = CLASSIFICATION)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Dorsal Pattern Profile", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(blade_data_clean, aes(fill = BULB_MORPH, x = CLASSIFICATION)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Bulb Morphology", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(blade_data_clean, aes(fill = BUTT_PREP_1, x = CLASSIFICATION)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Butt Preparation Method #1", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(blade_data_clean, aes(fill = BUTT_PREP_2, x = CLASSIFICATION)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Butt Preparation Method #2", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+```
+
+## Gini-Simpson and Morisita-Horn diversity indices
+
+```{r blade diversity 1, echo = FALSE, message = FALSE,  fig.width = 6, fig.height = 4, fig.align = "center"}
+
+diversity_blade_prof <- diverse::diversity(table(blade_data_clean$CODE, blade_data_clean$DORS_BLADE_PROF), type = "gini-simpson", category_row = FALSE)
+diversity_blade_det  <- diverse::diversity(table(blade_data_clean$CODE, blade_data_clean$BLADE_DET), type = "gini-simpson", category_row = FALSE)
+diversity_blade_curv <- diverse::diversity(table(blade_data_clean$CODE, blade_data_clean$BLADE_CURV), type = "gini-simpson", category_row = FALSE)
+diversity_blade_dp   <- diverse::diversity(table(blade_data_clean$CODE, blade_data_clean$DORSAL_PATTERN), type = "gini-simpson", category_row = FALSE)
+diversity_blade_bm   <- diverse::diversity(table(blade_data_clean$CODE, blade_data_clean$BULB_MORPH), type = "gini-simpson", category_row = FALSE)
+diversity_blade_cf   <- diverse::diversity(table(blade_data_clean$CODE, blade_data_clean$CONUS_FORM), type = "gini-simpson", category_row = FALSE)
+diversity_blade_btm  <- diverse::diversity(table(blade_data_clean$CODE, blade_data_clean$BUTT_MORPH), type = "gini-simpson", category_row = FALSE)
+diversity_blade_bp1  <- diverse::diversity(table(blade_data_clean$CODE, blade_data_clean$BUTT_PREP_1), type = "gini-simpson", category_row = FALSE)
+diversity_blade_bp2  <- diverse::diversity(table(blade_data_clean$CODE, blade_data_clean$BUTT_PREP_2), type = "gini-simpson", category_row = FALSE)
+
+diversity_blade_prof %>% 
+  rownames_to_column(var = "Context") %>%
+  mutate("Context" = as.factor(Context)) %>%
+  ggplot(aes(Context, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Dorsal Profile",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_blade_det %>% 
+  rownames_to_column(var = "Context") %>%
+  mutate("Context" = as.factor(Context)) %>%
+  ggplot(aes(Context, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Blade Determination Profile",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_blade_curv %>% 
+  rownames_to_column(var = "Context") %>%
+  mutate("Context" = as.factor(Context)) %>%
+  ggplot(aes(Context, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Blade Curvature",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_blade_dp %>% 
+  rownames_to_column(var = "Context") %>%
+  mutate("Context" = as.factor(Context)) %>%
+  ggplot(aes(Context, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Dorsal Pattern",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_blade_bm %>% 
+  rownames_to_column(var = "Context") %>%
+  mutate("Context" = as.factor(Context)) %>%
+  ggplot(aes(Context, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Bulb Morphology",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_blade_cf %>% 
+  rownames_to_column(var = "Context") %>%
+  mutate("Context" = as.factor(Context)) %>%
+  ggplot(aes(Context, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Conus Formation",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_blade_btm %>% 
+  rownames_to_column(var = "Context") %>%
+  mutate("Context" = as.factor(Context)) %>%
+  ggplot(aes(Context, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Butt Morphology",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_blade_bp1 %>% 
+  rownames_to_column(var = "Context") %>%
+  mutate("Context" = as.factor(Context)) %>%
+  ggplot(aes(Context, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Butt Preparation #1",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_blade_bp2 %>% 
+  rownames_to_column(var = "Context") %>%
+  mutate("Context" = as.factor(Context)) %>%
+  ggplot(aes(Context, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Butt Preparation #2",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_blade_prof_class <- diverse::diversity(table(blade_data_clean$CLASSIFICATION, blade_data_clean$DORS_BLADE_PROF), type = "gini-simpson", category_row = FALSE)
+diversity_blade_det_class  <- diverse::diversity(table(blade_data_clean$CLASSIFICATION, blade_data_clean$BLADE_DET), type = "gini-simpson", category_row = FALSE)
+diversity_blade_curv_class <- diverse::diversity(table(blade_data_clean$CLASSIFICATION, blade_data_clean$BLADE_CURV), type = "gini-simpson", category_row = FALSE)
+diversity_blade_dp_class   <- diverse::diversity(table(blade_data_clean$CLASSIFICATION, blade_data_clean$DORSAL_PATTERN), type = "gini-simpson", category_row = FALSE)
+diversity_blade_bm_class   <- diverse::diversity(table(blade_data_clean$CLASSIFICATION, blade_data_clean$BULB_MORPH), type = "gini-simpson", category_row = FALSE)
+diversity_blade_cf_class   <- diverse::diversity(table(blade_data_clean$CLASSIFICATION, blade_data_clean$CONUS_FORM), type = "gini-simpson", category_row = FALSE)
+diversity_blade_btm_class  <- diverse::diversity(table(blade_data_clean$CLASSIFICATION, blade_data_clean$BUTT_MORPH), type = "gini-simpson", category_row = FALSE)
+diversity_blade_bp1_class  <- diverse::diversity(table(blade_data_clean$CLASSIFICATION, blade_data_clean$BUTT_PREP_1), type = "gini-simpson", category_row = FALSE)
+diversity_blade_bp2_class  <- diverse::diversity(table(blade_data_clean$CLASSIFICATION, blade_data_clean$BUTT_PREP_2), type = "gini-simpson", category_row = FALSE)
+
+diversity_blade_prof_class %>% 
+  rownames_to_column(var = "Classification") %>%
+  mutate("Classification" = as.factor(Classification)) %>%
+  ggplot(aes(Classification, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Dorsal Profile",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_blade_det_class %>% 
+  rownames_to_column(var = "Classification") %>%
+  mutate("Classification" = as.factor(Classification)) %>%
+  ggplot(aes(Classification, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Blade Determination Profile",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_blade_curv_class %>% 
+  rownames_to_column(var = "Classification") %>%
+  mutate("Classification" = as.factor(Classification)) %>%
+  ggplot(aes(Classification, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Blade Curvature",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_blade_dp_class %>% 
+  rownames_to_column(var = "Classification") %>%
+  mutate("Classification" = as.factor(Classification)) %>%
+  ggplot(aes(Classification, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Dorsal Pattern",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_blade_bm_class %>% 
+  rownames_to_column(var = "Classification") %>%
+  mutate("Classification" = as.factor(Classification)) %>%
+  ggplot(aes(Classification, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Bulb Morphology",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_blade_cf_class %>% 
+  rownames_to_column(var = "Classification") %>%
+  mutate("Classification" = as.factor(Classification)) %>%
+  ggplot(aes(Classification, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Conus Formation",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_blade_btm_class %>% 
+  rownames_to_column(var = "Classification") %>%
+  mutate("Classification" = as.factor(Classification)) %>%
+  ggplot(aes(Classification, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Butt Morphology",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_blade_bp1_class %>% 
+  rownames_to_column(var = "Classification") %>%
+  mutate("Classification" = as.factor(Classification)) %>%
+  ggplot(aes(Classification, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Butt Preparation #1",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_blade_bp2_class %>% 
+  rownames_to_column(var = "Classification") %>%
+  mutate("Classification" = as.factor(Classification)) %>%
+  ggplot(aes(Classification, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Butt Preparation #2",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+```
+
+```{r blade diversity 2, echo = FALSE, message = FALSE, fig.height = 3, fig.align = "center"}
+horn_blade_prof <- vegdist(table(blade_data_clean$CODE, blade_data_clean$DORS_BLADE_PROF), method = "horn", diag = TRUE, upper = TRUE)
+horn_blade_det  <- vegdist(table(blade_data_clean$CODE, blade_data_clean$BLADE_DET), method = "horn", diag = TRUE, upper = TRUE)
+horn_blade_curv <- vegdist(table(blade_data_clean$CODE, blade_data_clean$BLADE_CURV), method = "horn", diag = TRUE, upper = TRUE)
+horn_blade_dp   <- vegdist(table(blade_data_clean$CODE, blade_data_clean$DORSAL_PATTERN), method = "horn", diag = TRUE, upper = TRUE)
+horn_blade_bm   <- vegdist(table(blade_data_clean$CODE, blade_data_clean$BULB_MORPH), method = "horn", diag = TRUE, upper = TRUE)
+horn_blade_cf   <- vegdist(table(blade_data_clean$CODE, blade_data_clean$CONUS_FORM), method = "horn", diag = TRUE, upper = TRUE)
+horn_blade_btm  <- vegdist(table(blade_data_clean$CODE, blade_data_clean$BUTT_MORPH), method = "horn", diag = TRUE, upper = TRUE)
+horn_blade_bp1  <- vegdist(table(blade_data_clean$CODE, blade_data_clean$BUTT_PREP_1), method = "horn", diag = TRUE, upper = TRUE)
+horn_blade_bp2  <- vegdist(table(blade_data_clean$CODE, blade_data_clean$BUTT_PREP_2), method = "horn", diag = TRUE, upper = TRUE)
+
+tidy(horn_blade_prof) %>%
+  mutate("Context_1" = item1,
+         "Context_2" = item2) %>%
+  ggplot(aes(Context_1, Context_2, fill = distance)) + 
+  geom_tile() +
+  geom_text(aes(label = round(distance, 1))) +
+  labs(title = "Dorsal Profile: Morisita-Horn Index", x = "", y = "", fill = "Distance") +
+  scale_fill_gradient(low="white", high="grey40") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 16))
+
+tidy(horn_blade_det) %>%
+  mutate("Context_1" = item1,
+         "Context_2" = item2) %>%
+  ggplot(aes(Context_1, Context_2, fill = distance)) + 
+  geom_tile() +
+  geom_text(aes(label = round(distance, 1))) +
+  labs(title = "Blade Determination Profile: Morisita-Horn Index", x = "", y = "", fill = "Distance") +
+  scale_fill_gradient(low="white", high="grey40") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 16))
+
+tidy(horn_blade_curv) %>%
+  mutate("Context_1" = item1,
+         "Context_2" = item2) %>%
+  ggplot(aes(Context_1, Context_2, fill = distance)) + 
+  geom_tile() +
+  geom_text(aes(label = round(distance, 1))) +
+  labs(title = "Blade Curvature: Morisita-Horn Index", x = "", y = "", fill = "Distance") +
+  scale_fill_gradient(low="white", high="grey40") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 16))
+
+tidy(horn_blade_dp) %>%
+  mutate("Context_1" = item1,
+         "Context_2" = item2) %>%
+  ggplot(aes(Context_1, Context_2, fill = distance)) + 
+  geom_tile() +
+  geom_text(aes(label = round(distance, 1))) +
+  labs(title = "Dorsal Pattern: Morisita-Horn Index", x = "", y = "", fill = "Distance") +
+  scale_fill_gradient(low="white", high="grey40") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 16))
+
+tidy(horn_blade_bm) %>%
+  mutate("Context_1" = item1,
+         "Context_2" = item2) %>%
+  ggplot(aes(Context_1, Context_2, fill = distance)) + 
+  geom_tile() +
+  geom_text(aes(label = round(distance, 1))) +
+  labs(title = "Bulb Morphology: Morisita-Horn Index", x = "", y = "", fill = "Distance") +
+  scale_fill_gradient(low="white", high="grey40") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 16))
+
+tidy(horn_blade_cf) %>%
+  mutate("Context_1" = item1,
+         "Context_2" = item2) %>%
+  ggplot(aes(Context_1, Context_2, fill = distance)) + 
+  geom_tile() +
+  geom_text(aes(label = round(distance, 1))) +
+  labs(title = "Conus Formation: Morisita-Horn Index", x = "", y = "", fill = "Distance") +
+  scale_fill_gradient(low="white", high="grey40") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 16))
+
+tidy(horn_blade_btm) %>%
+  mutate("Context_1" = item1,
+         "Context_2" = item2) %>%
+  ggplot(aes(Context_1, Context_2, fill = distance)) + 
+  geom_tile() +
+  geom_text(aes(label = round(distance, 1))) +
+  labs(title = "Butt Morphology: Morisita-Horn Index", x = "", y = "", fill = "Distance") +
+  scale_fill_gradient(low="white", high="grey40") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 16))
+
+tidy(horn_blade_bp1) %>%
+  mutate("Context_1" = item1,
+         "Context_2" = item2) %>%
+  ggplot(aes(Context_1, Context_2, fill = distance)) + 
+  geom_tile() +
+  geom_text(aes(label = round(distance, 1))) +
+  labs(title = "Butt Preparation #1: Morisita-Horn Index", x = "", y = "", fill = "Distance") +
+  scale_fill_gradient(low="white", high="grey40") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 16))
+
+tidy(horn_blade_bp2) %>%
+  mutate("Context_1" = item1,
+         "Context_2" = item2) %>%
+  ggplot(aes(Context_1, Context_2, fill = distance)) + 
+  geom_tile() +
+  geom_text(aes(label = round(distance, 1))) +
+  labs(title = "Butt Preparation #2: Morisita-Horn Index", x = "", y = "", fill = "Distance") +
+  scale_fill_gradient(low="white", high="grey40") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 16))
+```
+
+## Principal Component Analysis (PCA)
+
+Note: Elongation is omitted from this analysis as it is a combination of two pre-existing variables. Crested blades and broken/indistinguishable butts and bulbs are also omitted from this analysis.
+
+```{r blade pca, echo = FALSE, message = FALSE}
+
+blade_pca_data <- blade_data %>%
+  filter(!DORS_BLADE_PROF == "BCB",
+         !DORS_BLADE_PROF == "CBOU",
+         !DORS_BLADE_PROF == "CBTHF",
+         !DORS_BLADE_PROF == "CBOFOC",
+         !DORS_BLADE_PROF == "CBFT",
+         !BUTT_MORPH == "BAB", 
+         !BUTT_PREP_1 == "B", 
+         !BUTT_PREP_2 == "B") %>%
+  select(CODE, CONTEXT, CLASSIFICATION, WEIGHT, LENGTH, WIDTH, THICKNESS, PLAT_DEPTH)
+
+blade_pca <- PCA(blade_pca_data, graph = FALSE, quali.sup = 1:3)
+
+```
+
+```{r blade pca table, echo = FALSE, message = FALSE, warning = FALSE}
+
+as.tibble(get_eig(blade_pca), rownames = "rowname") %>%
+  rename(variance = variance.percent,
+         cumulative = cumulative.variance.percent)
+
+```
+
+```{r blade pca scree, echo = FALSE, message = FALSE, fig.width = 4, fig.height = 3, fig.align="center"}
+
+fviz_screeplot(blade_pca, ylim = c(0,50), barfill = "grey50", barcolor = "grey50", geom = "bar") +
+  labs(title = "", x = "Dimension") + 
+  theme_minimal()
+
+```
+
+```{r blade pca contributions, echo = FALSE, message = FALSE, fig.align="center"}
+
+blade_pca_var <- get_pca_var(blade_pca)
+
+as_tibble(blade_pca_var$contrib, rownames = "rowname") %>%
+    rename(`Dimension 1` = Dim.1,
+           `Dimension 2` = Dim.2,
+           `Dimension 3` = Dim.3,
+           `Dimension 4` = Dim.4,
+           `Dimension 5` = Dim.5) %>%
+  gather("Contribution", "n", 2:6) %>%
+  ggplot(aes(n, rowname, fill = rowname)) +
+  geom_col(show.legend = FALSE, width = 0.75) +
+  labs(title = "Contribution of Variables", x = "Contribution (%)", y = "Variable") +
+  scale_fill_grey() +
+  facet_wrap(~Contribution, nrow = 1) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18))
+```
+
+```{r blade pca graphs, echo = FALSE, message = FALSE, fig.width = 7, fig.height = 7, fig.align="center"}
+
+fviz_pca_biplot(blade_pca, 
+                axes = c(1,2),
+                repel = FALSE,
+                habillage = blade_pca_data$CLASSIFICATION,
+                palette = c("grey80", "grey40"),
+                label = "var",
+                addEllipses = TRUE) +
+  labs(title = "PCA 1 vs. PCA 2 (Classification)",
+       x = "Dimension 1 (56.4%)",
+       y = "Dimension 2 (17.3%)") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+fviz_pca_biplot(blade_pca, 
+                axes = c(2,3),
+                repel = FALSE,
+                habillage = blade_pca_data$CLASSIFICATION,
+                palette = c("grey80", "grey40"),
+                label = "var",
+                addEllipses = TRUE) +
+  labs(title = "PCA 2 vs. PCA 3 (Classification)",
+       x = "Dimension 2 (17.3%)",
+       y = "Dimension 3 (13.8%)") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+fviz_pca_biplot(blade_pca, 
+                axes = c(1,2),
+                repel = FALSE,
+                habillage = blade_pca_data$CODE,
+                palette = c("grey90", "grey80", "grey70", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10"),
+                label = "var",
+                addEllipses = TRUE) +
+  labs(title = "PCA 1 vs. PCA 2 (Context)",
+       x = "Dimension 1 (56.4%)",
+       y = "Dimension 2 (17.3%)") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+fviz_pca_biplot(blade_pca, 
+                axes = c(2,3),
+                repel = FALSE,
+                habillage = blade_pca_data$CODE,
+                palette = c("grey90", "grey80", "grey70", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10"),
+                label = "var",
+                addEllipses = TRUE) +
+  labs(title = "PCA 2 vs. PCA 3 (Classification)",
+       x = "Dimension 2 (17.3%)",
+       y = "Dimension 3 (13.8%)") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+```
+```{r blade pca boxplots, echo = FALSE, message = FALSE, fig.width = 10, fig.height = 7, fig.align="center"}
+
+blade_pca_x <- cbind(blade_pca_data, blade_pca$ind$coord) %>% 
+  select(CODE, CONTEXT, CLASSIFICATION, Dim.1, Dim.2, Dim.3, Dim.4, Dim.5) %>%
+    rename(`Dimension 1` = Dim.1,
+           `Dimension 2` = Dim.2,
+           `Dimension 3` = Dim.3,
+           `Dimension 4` = Dim.4,
+           `Dimension 5` = Dim.5)
+
+blade_pca_x %>%
+  gather("Value", "n", 4:8) %>%
+  ggplot(aes(Value, n, fill = CLASSIFICATION)) +
+  geom_boxplot() +
+  labs(title = "PCA 1:5 (Classification)",
+       x = "",
+       y = "Value",
+       fill = "Classification") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom") 
+
+blade_pca_x %>%
+  gather("Value", "n", 4:8) %>%
+  ggplot(aes(Value, n, fill = CODE)) +
+  geom_boxplot() +
+  labs(title = "PCA 1:5 (Classification)",
+       x = "",
+       y = "Value",
+       fill = "Classification") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom") 
+
+```
+
+## Multiple Correspondence Analysis (MCA)
+
+Note: for MCA all crested blades and broken butts were omitted from the analysis.  
+
+```{r blade mca, echo = FALSE, message = FALSE}
+
+blade_mca_data <- blade_data %>%
+  select(CODE, CONTEXT, CLASSIFICATION,DORS_BLADE_PROF, BLADE_DET, BLADE_CURV,
+         DORSAL_PATTERN, BULB_MORPH, CONUS_FORM, BUTT_MORPH, BUTT_PREP_1, BUTT_PREP_2) %>%
+  filter(!DORS_BLADE_PROF == "BCB",
+         !DORS_BLADE_PROF == "CBOU",
+         !DORS_BLADE_PROF == "CBTHF",
+         !DORS_BLADE_PROF == "CBOFOC",
+         !DORS_BLADE_PROF == "CBFT",
+         !BUTT_MORPH == "BAB", 
+         !BUTT_PREP_1 == "B", 
+         !BUTT_PREP_2 == "B")
+
+blade_mca <- MCA(blade_mca_data, graph = FALSE, quali.sup = 1:3)
+
+```
+
+```{r blade mca table, echo = FALSE, message = FALSE, warning = FALSE}
+
+as.tibble(get_eig(blade_mca), rownames = "rowname") %>%
+  rename(variance = variance.percent,
+         cumulative = cumulative.variance.percent)
+
+```
+
+```{r blade mca scree, echo = FALSE, message = FALSE, fig.width = 4, fig.height = 3, fig.align="center"}
+
+fviz_screeplot(blade_mca, ylim = c(0,50), barfill = "grey50", barcolor = "grey50", geom = "bar") +
+  labs(title = "") + 
+  theme_minimal()
+
+```
+
+```{r blade mca contributions, echo = FALSE, message = FALSE, fig.width = 8, fig.height = 9, fig.align="center"}
+
+blade_mca_var <- get_mca_var(blade_mca)
+
+as_tibble(blade_mca_var$contrib, rownames = "rowname") %>%
+    rename(`Dimension 1` = `Dim 1`,
+           `Dimension 2` = `Dim 2`,
+           `Dimension 3` = `Dim 3`,
+           `Dimension 4` = `Dim 4`,
+           `Dimension 5` = `Dim 5`) %>%
+  gather("Contribution", "n", 2:6) %>%
+  ggplot(aes(n, rowname, fill = rowname)) +
+  geom_col(show.legend = FALSE, width = 0.75) +
+  labs(title = "Contribution of Variables", 
+       x = "Contribution (%)", 
+       y = "Variable",
+       caption = "Refer to the attribute catalogue for specific terminology") +
+  scale_fill_grey() +
+  facet_wrap(~Contribution, nrow = 1) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18))
+```
+
+Key acronyms for responses in *Axis 1*:  
+
+*DB*: Diffused bulb (**Bulb Morph**)  
+*NBOL*: No bulb or lip (**Bulb Morph**)  
+*CU*: Cortical unprepared (**Butt Prep #2**)  
+*PUNB*: Punctiform butt (**Butt Morph**)  
+*MDF*: Multiple dorsal faces (**Dorsal Blade Prof**)  
+
+Key acronyms for responses in *Axis 2*:  
+*NBOL*: No bulb or lip (**Bulb Morph**)  
+*DT*: Dorsal trimming (**Butt Prep #2**)  
+*DB*: Diffused bulb (**Bulb Morph**)  
+*VB*: Ventral 'belly' (**Blade Curv**)  
+*FE*: Feathered (**Blade Determ**)  
+
+```{r blade mca graphs, echo = FALSE, message = FALSE, fig.width = 7, fig.height = 7, fig.align="center"}
+
+blade_mca_x <- cbind(blade_mca_data, blade_mca$ind$coord) %>% 
+  select(CODE, CONTEXT, CLASSIFICATION, `Dim 1`, `Dim 2`, `Dim 3`, `Dim 4`, `Dim 5`) %>%
+    rename(`Dimension 1` = `Dim 1`,
+           `Dimension 2` = `Dim 2`,
+           `Dimension 3` = `Dim 3`,
+           `Dimension 4` = `Dim 4`,
+           `Dimension 5` = `Dim 5`)
+
+ggplot(blade_mca_x, aes(`Dimension 1`, `Dimension 2`, colour = CLASSIFICATION, shape = CLASSIFICATION)) +
+  geom_point() +
+  scale_colour_manual(values = c("grey80", "grey40")) +
+  labs(title = "MCA 1 vs. MCA 2 (Classification)",
+       x = "Dimension 1 (4.90%)",
+       y = "Dimension 2 (4.31%)") +
+  stat_ellipse() + 
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(blade_mca_x, aes(`Dimension 2`, `Dimension 3`, colour = CLASSIFICATION, shape = CLASSIFICATION)) +
+  geom_point() +
+  scale_colour_manual(values = c("grey80", "grey40")) +
+  labs(title = "MCA 2 vs. MCA 3 (Classification)",
+       x = "Dimension 2 (4.31%)",
+       y = "Dimension 3 (4.11%)") +
+  stat_ellipse() + 
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+  
+ggplot(blade_mca_x, aes(`Dimension 1`, `Dimension 2`, colour = CODE, shape = CODE)) +
+  geom_point() +
+  scale_colour_manual(values = c("grey90", "grey80", "grey70", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10")) +
+  scale_shape_manual(values = c(1,2,3,4,5,6,7,8,9)) +
+  labs(title = "MCA 1 vs. MCA 2 (Code)",
+       x = "Dimension 1 (4.90%)",
+       y = "Dimension 2 (4.31%)") +
+  stat_ellipse() + 
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(blade_mca_x, aes(`Dimension 2`, `Dimension 3`, colour = CODE, shape = CODE)) +
+  geom_point() +
+  scale_colour_manual(values = c("grey90", "grey80", "grey70", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10")) +
+  scale_shape_manual(values = c(1,2,3,4,5,6,7,8,9)) +
+  labs(title = "MCA 2 vs. MCA 3 (Code)",
+       x = "Dimension 2 (4.31%)",
+       y = "Dimension 3 (4.11%)") + 
+  stat_ellipse() + 
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+
+```
+
+```{r blade mca boxplots, echo = FALSE, message = FALSE, fig.width = 10, fig.height = 7, fig.align= "center"}
+blade_mca_x %>%
+  gather("Value", "n", 4:8) %>%
+  ggplot(aes(Value, n, fill = CLASSIFICATION)) +
+  geom_boxplot() +
+  labs(title = "MCA 1:5 (Classification)",
+       x = "",
+       y = "Value",
+       fill = "Classification") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom") 
+
+blade_mca_x %>%
+  gather("Value", "n", 4:8) %>%
+  ggplot(aes(Value, n, fill = CODE)) +
+  geom_boxplot() +
+  labs(title = "MCA 1:5 (Classification)",
+       x = "",
+       y = "Value",
+       fill = "Classification") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom") 
+```
+
+# Analysis: Cores
+
+## Visual and Descriptive Summaries of Data
+
+```{r core clean and display, echo = FALSE, message = FALSE}
+
+core_data_clean <- core_data
+
+core_data_clean %>% 
+  group_by(CONTEXT) %>% 
+  summarise(n_obs = n(),
+            min = round(min(WEIGHT),2),
+            max = round(max(WEIGHT),2),
+            mean = round(mean(WEIGHT),2),
+            med = round(median(WEIGHT),2),
+            sd = round(sd(WEIGHT),2),
+            var = round(var(WEIGHT),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 9. Descriptive Statistics: Blade Core Weight (g)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+core_data_clean %>% 
+  group_by(CONTEXT) %>% 
+  summarise(n_obs = n(),
+            min = round(min(CORE_LENGTH),2),
+            max = round(max(CORE_LENGTH),2),
+            mean = round(mean(CORE_LENGTH),2),
+            med = round(median(CORE_LENGTH,2)),
+            sd = round(sd(CORE_LENGTH),2),
+            var = round(var(CORE_LENGTH),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 10. Descriptive Statistics: Blade Core Length (mm)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+core_data_clean %>% 
+  group_by(CONTEXT) %>% 
+  summarise(n_obs = n(),
+            min = round(min(CORE_WIDTH),2),
+            max = round(max(CORE_WIDTH),2),
+            mean = round(mean(CORE_WIDTH),2),
+            med = round(median(CORE_WIDTH),2),
+            sd = round(sd(CORE_WIDTH),2),
+            var = round(var(CORE_WIDTH),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 11. Descriptive Statistics: Blade Core Width (mm)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+            
+core_data_clean %>% 
+  group_by(CONTEXT) %>% 
+  summarise(n_obs = n(),
+            min = round(min(CORE_BREADTH),2),
+            max = round(max(CORE_BREADTH),2),
+            mean = round(mean(CORE_BREADTH),2),
+            med = round(median(CORE_BREADTH),2),
+            sd = round(sd(CORE_BREADTH),2),
+            var = round(var(CORE_BREADTH),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 12. Descriptive Statistics: Blade Core Breadth (mm)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+core_data_clean %>% 
+  group_by(CONTEXT) %>% 
+  summarise(n_obs = n(),
+            min = round(min(CORE_ELONGATION),2),
+            max = round(max(CORE_ELONGATION),2),
+            mean = round(mean(CORE_ELONGATION),2),
+            med = round(median(CORE_ELONGATION),2),
+            sd = round(sd(CORE_ELONGATION),2),
+            var = round(var(CORE_ELONGATION),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 13. Descriptive Statistics: Blade Core Elongation (L/W)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+```
+
+```{r core summary 1, echo = FALSE, message = FALSE, fig.width = 6, fig.height = 4, fig.align = "center"}
+ggplot(core_data_clean, aes(CODE, WEIGHT, fill = CLASSIFICATION)) +
+         geom_boxplot(width = 0.3) +
+         labs(x = "", y = "Core Weight (g)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  scale_fill_grey(start = 0.4, end = 0.8) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(core_data_clean, aes(CODE, CORE_LENGTH, fill = CLASSIFICATION)) +
+         geom_boxplot(width = 0.3) +
+         labs(x = "", y = "Core Length (mm)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  scale_fill_grey(start = 0.4, end = 0.8) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(core_data_clean, aes(CODE, CORE_WIDTH, fill = CLASSIFICATION)) +
+         geom_boxplot(width = 0.3) +
+         labs(x = "", y = "Core Width (mm)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  scale_fill_grey(start = 0.4, end = 0.8) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(core_data_clean, aes(CODE, CORE_BREADTH, fill = CLASSIFICATION)) +
+         geom_boxplot(width = 0.3) +
+         labs(x = "", y = "Core Breadth (mm)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  scale_fill_grey(start = 0.4, end = 0.8) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(core_data_clean, aes(CODE, CORE_ELONGATION, fill = CLASSIFICATION)) +
+         geom_boxplot(width = 0.3) +
+         labs(x = "", y = "Core Elongation Index", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  scale_fill_grey(start = 0.4, end = 0.8) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+```
+
+```{r core l w plot, echo = FALSE, message = FALSE, fig.width = 6, fig.height = 6, fig.align = "center"}
+ggplot(core_data_clean, aes(CORE_WIDTH, CORE_LENGTH, colour = CLASSIFICATION, shape = CLASSIFICATION)) +
+         geom_point() +
+         labs(x = "Core Width (mm)", y = "Core Length (mm)", fill = "Taxonomic Unit") +
+  stat_ellipse(type = "norm", linetype = 2) +
+  theme_minimal() + 
+  scale_colour_grey(start = 0.4, end = 0.8) +
+  theme(legend.position = "bottom")
+
+ggplot(core_data_clean, aes(CORE_WIDTH, CORE_LENGTH, colour = CODE, shape = CODE)) +
+         geom_point() +
+         labs(x = "Core Width (mm)", y = "Core Length (mm)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  lims(x = c(0,90), y = c(0,180)) +
+  scale_colour_manual(values = c("grey90", "grey80", "grey70", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10")) +
+  scale_shape_manual(values = c(1,2,3,4,5,6,7,8,9)) + 
+  theme(legend.position = "bottom")
+
+```
+
+```{r core tests, echo = FALSE, warning = FALSE, message = FALSE}
+
+pairwise.wilcox.test(core_data_clean$WEIGHT, core_data_clean$CODE, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(core_data_clean$CORE_LENGTH, core_data_clean$CODE, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(core_data_clean$CORE_WIDTH, core_data_clean$CODE, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(core_data_clean$CORE_BREADTH, core_data_clean$CODE, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(core_data_clean$CORE_ELONGATION, core_data_clean$CODE, p.adj = "bonf", exact = FALSE)
+
+pairwise.wilcox.test(core_data_clean$WEIGHT, core_data_clean$CLASSIFICATION, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(core_data_clean$CORE_LENGTH, core_data_clean$CLASSIFICATION, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(core_data_clean$CORE_WIDTH, core_data_clean$CLASSIFICATION, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(core_data_clean$CORE_BREADTH, core_data_clean$CLASSIFICATION, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(core_data_clean$CORE_ELONGATION, core_data_clean$CLASSIFICATION, p.adj = "bonf", exact = FALSE)
+
+```
+
+
+```{r core summary 2, echo = FALSE, message = FALSE, fig.width = 6, fig.height = 4, fig.align = "center"}
+
+ggplot(core_data_clean, aes(fill = RAW_MAT, x = CODE)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Raw Material", x = "", y = "Count", fill = "Type") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(core_data_clean, aes(fill = CORE_MORPH, x = CODE)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Core Morphology", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(core_data_clean, aes(fill = PLAT_REJUV, x = CODE)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Platform Profile", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(core_data_clean, aes(fill = CORE_METHOD, x = CODE)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Core Reduction Strategy", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(core_data_clean, aes(fill = CORE_DIRECTIONALITY, x = CODE)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Core Directionality", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(core_data_clean, aes(fill = CORE_TABLET_REJUV, x = CODE)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Core Tablet Rejuvenation", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(core_data_clean, aes(fill = CORE_FLAKE_REJUV, x = CODE)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Preparatory Flake Rejuvenation", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(core_data_clean, aes(fill = CORE_FRONT_REJUV, x = CODE)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Frontal Rejuvenation", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(core_data_clean, aes(fill = CORE_DIST_REJUV, x = CODE)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Distal Rejuvenation", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(core_data_clean, aes(fill = CORE_SIDE_REJUV, x = CODE)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Lateral Rejuvenation", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(core_data_clean, aes(fill = RAW_MAT, x = CLASSIFICATION)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Raw Material", x = "", y = "Count", fill = "Type") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(core_data_clean, aes(fill = CORE_MORPH, x = CLASSIFICATION)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Core Morphology", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(core_data_clean, aes(fill = PLAT_REJUV, x = CLASSIFICATION)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Core Platform Profile", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(core_data_clean, aes(fill = CORE_METHOD, x = CLASSIFICATION)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Core Reduction Strategy", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(core_data_clean, aes(fill = CORE_DIRECTIONALITY, x = CLASSIFICATION)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Core Directionality", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(core_data_clean, aes(fill = CORE_TABLET_REJUV, x = CLASSIFICATION)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Core Tablet Rejuvenation", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(core_data_clean, aes(fill = CORE_FLAKE_REJUV, x = CLASSIFICATION)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Preparatory Flake Rejuvenation", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(core_data_clean, aes(fill = CORE_FRONT_REJUV, x = CLASSIFICATION)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Frontal Rejuvenation", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(core_data_clean, aes(fill = CORE_DIST_REJUV, x = CLASSIFICATION)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Core Distal Rejuvenation", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(core_data_clean, aes(fill = CORE_SIDE_REJUV, x = CLASSIFICATION)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Core Lateral Rejuvenation", x = "", y = "Count", fill = "Attribute") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+```
+
+## Gini-Simpson and Morisita-Horn diversity indices
+
+```{r core diversity 1, echo = FALSE, message = FALSE,  fig.width = 6, fig.height = 4, fig.align = "center"}
+
+diversity_core_morph <- diverse::diversity(table(core_data_clean$CODE, core_data_clean$CORE_MORPH), type = "gini-simpson", category_row = FALSE)
+diversity_core_pr  <- diverse::diversity(table(core_data_clean$CODE, core_data_clean$PLAT_REJUV), type = "gini-simpson", category_row = FALSE)
+diversity_core_cm <- diverse::diversity(table(core_data_clean$CODE, core_data_clean$CORE_METHOD), type = "gini-simpson", category_row = FALSE)
+diversity_core_cd   <- diverse::diversity(table(core_data_clean$CODE, core_data_clean$CORE_DIRECTIONALITY), type = "gini-simpson", category_row = FALSE)
+diversity_core_ctr   <- diverse::diversity(table(core_data_clean$CODE, core_data_clean$CORE_TABLET_REJUV), type = "gini-simpson", category_row = FALSE)
+diversity_core_flr   <- diverse::diversity(table(core_data_clean$CODE, core_data_clean$CORE_FLAKE_REJUV), type = "gini-simpson", category_row = FALSE)
+diversity_core_frr   <- diverse::diversity(table(core_data_clean$CODE, core_data_clean$CORE_FRONT_REJUV), type = "gini-simpson", category_row = FALSE)
+diversity_core_cdr   <- diverse::diversity(table(core_data_clean$CODE, core_data_clean$CORE_DIST_REJUV), type = "gini-simpson", category_row = FALSE)
+diversity_core_csr  <- diverse::diversity(table(core_data_clean$CODE, core_data_clean$CORE_SIDE_REJUV), type = "gini-simpson", category_row = FALSE)
+
+
+diversity_core_morph %>% 
+  rownames_to_column(var = "Context") %>%
+  mutate("Context" = as.factor(Context)) %>%
+  ggplot(aes(Context, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Core Morphology",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_core_pr %>% 
+  rownames_to_column(var = "Context") %>%
+  mutate("Context" = as.factor(Context)) %>%
+  ggplot(aes(Context, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Core Platform Profile",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_core_cm %>% 
+  rownames_to_column(var = "Context") %>%
+  mutate("Context" = as.factor(Context)) %>%
+  ggplot(aes(Context, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Core Reduction Strategy",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_core_cd %>% 
+  rownames_to_column(var = "Context") %>%
+  mutate("Context" = as.factor(Context)) %>%
+  ggplot(aes(Context, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Core Directionality",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_core_ctr %>% 
+  rownames_to_column(var = "Context") %>%
+  mutate("Context" = as.factor(Context)) %>%
+  ggplot(aes(Context, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Core Tablet Rejuvenation",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_core_flr %>% 
+  rownames_to_column(var = "Context") %>%
+  mutate("Context" = as.factor(Context)) %>%
+  ggplot(aes(Context, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Preparatory Flake Rejuvenation",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_core_frr %>% 
+  rownames_to_column(var = "Context") %>%
+  mutate("Context" = as.factor(Context)) %>%
+  ggplot(aes(Context, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Frontal Rejuvenation",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_core_cdr %>% 
+  rownames_to_column(var = "Context") %>%
+  mutate("Context" = as.factor(Context)) %>%
+  ggplot(aes(Context, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Core Distal Rejuvenation",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_core_csr %>% 
+  rownames_to_column(var = "Context") %>%
+  mutate("Context" = as.factor(Context)) %>%
+  ggplot(aes(Context, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Core Lateral Rejuvenation",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_core_morph_class <- diverse::diversity(table(core_data_clean$CLASSIFICATION, core_data_clean$CORE_MORPH), type = "gini-simpson", category_row = FALSE)
+diversity_core_pr_class  <- diverse::diversity(table(core_data_clean$CLASSIFICATION, core_data_clean$PLAT_REJUV), type = "gini-simpson", category_row = FALSE)
+diversity_core_cm_class <- diverse::diversity(table(core_data_clean$CLASSIFICATION, core_data_clean$CORE_METHOD), type = "gini-simpson", category_row = FALSE)
+diversity_core_cd_class   <- diverse::diversity(table(core_data_clean$CLASSIFICATION, core_data_clean$CORE_DIRECTIONALITY), type = "gini-simpson", category_row = FALSE)
+diversity_core_ctr_class   <- diverse::diversity(table(core_data_clean$CLASSIFICATION, core_data_clean$CORE_TABLET_REJUV), type = "gini-simpson", category_row = FALSE)
+diversity_core_flr_class   <- diverse::diversity(table(core_data_clean$CLASSIFICATION, core_data_clean$CORE_FLAKE_REJUV), type = "gini-simpson", category_row = FALSE)
+diversity_core_frr_class   <- diverse::diversity(table(core_data_clean$CLASSIFICATION, core_data_clean$CORE_FRONT_REJUV), type = "gini-simpson", category_row = FALSE)
+diversity_core_cdr_class   <- diverse::diversity(table(core_data_clean$CLASSIFICATION, core_data_clean$CORE_DIST_REJUV), type = "gini-simpson", category_row = FALSE)
+diversity_core_csr_class  <- diverse::diversity(table(core_data_clean$CLASSIFICATION, core_data_clean$CORE_SIDE_REJUV), type = "gini-simpson", category_row = FALSE)
+
+diversity_core_morph_class %>% 
+  rownames_to_column(var = "Classification") %>%
+  mutate("Classification" = as.factor(Classification)) %>%
+  ggplot(aes(Classification, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Core Morphology",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_core_pr_class %>% 
+  rownames_to_column(var = "Classification") %>%
+  mutate("Classification" = as.factor(Classification)) %>%
+  ggplot(aes(Classification, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Core Platform Profile",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_core_cm_class %>% 
+  rownames_to_column(var = "Classification") %>%
+  mutate("Classification" = as.factor(Classification)) %>%
+  ggplot(aes(Classification, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Core Reduction Strategy",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_core_cd_class %>% 
+  rownames_to_column(var = "Classification") %>%
+  mutate("Classification" = as.factor(Classification)) %>%
+  ggplot(aes(Classification, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Core Directionality",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_core_ctr_class %>% 
+  rownames_to_column(var = "Classification") %>%
+  mutate("Classification" = as.factor(Classification)) %>%
+  ggplot(aes(Classification, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Core Tablet Rejuvenation",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_core_flr_class %>% 
+  rownames_to_column(var = "Classification") %>%
+  mutate("Classification" = as.factor(Classification)) %>%
+  ggplot(aes(Classification, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Preparatory Rejuvenation",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_core_frr_class %>% 
+  rownames_to_column(var = "Classification") %>%
+  mutate("Classification" = as.factor(Classification)) %>%
+  ggplot(aes(Classification, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Frontal Rejuvenation",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_core_cdr_class %>% 
+  rownames_to_column(var = "Classification") %>%
+  mutate("Classification" = as.factor(Classification)) %>%
+  ggplot(aes(Classification, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Core Distal Rejuvenation",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+diversity_core_csr_class %>% 
+  rownames_to_column(var = "Classification") %>%
+  mutate("Classification" = as.factor(Classification)) %>%
+  ggplot(aes(Classification, gini.simpson)) +
+  geom_point(size = 4) +
+  geom_line(aes(group = 1)) +
+  ylim(0,1) + 
+  labs(title = "Core Lateral Rejuvenation",x = "", y = "Gini Simpson Index") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18))
+
+```
+
+
+```{r core diversity 2, echo = FALSE, message = FALSE, fig.height = 3, fig.align = "center"}
+horn_core_morph <- vegdist(table(core_data_clean$CODE, core_data_clean$CORE_MORPH), method = "horn", diag = TRUE, upper = TRUE)
+horn_core_pr  <- vegdist(table(core_data_clean$CODE, core_data_clean$PLAT_REJUV), method = "horn", diag = TRUE, upper = TRUE)
+horn_core_cm <- vegdist(table(core_data_clean$CODE, core_data_clean$CORE_METHOD), method = "horn", diag = TRUE, upper = TRUE)
+horn_core_cd   <- vegdist(table(core_data_clean$CODE, core_data_clean$CORE_DIRECTIONALITY), method = "horn", diag = TRUE, upper = TRUE)
+horn_core_tr   <- vegdist(table(core_data_clean$CODE, core_data_clean$CORE_TABLET_REJUV), method = "horn", diag = TRUE, upper = TRUE)
+horn_core_fl   <- vegdist(table(core_data_clean$CODE, core_data_clean$CORE_FLAKE_REJUV), method = "horn", diag = TRUE, upper = TRUE)
+horn_core_fr   <- vegdist(table(core_data_clean$CODE, core_data_clean$CORE_FRONT_REJUV), method = "horn", diag = TRUE, upper = TRUE)
+horn_core_dr   <- vegdist(table(core_data_clean$CODE, core_data_clean$CORE_DIST_REJUV), method = "horn", diag = TRUE, upper = TRUE)
+horn_core_sr  <- vegdist(table(core_data_clean$CODE, core_data_clean$CORE_SIDE_REJUV), method = "horn", diag = TRUE, upper = TRUE)
+
+
+tidy(horn_core_morph) %>%
+  mutate("Context_1" = item1,
+         "Context_2" = item2) %>%
+  ggplot(aes(Context_1, Context_2, fill = distance)) + 
+  geom_tile() +
+  geom_text(aes(label = round(distance, 1))) +
+  labs(title = "Core Morphology: Morisita-Horn Index", x = "", y = "", fill = "Distance") +
+  scale_fill_gradient(low="white", high="grey40") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 16))
+
+tidy(horn_core_pr) %>%
+  mutate("Context_1" = item1,
+         "Context_2" = item2) %>%
+  ggplot(aes(Context_1, Context_2, fill = distance)) + 
+  geom_tile() +
+  geom_text(aes(label = round(distance, 1))) +
+  labs(title = "Core Platform Profile: Morisita-Horn Index", x = "", y = "", fill = "Distance") +
+  scale_fill_gradient(low="white", high="grey40") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 16))
+
+tidy(horn_core_cm) %>%
+  mutate("Context_1" = item1,
+         "Context_2" = item2) %>%
+  ggplot(aes(Context_1, Context_2, fill = distance)) + 
+  geom_tile() +
+  geom_text(aes(label = round(distance, 1))) +
+  labs(title = "Core Reduction Strategy: Morisita-Horn Index", x = "", y = "", fill = "Distance") +
+  scale_fill_gradient(low="white", high="grey40") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 16))
+
+tidy(horn_core_cd) %>%
+  mutate("Context_1" = item1,
+         "Context_2" = item2) %>%
+  ggplot(aes(Context_1, Context_2, fill = distance)) + 
+  geom_tile() +
+  geom_text(aes(label = round(distance, 1))) +
+  labs(title = "Core Directionality: Morisita-Horn Index", x = "", y = "", fill = "Distance") +
+  scale_fill_gradient(low="white", high="grey40") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 16))
+
+tidy(horn_core_tr) %>%
+  mutate("Context_1" = item1,
+         "Context_2" = item2) %>%
+  ggplot(aes(Context_1, Context_2, fill = distance)) + 
+  geom_tile() +
+  geom_text(aes(label = round(distance, 1))) +
+  labs(title = "Core Tablet Rejuvenation: Morisita-Horn Index", x = "", y = "", fill = "Distance") +
+  scale_fill_gradient(low="white", high="grey40") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 16))
+
+tidy(horn_core_fl) %>%
+  mutate("Context_1" = item1,
+         "Context_2" = item2) %>%
+  ggplot(aes(Context_1, Context_2, fill = distance)) + 
+  geom_tile() +
+  geom_text(aes(label = round(distance, 1))) +
+  labs(title = "Preparatory Flake Rejuvenation: Morisita-Horn Index", x = "", y = "", fill = "Distance") +
+  scale_fill_gradient(low="white", high="grey40") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 16))
+
+tidy(horn_core_fr) %>%
+  mutate("Context_1" = item1,
+         "Context_2" = item2) %>%
+  ggplot(aes(Context_1, Context_2, fill = distance)) + 
+  geom_tile() +
+  geom_text(aes(label = round(distance, 1))) +
+  labs(title = "Frontal Rejuvenation: Morisita-Horn Index", x = "", y = "", fill = "Distance") +
+  scale_fill_gradient(low="white", high="grey40") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 16))
+
+tidy(horn_core_dr) %>%
+  mutate("Context_1" = item1,
+         "Context_2" = item2) %>%
+  ggplot(aes(Context_1, Context_2, fill = distance)) + 
+  geom_tile() +
+  geom_text(aes(label = round(distance, 1))) +
+  labs(title = "Core Distal Rejuvenation: Morisita-Horn Index", x = "", y = "", fill = "Distance") +
+  scale_fill_gradient(low="white", high="grey40") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 16))
+
+tidy(horn_core_sr) %>%
+  mutate("Context_1" = item1,
+         "Context_2" = item2) %>%
+  ggplot(aes(Context_1, Context_2, fill = distance)) + 
+  geom_tile() +
+  geom_text(aes(label = round(distance, 1))) +
+  labs(title = "Core Lateral Rejuvenation: Morisita-Horn Index", x = "", y = "", fill = "Distance") +
+  scale_fill_gradient(low="white", high="grey40") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 16))
+
+```
+
+## Principal Component Analysis (PCA)
+
+Note: Elongation is omitted from this analysis as it is a combination of two pre-existing variables. 
+
+```{r core pca, echo = FALSE, message = FALSE}
+
+core_pca_data <- core_data  %>%
+  select(CODE, CONTEXT, CLASSIFICATION, WEIGHT, CORE_LENGTH, CORE_WIDTH, CORE_BREADTH)
+
+core_pca <- PCA(core_pca_data, graph = FALSE, quali.sup = 1:3)
+
+```
+
+```{r core pca table, echo = FALSE, message = FALSE, warning = FALSE}
+
+as.tibble(get_eig(core_pca), rownames = "rowname") %>%
+  rename(variance = variance.percent,
+         cumulative = cumulative.variance.percent)
+
+```
+
+```{r core pca scree, echo = FALSE, message = FALSE, fig.width = 4, fig.height = 3, fig.align="center"}
+
+fviz_screeplot(core_pca, ylim = c(0,50), barfill = "grey50", barcolor = "grey50", geom = "bar") +
+  labs(title = "", x = "Dimension") + 
+  theme_minimal()
+
+```
+
+```{r core pca contribution, echo = FALSE, message = FALSE, fig.align="center"}
+
+core_pca_var <- get_pca_var(core_pca)
+
+as_tibble(core_pca_var$contrib, rownames = "rowname") %>%
+    rename(`Dimension 1` = Dim.1,
+           `Dimension 2` = Dim.2,
+           `Dimension 3` = Dim.3,
+           `Dimension 4` = Dim.4) %>%
+  gather("Contribution", "n", 2:5) %>%
+  ggplot(aes(n, rowname, fill = rowname)) +
+  geom_col(show.legend = FALSE, width = 0.75) +
+  labs(title = "Contribution of Variables", x = "Contribution (%)", y = "Variable") +
+  scale_fill_grey() +
+  facet_wrap(~Contribution, nrow = 1) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18))
+```
+
+
+```{r core pca graphs, echo = FALSE, message = FALSE, fig.width = 7, fig.height = 7, fig.align="center"}
+
+fviz_pca_biplot(core_pca, 
+                axes = c(1,2),
+                repel = FALSE,
+                habillage = core_pca_data$CLASSIFICATION,
+                palette = c("grey80", "grey40"),
+                label = "var",
+                addEllipses = TRUE) +
+  labs(title = "PCA 1 vs. PCA 2 (Classification)",
+       x = "Dimension 1 (68.79%)",
+       y = "Dimension 2 (14.75%)") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+fviz_pca_biplot(core_pca, 
+                axes = c(2,3),
+                repel = FALSE,
+                habillage = core_pca_data$CLASSIFICATION,
+                palette = c("grey80", "grey40"),
+                label = "var",
+                addEllipses = TRUE) +
+  labs(title = "PCA 2 vs. PCA 3 (Classification)",
+       x = "Dimension 2 (14.75%)",
+       y = "Dimension 3 (10.37%)") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+fviz_pca_biplot(core_pca, 
+                axes = c(1,2),
+                repel = FALSE,
+                habillage = core_pca_data$CODE,
+                palette = c("grey90", "grey80", "grey70", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10"),
+                label = "var",
+                addEllipses = TRUE) +
+  labs(title = "PCA 1 vs. PCA 2 (Context)",
+       x = "Dimension 1 (68.79%)",
+       y = "Dimension 2 (14.75%)") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+fviz_pca_biplot(core_pca, 
+                axes = c(2,3),
+                repel = FALSE,
+                habillage = core_pca_data$CODE,
+                palette = c("grey90", "grey80", "grey70", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10"),
+                label = "var",
+                addEllipses = TRUE) +
+  labs(title = "PCA 2 vs. PCA 3 (Context)",
+       x = "Dimension 2 (14.75%)",
+       y = "Dimension 3 (10.37%)") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+```
+
+```{r core pca boxplots, echo = FALSE, message = FALSE, fig.width = 10, fig.height = 7, fig.align="center"}
+
+blade_pca_x <- cbind(blade_pca_data, blade_pca$ind$coord) %>% 
+  select(CODE, CONTEXT, CLASSIFICATION, Dim.1, Dim.2, Dim.3, Dim.4, Dim.5) %>%
+    rename(`Dimension 1` = Dim.1,
+           `Dimension 2` = Dim.2,
+           `Dimension 3` = Dim.3,
+           `Dimension 4` = Dim.4,
+           `Dimension 5` = Dim.5)
+
+blade_pca_x %>%
+  gather("Value", "n", 4:8) %>%
+  ggplot(aes(Value, n, fill = CLASSIFICATION)) +
+  geom_boxplot() +
+  labs(title = "PCA 1:5 (Classification)",
+       x = "",
+       y = "Value",
+       fill = "Classification") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom") 
+
+blade_pca_x %>%
+  gather("Value", "n", 4:8) %>%
+  ggplot(aes(Value, n, fill = CODE)) +
+  geom_boxplot() +
+  labs(title = "PCA 1:5 (Classification)",
+       x = "",
+       y = "Value",
+       fill = "Classification") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom") 
+
+```
+
+## Multiple Correspondence Analysis (MCA)
+
+```{r core mca, echo = FALSE, message = FALSE}
+
+core_mca_data <- core_data %>% select(CODE, CONTEXT, CLASSIFICATION, CORE_MORPH, PLAT_REJUV, CORE_METHOD, CORE_DIRECTIONALITY, CORE_TABLET_REJUV, CORE_FLAKE_REJUV, CORE_FRONT_REJUV, CORE_DIST_REJUV, CORE_SIDE_REJUV)
+
+core_mca <- MCA(core_mca_data, graph = FALSE, quali.sup = 1:3)
+
+```
+
+```{r core mca table, echo = FALSE, message = FALSE, warning = FALSE}
+
+as.tibble(get_eig(core_mca), rownames = "rowname") %>%
+  rename(variance = variance.percent,
+         cumulative = cumulative.variance.percent)
+
+```
+
+```{r core mca scree, echo = FALSE, message = FALSE, fig.width = 4, fig.height = 3, fig.align="center"}
+
+fviz_screeplot(core_mca, ylim = c(0,50), barfill = "grey50", barcolor = "grey50", geom = "bar") +
+  labs(title = "") + 
+  theme_minimal()
+
+```
+
+```{r core mca contributions, echo = FALSE, message = FALSE, fig.width = 8, fig.height = 9, fig.align="center"}
+
+core_mca_var <- get_mca_var(core_mca)
+
+as_tibble(core_mca_var$contrib, rownames = "rowname") %>%
+    rename(`Dimension 1` = `Dim 1`,
+           `Dimension 2` = `Dim 2`,
+           `Dimension 3` = `Dim 3`,
+           `Dimension 4` = `Dim 4`,
+           `Dimension 5` = `Dim 5`) %>%
+  gather("Contribution", "n", 2:6) %>%
+  ggplot(aes(n, rowname, fill = rowname)) +
+  geom_col(show.legend = FALSE, width = 0.75) +
+  labs(title = "Contribution of Variables", 
+       x = "Contribution (%)", 
+       y = "Variable",
+       caption = "Refer to the attribute catalogue for specific terminology") +
+  scale_fill_grey() +
+  facet_wrap(~Contribution, nrow = 1) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18))
+```
+
+Key acronyms for responses in *Axis 1*:  
+
+*CORE_FLAKE_REJUV_Y*: Preparatory flake rejuvenation: positive response (**Core Flake Rejuv**)  
+*CORE_SIDE_REJUV_Y*:  Lateral rejuvenation: positive response (**Core Side Rejuv**)  
+*CORE_TABLET_REJUV_Y*: Core tabletting: positive response (**Core Tablet Rejuv**)  
+*DSF*: Double smooth and facetted core platforms (**Plat Rejuv**)  
+*CBI*: Bidirectional blade scars (**Core Directionality**)  
+
+Key acronyms for responses in *Axis 2*:  
+*TP*: Two platforms (**Core Morph**)  
+*SF*: Single facetted and/or flaked platforms (**Plat Rejuv**)  
+*DS*: Double smooth platforms (**Plat Rejuv**)  
+*OP*: One platform (**Core Morph**)  
+*CORE_TABLET_REJUV_Y*: Core tabletting: positive response(**Core Tablet Rejuv**)  
+
+```{r core mca graphs, echo = FALSE, message = FALSE, fig.width = 7, fig.height = 7, fig.align="center"}
+
+core_mca_x <- cbind(core_mca_data, core_mca$ind$coord) %>% 
+  select(CODE, CONTEXT, CLASSIFICATION, `Dim 1`, `Dim 2`, `Dim 3`, `Dim 4`, `Dim 5`) %>%
+    rename(`Dimension 1` = `Dim 1`,
+           `Dimension 2` = `Dim 2`,
+           `Dimension 3` = `Dim 3`,
+           `Dimension 4` = `Dim 4`,
+           `Dimension 5` = `Dim 5`)
+
+ggplot(core_mca_x, aes(`Dimension 1`, `Dimension 2`, colour = CLASSIFICATION, shape = CLASSIFICATION)) +
+  geom_point() +
+  scale_colour_manual(values = c("grey80", "grey40")) +
+  labs(title = "MCA 1 vs. MCA 2 (Classification)",
+       x = "Dimension 1 (14.53%)",
+       y = "Dimension 2 (12.36%)") +
+  stat_ellipse() + 
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(core_mca_x, aes(`Dimension 2`, `Dimension 3`, colour = CLASSIFICATION, shape = CLASSIFICATION)) +
+  geom_point() +
+  scale_colour_manual(values = c("grey80", "grey40")) +
+  labs(title = "MCA 2 vs. MCA 3 (Classification)",
+       x = "Dimension 2 (12.36%)",
+       y = "Dimension 3 (9.51%)") +
+  stat_ellipse() + 
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+  
+ggplot(core_mca_x, aes(`Dimension 1`, `Dimension 2`, colour = CODE, shape = CODE)) +
+  geom_point() +
+  scale_colour_manual(values = c("grey90", "grey80", "grey70", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10")) +
+  scale_shape_manual(values = c(1,2,3,4,5,6,7,8,9)) +
+  labs(title = "MCA 1 vs. MCA 2 (Code)",
+       x = "Dimension 1 (14.53%)",
+       y = "Dimension 2 (12.36%)") +
+  stat_ellipse() + 
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(core_mca_x, aes(`Dimension 2`, `Dimension 3`, colour = CODE, shape = CODE)) +
+  geom_point() +
+  scale_colour_manual(values = c("grey90", "grey80", "grey70", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10")) +
+  scale_shape_manual(values = c(1,2,3,4,5,6,7,8,9)) +
+  labs(title = "MCA 2 vs. MCA 3 (Code)",
+       x = "Dimension 2 (12.36%)",
+       y = "Dimension 3 (9.51%)") + 
+  stat_ellipse() + 
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+```
+
+```{r core mca boxplots, echo = FALSE, message = FALSE, fig.width = 10, fig.height = 7, fig.align= "center"}
+core_mca_x %>%
+  gather("Value", "n", 4:8) %>%
+  ggplot(aes(Value, n, fill = CLASSIFICATION)) +
+  geom_boxplot() +
+  labs(title = "MCA 1:5 (Classification)",
+       x = "",
+       y = "Value",
+       fill = "Classification") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom") 
+
+core_mca_x %>%
+  gather("Value", "n", 4:8) %>%
+  ggplot(aes(Value, n, fill = CODE)) +
+  geom_boxplot() +
+  labs(title = "MCA 1:5 (Classification)",
+       x = "",
+       y = "Value",
+       fill = "Classification") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom") 
+```
+
+# Analysis: Backed Points (exc. burinated pieces)
+
+## Visual and Descriptive Summaries of Data
+
+## Principal Component Analysis (PCA)
+
+# Analysis: Backed Points (inc. burinated pieces)
+
+## Visual and Descriptive Summaries of Data
+
+## Principal Component Analysis (PCA)
+
+# Analysis: Tanged Points (exc. burinated pieces)
+
+## Visual and Descriptive Summaries of Data
+
+## Principal Component Analysis (PCA)
+
+# Analysis: Tanged Points (inc. burinated pieces)
+
+## Visual and Descriptive Summaries of Data
+
+## Principal Component Analysis (PCA)
