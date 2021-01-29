@@ -332,6 +332,84 @@ blade_data_clean %>%
   tab_header(title = "Table 8. Descriptive Statistics: Blade Platform Depth (mm)", subtitle = md("&nbsp;")) %>%
   opt_align_table_header(align = "left")
 
+blade_data_clean %>% 
+  group_by(CLASSIFICATION) %>% 
+  summarise(n_obs = n(),
+            min = round(min(WEIGHT),2),
+            max = round(max(WEIGHT),2),
+            mean = round(mean(WEIGHT),2),
+            med = round(median(WEIGHT),2),
+            sd = round(sd(WEIGHT),2),
+            var = round(var(WEIGHT),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 9. Descriptive Statistics: Blade Weight (g)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+blade_data_clean %>% 
+  group_by(CLASSIFICATION) %>% 
+  summarise(n_obs = n(),
+            min = round(min(LENGTH),2),
+            max = round(max(LENGTH),2),
+            mean = round(mean(LENGTH),2),
+            med = round(median(LENGTH,2)),
+            sd = round(sd(LENGTH),2),
+            var = round(var(LENGTH),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 10. Descriptive Statistics: Blade Length (mm)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+blade_data_clean %>% 
+  group_by(CLASSIFICATION) %>% 
+  summarise(n_obs = n(),
+            min = round(min(WIDTH),2),
+            max = round(max(WIDTH),2),
+            mean = round(mean(WIDTH),2),
+            med = round(median(WIDTH),2),
+            sd = round(sd(WIDTH),2),
+            var = round(var(WIDTH),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 11. Descriptive Statistics: Blade Width (mm)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+            
+blade_data_clean %>% 
+  group_by(CLASSIFICATION) %>% 
+  summarise(n_obs = n(),
+            min = round(min(ELONGATION),2),
+            max = round(max(ELONGATION),2),
+            mean = round(mean(ELONGATION),2),
+            med = round(median(ELONGATION),2),
+            sd = round(sd(ELONGATION),2),
+            var = round(var(ELONGATION),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 12. Descriptive Statistics: Blade Elongation Index (L/W)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+blade_data_clean %>% 
+  group_by(CLASSIFICATION) %>% 
+  summarise(n_obs = n(),
+            min = round(min(THICKNESS),2),
+            max = round(max(THICKNESS),2),
+            mean = round(mean(THICKNESS),2),
+            med = round(median(THICKNESS),2),
+            sd = round(sd(THICKNESS),2),
+            var = round(var(THICKNESS),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 13. Descriptive Statistics: Blade Thickness (mm)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+blade_data_clean %>% 
+  group_by(CLASSIFICATION) %>% 
+  summarise(n_obs = n(),
+            min = round(min(PLAT_DEPTH),2),
+            max = round(max(PLAT_DEPTH),2),
+            mean = round(mean(PLAT_DEPTH),2),
+            med = round(median(PLAT_DEPTH),2),
+            sd = round(sd(PLAT_DEPTH),2),
+            var = round(var(PLAT_DEPTH),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 14. Descriptive Statistics: Blade Platform Depth (mm)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
 ```
 
 ```{r blade summary 1, echo = FALSE, message = FALSE, fig.width = 6, fig.height = 4, fig.align = "center"}
@@ -927,7 +1005,7 @@ tidy(horn_blade_bp2) %>%
 
 ## Principal Component Analysis (PCA)
 
-Note: Elongation is omitted from this analysis as it is a combination of two pre-existing variables. Crested blades and broken/indistinguishable butts and bulbs are also omitted from this analysis.
+Note: Crested blades and broken/indistinguishable butts and bulbs are omitted from this analysis.
 
 ```{r blade pca, echo = FALSE, message = FALSE}
 
@@ -940,7 +1018,7 @@ blade_pca_data <- blade_data %>%
          !BUTT_MORPH == "BAB", 
          !BUTT_PREP_1 == "B", 
          !BUTT_PREP_2 == "B") %>%
-  select(CODE, CONTEXT, CLASSIFICATION, WEIGHT, LENGTH, WIDTH, THICKNESS, PLAT_DEPTH)
+  select(CODE, CONTEXT, CLASSIFICATION, WEIGHT, LENGTH, WIDTH, ELONGATION, THICKNESS, PLAT_DEPTH)
 
 blade_pca <- PCA(blade_pca_data, graph = FALSE, quali.sup = 1:3)
 
@@ -956,7 +1034,7 @@ as.tibble(get_eig(blade_pca), rownames = "rowname") %>%
 
 ```{r blade pca scree, echo = FALSE, message = FALSE, fig.width = 4, fig.height = 3, fig.align="center"}
 
-fviz_screeplot(blade_pca, ylim = c(0,50), barfill = "grey50", barcolor = "grey50", geom = "bar") +
+fviz_screeplot(blade_pca, xlim = c(1,5), ylim = c(0,50), barfill = "grey50", barcolor = "grey50", geom = "bar") +
   labs(title = "", x = "Dimension") + 
   theme_minimal()
 
@@ -992,8 +1070,8 @@ fviz_pca_biplot(blade_pca,
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 1 vs. PCA 2 (Classification)",
-       x = "Dimension 1 (56.4%)",
-       y = "Dimension 2 (17.3%)") +
+       x = "Dimension 1 (49.16%)",
+       y = "Dimension 2 (18.97%)") +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         legend.position = "bottom")
@@ -1006,8 +1084,8 @@ fviz_pca_biplot(blade_pca,
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 2 vs. PCA 3 (Classification)",
-       x = "Dimension 2 (17.3%)",
-       y = "Dimension 3 (13.8%)") +
+       x = "Dimension 2 (18.97%)",
+       y = "Dimension 3 (14.13%)") +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         legend.position = "bottom")
@@ -1020,8 +1098,8 @@ fviz_pca_biplot(blade_pca,
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 1 vs. PCA 2 (Context)",
-       x = "Dimension 1 (56.4%)",
-       y = "Dimension 2 (17.3%)") +
+       x = "Dimension 1 (49.16%)",
+       y = "Dimension 2 (18.97%)") +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         legend.position = "bottom")
@@ -1034,8 +1112,8 @@ fviz_pca_biplot(blade_pca,
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 2 vs. PCA 3 (Classification)",
-       x = "Dimension 2 (17.3%)",
-       y = "Dimension 3 (13.8%)") +
+       x = "Dimension 2 (18.97%)",
+       y = "Dimension 3 (14.13%)") +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         legend.position = "bottom")
@@ -1259,7 +1337,7 @@ core_data_clean %>%
             sd = round(sd(WEIGHT),2),
             var = round(var(WEIGHT),2)) %>% 
   gt() %>%
-  tab_header(title = "Table 9. Descriptive Statistics: Blade Core Weight (g)", subtitle = md("&nbsp;")) %>%
+  tab_header(title = "Table 15. Descriptive Statistics: Blade Core Weight (g)", subtitle = md("&nbsp;")) %>%
   opt_align_table_header(align = "left")
 
 core_data_clean %>% 
@@ -1272,7 +1350,7 @@ core_data_clean %>%
             sd = round(sd(CORE_LENGTH),2),
             var = round(var(CORE_LENGTH),2)) %>% 
   gt() %>%
-  tab_header(title = "Table 10. Descriptive Statistics: Blade Core Length (mm)", subtitle = md("&nbsp;")) %>%
+  tab_header(title = "Table 16. Descriptive Statistics: Blade Core Length (mm)", subtitle = md("&nbsp;")) %>%
   opt_align_table_header(align = "left")
 
 core_data_clean %>% 
@@ -1285,7 +1363,7 @@ core_data_clean %>%
             sd = round(sd(CORE_WIDTH),2),
             var = round(var(CORE_WIDTH),2)) %>% 
   gt() %>%
-  tab_header(title = "Table 11. Descriptive Statistics: Blade Core Width (mm)", subtitle = md("&nbsp;")) %>%
+  tab_header(title = "Table 17. Descriptive Statistics: Blade Core Width (mm)", subtitle = md("&nbsp;")) %>%
   opt_align_table_header(align = "left")
             
 core_data_clean %>% 
@@ -1298,7 +1376,7 @@ core_data_clean %>%
             sd = round(sd(CORE_BREADTH),2),
             var = round(var(CORE_BREADTH),2)) %>% 
   gt() %>%
-  tab_header(title = "Table 12. Descriptive Statistics: Blade Core Breadth (mm)", subtitle = md("&nbsp;")) %>%
+  tab_header(title = "Table 18. Descriptive Statistics: Blade Core Breadth (mm)", subtitle = md("&nbsp;")) %>%
   opt_align_table_header(align = "left")
 
 core_data_clean %>% 
@@ -1311,8 +1389,74 @@ core_data_clean %>%
             sd = round(sd(CORE_ELONGATION),2),
             var = round(var(CORE_ELONGATION),2)) %>% 
   gt() %>%
-  tab_header(title = "Table 13. Descriptive Statistics: Blade Core Elongation (L/W)", subtitle = md("&nbsp;")) %>%
+  tab_header(title = "Table 19. Descriptive Statistics: Blade Core Elongation (L/W)", subtitle = md("&nbsp;")) %>%
   opt_align_table_header(align = "left")
+
+core_data_clean %>% 
+  group_by(CLASSIFICATION) %>% 
+  summarise(n_obs = n(),
+            min = round(min(WEIGHT),2),
+            max = round(max(WEIGHT),2),
+            mean = round(mean(WEIGHT),2),
+            med = round(median(WEIGHT),2),
+            sd = round(sd(WEIGHT),2),
+            var = round(var(WEIGHT),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 20. Descriptive Statistics: Blade Core Weight (g)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+core_data_clean %>% 
+  group_by(CLASSIFICATION) %>% 
+  summarise(n_obs = n(),
+            min = round(min(CORE_LENGTH),2),
+            max = round(max(CORE_LENGTH),2),
+            mean = round(mean(CORE_LENGTH),2),
+            med = round(median(CORE_LENGTH,2)),
+            sd = round(sd(CORE_LENGTH),2),
+            var = round(var(CORE_LENGTH),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 21. Descriptive Statistics: Blade Core Length (mm)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+core_data_clean %>% 
+  group_by(CLASSIFICATION) %>% 
+  summarise(n_obs = n(),
+            min = round(min(CORE_WIDTH),2),
+            max = round(max(CORE_WIDTH),2),
+            mean = round(mean(CORE_WIDTH),2),
+            med = round(median(CORE_WIDTH),2),
+            sd = round(sd(CORE_WIDTH),2),
+            var = round(var(CORE_WIDTH),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 22. Descriptive Statistics: Blade Core Width (mm)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+            
+core_data_clean %>% 
+  group_by(CLASSIFICATION) %>% 
+  summarise(n_obs = n(),
+            min = round(min(CORE_BREADTH),2),
+            max = round(max(CORE_BREADTH),2),
+            mean = round(mean(CORE_BREADTH),2),
+            med = round(median(CORE_BREADTH),2),
+            sd = round(sd(CORE_BREADTH),2),
+            var = round(var(CORE_BREADTH),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 23. Descriptive Statistics: Blade Core Breadth (mm)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+core_data_clean %>% 
+  group_by(CLASSIFICATION) %>% 
+  summarise(n_obs = n(),
+            min = round(min(CORE_ELONGATION),2),
+            max = round(max(CORE_ELONGATION),2),
+            mean = round(mean(CORE_ELONGATION),2),
+            med = round(median(CORE_ELONGATION),2),
+            sd = round(sd(CORE_ELONGATION),2),
+            var = round(var(CORE_ELONGATION),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 24. Descriptive Statistics: Blade Core Elongation (L/W)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
 
 ```
 
@@ -1937,12 +2081,10 @@ tidy(horn_core_sr) %>%
 
 ## Principal Component Analysis (PCA)
 
-Note: Elongation is omitted from this analysis as it is a combination of two pre-existing variables. 
-
 ```{r core pca, echo = FALSE, message = FALSE}
 
 core_pca_data <- core_data  %>%
-  select(CODE, CONTEXT, CLASSIFICATION, WEIGHT, CORE_LENGTH, CORE_WIDTH, CORE_BREADTH)
+  select(CODE, CONTEXT, CLASSIFICATION, WEIGHT, CORE_LENGTH, CORE_WIDTH, CORE_ELONGATION, CORE_BREADTH)
 
 core_pca <- PCA(core_pca_data, graph = FALSE, quali.sup = 1:3)
 
@@ -1972,8 +2114,9 @@ as_tibble(core_pca_var$contrib, rownames = "rowname") %>%
     rename(`Dimension 1` = Dim.1,
            `Dimension 2` = Dim.2,
            `Dimension 3` = Dim.3,
-           `Dimension 4` = Dim.4) %>%
-  gather("Contribution", "n", 2:5) %>%
+           `Dimension 4` = Dim.4,
+           `Dimension 5` = Dim.5) %>%
+  gather("Contribution", "n", 2:6) %>%
   ggplot(aes(n, rowname, fill = rowname)) +
   geom_col(show.legend = FALSE, width = 0.75) +
   labs(title = "Contribution of Variables", x = "Contribution (%)", y = "Variable") +
@@ -1994,8 +2137,8 @@ fviz_pca_biplot(core_pca,
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 1 vs. PCA 2 (Classification)",
-       x = "Dimension 1 (68.79%)",
-       y = "Dimension 2 (14.75%)") +
+       x = "Dimension 1 (56.67%)",
+       y = "Dimension 2 (26.98%)") +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         legend.position = "bottom")
@@ -2008,8 +2151,8 @@ fviz_pca_biplot(core_pca,
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 2 vs. PCA 3 (Classification)",
-       x = "Dimension 2 (14.75%)",
-       y = "Dimension 3 (10.37%)") +
+       x = "Dimension 2 (26.98%)",
+       y = "Dimension 3 (9.53%)") +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         legend.position = "bottom")
@@ -2022,8 +2165,8 @@ fviz_pca_biplot(core_pca,
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 1 vs. PCA 2 (Context)",
-       x = "Dimension 1 (68.79%)",
-       y = "Dimension 2 (14.75%)") +
+       x = "Dimension 1 (56.67%)",
+       y = "Dimension 2 (26.98%)") +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         legend.position = "bottom")
@@ -2036,8 +2179,8 @@ fviz_pca_biplot(core_pca,
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 2 vs. PCA 3 (Context)",
-       x = "Dimension 2 (14.75%)",
-       y = "Dimension 3 (10.37%)") +
+       x = "Dimension 2 (26.98%)",
+       y = "Dimension 3 (9.53%)") +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         legend.position = "bottom")
@@ -2234,15 +2377,1356 @@ core_mca_x %>%
 
 # Analysis: Backed Points (exc. burinated pieces)
 
+Note: Backed pieces categorised as "Creswellian/Penknife Point", "Kent Point" and "Penknife Point" have, for the purposes of this analysis been redefined as "Creswellian Point".
+
 ## Visual and Descriptive Summaries of Data
 
+```{r bp excb clean and display, echo = FALSE, message = FALSE}
+
+bp_data_excb_clean <- bp_data %>%
+  filter(!BURINATION == "Y") %>%
+  mutate(SUB_CATEGORY = fct_recode(SUB_CATEGORY, "Creswellian Point" = "Creswellian/Penknife Point"),
+         SUB_CATEGORY = fct_recode(SUB_CATEGORY, "Creswellian Point" = "Penknife Point"),
+         SUB_CATEGORY = fct_recode(SUB_CATEGORY, "Creswellian Point" = "Kent Point")) %>%
+  rename(BASE_LOCATION = TANG_ORIENTATION)
+
+bp_data_excb_clean %>% 
+  group_by(CONTEXT) %>% 
+  summarise(n_obs = n(),
+            min = round(min(WEIGHT),2),
+            max = round(max(WEIGHT),2),
+            mean = round(mean(WEIGHT),2),
+            med = round(median(WEIGHT),2),
+            sd = round(sd(WEIGHT),2),
+            var = round(var(WEIGHT),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 25. Descriptive Statistics: Backed Point Weight (g)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_excb_clean %>% 
+  group_by(CONTEXT) %>% 
+  summarise(n_obs = n(),
+            min = round(min(LENGTH),2),
+            max = round(max(LENGTH),2),
+            mean = round(mean(LENGTH),2),
+            med = round(median(LENGTH,2)),
+            sd = round(sd(LENGTH),2),
+            var = round(var(LENGTH),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 26. Descriptive Statistics: Backed Point Length (mm)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_excb_clean %>% 
+  group_by(CONTEXT) %>% 
+  summarise(n_obs = n(),
+            min = round(min(WIDTH),2),
+            max = round(max(WIDTH),2),
+            mean = round(mean(WIDTH),2),
+            med = round(median(WIDTH),2),
+            sd = round(sd(WIDTH),2),
+            var = round(var(WIDTH),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 27. Descriptive Statistics: Backed Point Width (mm)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+            
+bp_data_excb_clean %>% 
+  group_by(CONTEXT) %>% 
+  summarise(n_obs = n(),
+            min = round(min(ELONGATION),2),
+            max = round(max(ELONGATION),2),
+            mean = round(mean(ELONGATION),2),
+            med = round(median(ELONGATION),2),
+            sd = round(sd(ELONGATION),2),
+            var = round(var(ELONGATION),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 28. Descriptive Statistics: Backed Point Elongation Index (L/W)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_excb_clean %>% 
+  group_by(CONTEXT) %>% 
+  summarise(n_obs = n(),
+            min = round(min(THICKNESS),2),
+            max = round(max(THICKNESS),2),
+            mean = round(mean(THICKNESS),2),
+            med = round(median(THICKNESS),2),
+            sd = round(sd(THICKNESS),2),
+            var = round(var(THICKNESS),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 29. Descriptive Statistics: Backed Point Elongation Index (L/W)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_excb_clean %>% 
+  group_by(CONTEXT) %>% 
+  summarise(n_obs = n(),
+            min = round(min(TCSA),2),
+            max = round(max(TCSA),2),
+            mean = round(mean(TCSA),2),
+            med = round(median(TCSA),2),
+            sd = round(sd(TCSA),2),
+            var = round(var(TCSA),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 30. Descriptive Statistics: Tip Cross-Sectional Area (TCSA)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_excb_clean %>% 
+  group_by(CONTEXT) %>% 
+  summarise(n_obs = n(),
+            min = round(min(TCSP),2),
+            max = round(max(TCSP),2),
+            mean = round(mean(TCSP),2),
+            med = round(median(TCSP),2),
+            sd = round(sd(TCSP),2),
+            var = round(var(TCSP),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 31. Descriptive Statistics: Tip Cross-Sectional Perimeter (TCSP)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_excb_clean %>% 
+  group_by(CLASSIFICATION) %>% 
+  summarise(n_obs = n(),
+            min = round(min(WEIGHT),2),
+            max = round(max(WEIGHT),2),
+            mean = round(mean(WEIGHT),2),
+            med = round(median(WEIGHT),2),
+            sd = round(sd(WEIGHT),2),
+            var = round(var(WEIGHT),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 32. Descriptive Statistics: Backed Point Weight (g)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_excb_clean %>% 
+  group_by(CLASSIFICATION) %>% 
+  summarise(n_obs = n(),
+            min = round(min(LENGTH),2),
+            max = round(max(LENGTH),2),
+            mean = round(mean(LENGTH),2),
+            med = round(median(LENGTH,2)),
+            sd = round(sd(LENGTH),2),
+            var = round(var(LENGTH),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 33. Descriptive Statistics: Backed Point Length (mm)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_excb_clean %>% 
+  group_by(CLASSIFICATION) %>% 
+  summarise(n_obs = n(),
+            min = round(min(WIDTH),2),
+            max = round(max(WIDTH),2),
+            mean = round(mean(WIDTH),2),
+            med = round(median(WIDTH),2),
+            sd = round(sd(WIDTH),2),
+            var = round(var(WIDTH),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 34. Descriptive Statistics: Backed Point Width (mm)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+            
+bp_data_excb_clean %>% 
+  group_by(CLASSIFICATION) %>% 
+  summarise(n_obs = n(),
+            min = round(min(ELONGATION),2),
+            max = round(max(ELONGATION),2),
+            mean = round(mean(ELONGATION),2),
+            med = round(median(ELONGATION),2),
+            sd = round(sd(ELONGATION),2),
+            var = round(var(ELONGATION),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 35. Descriptive Statistics: Backed Point Elongation Index (L/W)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_excb_clean %>% 
+  group_by(CLASSIFICATION) %>% 
+  summarise(n_obs = n(),
+            min = round(min(THICKNESS),2),
+            max = round(max(THICKNESS),2),
+            mean = round(mean(THICKNESS),2),
+            med = round(median(THICKNESS),2),
+            sd = round(sd(THICKNESS),2),
+            var = round(var(THICKNESS),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 36. Descriptive Statistics: Backed Point Elongation Index (L/W)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_excb_clean %>% 
+  group_by(CLASSIFICATION) %>% 
+  summarise(n_obs = n(),
+            min = round(min(TCSA),2),
+            max = round(max(TCSA),2),
+            mean = round(mean(TCSA),2),
+            med = round(median(TCSA),2),
+            sd = round(sd(TCSA),2),
+            var = round(var(TCSA),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 37. Descriptive Statistics: Tip Cross-Sectional Area (TCSA)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_excb_clean %>% 
+  group_by(CLASSIFICATION) %>% 
+  summarise(n_obs = n(),
+            min = round(min(TCSP),2),
+            max = round(max(TCSP),2),
+            mean = round(mean(TCSP),2),
+            med = round(median(TCSP),2),
+            sd = round(sd(TCSP),2),
+            var = round(var(TCSP),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 38. Descriptive Statistics: Tip Cross-Sectional Perimeter (TCSP)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_excb_clean %>% 
+  group_by(SUB_CATEGORY) %>% 
+  summarise(n_obs = n(),
+            min = round(min(WEIGHT),2),
+            max = round(max(WEIGHT),2),
+            mean = round(mean(WEIGHT),2),
+            med = round(median(WEIGHT),2),
+            sd = round(sd(WEIGHT),2),
+            var = round(var(WEIGHT),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 39. Descriptive Statistics: Backed Point Weight (g)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_excb_clean %>% 
+  group_by(SUB_CATEGORY) %>% 
+  summarise(n_obs = n(),
+            min = round(min(LENGTH),2),
+            max = round(max(LENGTH),2),
+            mean = round(mean(LENGTH),2),
+            med = round(median(LENGTH,2)),
+            sd = round(sd(LENGTH),2),
+            var = round(var(LENGTH),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 40. Descriptive Statistics: Backed Point Length (mm)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_excb_clean %>% 
+  group_by(SUB_CATEGORY) %>% 
+  summarise(n_obs = n(),
+            min = round(min(WIDTH),2),
+            max = round(max(WIDTH),2),
+            mean = round(mean(WIDTH),2),
+            med = round(median(WIDTH),2),
+            sd = round(sd(WIDTH),2),
+            var = round(var(WIDTH),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 41. Descriptive Statistics: Backed Point Width (mm)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+            
+bp_data_excb_clean %>% 
+  group_by(SUB_CATEGORY) %>% 
+  summarise(n_obs = n(),
+            min = round(min(ELONGATION),2),
+            max = round(max(ELONGATION),2),
+            mean = round(mean(ELONGATION),2),
+            med = round(median(ELONGATION),2),
+            sd = round(sd(ELONGATION),2),
+            var = round(var(ELONGATION),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 42. Descriptive Statistics: Backed Point Elongation Index (L/W)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_excb_clean %>% 
+  group_by(SUB_CATEGORY) %>% 
+  summarise(n_obs = n(),
+            min = round(min(THICKNESS),2),
+            max = round(max(THICKNESS),2),
+            mean = round(mean(THICKNESS),2),
+            med = round(median(THICKNESS),2),
+            sd = round(sd(THICKNESS),2),
+            var = round(var(THICKNESS),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 43. Descriptive Statistics: Backed Point Elongation Index (L/W)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_excb_clean %>% 
+  group_by(SUB_CATEGORY) %>% 
+  summarise(n_obs = n(),
+            min = round(min(TCSA),2),
+            max = round(max(TCSA),2),
+            mean = round(mean(TCSA),2),
+            med = round(median(TCSA),2),
+            sd = round(sd(TCSA),2),
+            var = round(var(TCSA),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 44. Descriptive Statistics: Tip Cross-Sectional Area (TCSA)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_excb_clean %>% 
+  group_by(SUB_CATEGORY) %>% 
+  summarise(n_obs = n(),
+            min = round(min(TCSP),2),
+            max = round(max(TCSP),2),
+            mean = round(mean(TCSP),2),
+            med = round(median(TCSP),2),
+            sd = round(sd(TCSP),2),
+            var = round(var(TCSP),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 45. Descriptive Statistics: Tip Cross-Sectional Perimeter (TCSP)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+```
+
+```{r bp excb summary 1, echo = FALSE, message = FALSE, fig.width = 6, fig.height = 4, fig.align = "center"}
+
+ggplot(bp_data_excb_clean, aes(CODE, WEIGHT, fill = CLASSIFICATION)) +
+         geom_boxplot(width = 0.3) +
+         labs(x = "", y = "Weight (g)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  scale_fill_grey(start = 0.4, end = 0.8) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(bp_data_excb_clean, aes(CODE, LENGTH, fill = CLASSIFICATION)) +
+         geom_boxplot(width = 0.3) +
+         labs(x = "", y = "Length (mm)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  scale_fill_grey(start = 0.4, end = 0.8) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(bp_data_excb_clean, aes(CODE, WIDTH, fill = CLASSIFICATION)) +
+         geom_boxplot(width = 0.3) +
+         labs(x = "", y = "Width (mm)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  scale_fill_grey(start = 0.4, end = 0.8) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(bp_data_excb_clean, aes(CODE, ELONGATION, fill = CLASSIFICATION)) +
+         geom_boxplot(width = 0.3) +
+         labs(x = "", y = "Elongation (L/W)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  scale_fill_grey(start = 0.4, end = 0.8) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(bp_data_excb_clean, aes(CODE, THICKNESS, fill = CLASSIFICATION)) +
+         geom_boxplot(width = 0.3) +
+         labs(x = "", y = "Thickness (mm)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  scale_fill_grey(start = 0.4, end = 0.8) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(bp_data_excb_clean, aes(CODE, TCSA, fill = CLASSIFICATION)) +
+         geom_boxplot(width = 0.3) +
+         labs(x = "", y = "Tip Cross-Sectional Area (TCSA)", fill = "Taxonomic Unit") +
+  theme_minimal() +
+  scale_fill_grey(start = 0.4, end = 0.8) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(bp_data_excb_clean, aes(CODE, TCSP, fill = CLASSIFICATION)) +
+         geom_boxplot(width = 0.3) +
+         labs(x = "", y = "Tip Cross-Sectional Area (TCSP)", fill = "Taxonomic Unit") +
+  theme_minimal() +
+  scale_fill_grey(start = 0.4, end = 0.8) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(bp_data_excb_clean, aes(SUB_CATEGORY, WEIGHT)) +
+         geom_boxplot(width = 0.3, fill = "grey80") +
+         labs(x = "", y = "Weight (g)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(bp_data_excb_clean, aes(SUB_CATEGORY, LENGTH)) +
+         geom_boxplot(width = 0.3, fill = "grey80") +
+         labs(x = "", y = "Length (mm)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(bp_data_excb_clean, aes(SUB_CATEGORY, WIDTH)) +
+         geom_boxplot(width = 0.3, fill = "grey80") +
+         labs(x = "", y = "Width (mm)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(bp_data_excb_clean, aes(SUB_CATEGORY, ELONGATION)) +
+         geom_boxplot(width = 0.3, fill = "grey80") +
+         labs(x = "", y = "Elongation (L/W)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(bp_data_excb_clean, aes(SUB_CATEGORY, THICKNESS)) +
+         geom_boxplot(width = 0.3, fill = "grey80") +
+         labs(x = "", y = "Thickness (mm)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(bp_data_excb_clean, aes(SUB_CATEGORY, TCSA)) +
+         geom_boxplot(width = 0.3, fill = "grey80") +
+         labs(x = "", y = "Tip Cross-Sectional Area (TCSA)", fill = "Taxonomic Unit") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(bp_data_excb_clean, aes(SUB_CATEGORY, TCSP)) +
+         geom_boxplot(width = 0.3, fill = "grey80") +
+         labs(x = "", y = "Tip Cross-Sectional Area (TCSP)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+```
+
+```{r bp excb l w plot, echo = FALSE, message = FALSE, fig.width = 6, fig.height = 6, fig.align = "center"}
+
+ggplot(bp_data_excb_clean, aes(WIDTH, LENGTH, colour = CLASSIFICATION, shape = CLASSIFICATION)) +
+         geom_point() +
+         labs(x = "Backed Point Width (mm)", y = "Backed Point Length (mm)") +
+  stat_ellipse(type = "norm", linetype = 2) +
+  lims(x = c(0,40), y = c(0,80)) +
+  theme_minimal() + 
+  scale_colour_manual(values = c("grey70", "grey30")) +
+  theme(legend.position = "bottom")
+
+ggplot(bp_data_excb_clean, aes(WIDTH, LENGTH, colour = CODE, shape = CODE)) +
+         geom_point() +
+         labs(x = "Backed Point Width (mm)", y = "Backed Point Length (mm)") +
+  lims(x = c(0,40), y = c(0,80)) +
+  theme_minimal() + 
+  scale_colour_manual(values = c("grey90", "grey80", "grey70", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10")) +
+  scale_shape_manual(values = c(1,2,3,4,5,6,7,8,9)) +
+  theme(legend.position = "bottom")
+
+ggplot(bp_data_excb_clean, aes(WIDTH, LENGTH, colour = CODE, shape = SUB_CATEGORY)) +
+         geom_point() +
+         labs(x = "Backed Point Width (mm)", y = "Backed Point Length (mm)") + 
+  lims(x = c(0,40), y = c(0,80)) +
+  theme_minimal() + 
+  scale_colour_manual(values = c("grey90", "grey80", "grey70", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10")) +
+  scale_shape_manual(values = c(1,2,3,4))
+
+ggplot(bp_data_excb_clean, aes(WIDTH, LENGTH, colour = CLASSIFICATION, shape = SUB_CATEGORY)) +
+         geom_point() +
+         labs(x = "Backed Point Width (mm)", y = "Backed Point Length (mm)") + 
+  lims(x = c(0,40), y = c(0,80)) +
+  theme_minimal() + 
+  scale_colour_manual(values = c("grey70", "grey30")) +
+  scale_shape_manual(values = c(1,2,3,4))
+
+```
+
+```{r bp excb tests, echo = FALSE, message = FALSE, warning = FALSE}
+
+pairwise.wilcox.test(bp_data_excb_clean$WEIGHT, bp_data_excb_clean$CODE, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_excb_clean$LENGTH, bp_data_excb_clean$CODE, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_excb_clean$WIDTH, bp_data_excb_clean$CODE, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_excb_clean$ELONGATION, bp_data_excb_clean$CODE, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_excb_clean$THICKNESS, bp_data_excb_clean$CODE, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_excb_clean$TCSA, bp_data_excb_clean$CODE, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_excb_clean$TCSP, bp_data_excb_clean$CODE, p.adj = "bonf", exact = FALSE)
+
+pairwise.wilcox.test(bp_data_excb_clean$WEIGHT, bp_data_excb_clean$CLASSIFICATION, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_excb_clean$LENGTH, bp_data_excb_clean$CLASSIFICATION, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_excb_clean$WIDTH, bp_data_excb_clean$CLASSIFICATION, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_excb_clean$ELONGATION, bp_data_excb_clean$CLASSIFICATION, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_excb_clean$THICKNESS, bp_data_excb_clean$CLASSIFICATION, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_excb_clean$TCSA, bp_data_excb_clean$CLASSIFICATION, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_excb_clean$TCSP, bp_data_excb_clean$CLASSIFICATION, p.adj = "bonf", exact = FALSE)
+
+pairwise.wilcox.test(bp_data_excb_clean$WEIGHT, bp_data_excb_clean$SUB_CATEGORY, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_excb_clean$LENGTH, bp_data_excb_clean$SUB_CATEGORY, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_excb_clean$WIDTH, bp_data_excb_clean$SUB_CATEGORY, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_excb_clean$ELONGATION, bp_data_excb_clean$SUB_CATEGORY, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_excb_clean$THICKNESS, bp_data_excb_clean$SUB_CATEGORY, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_excb_clean$TCSA, bp_data_excb_clean$SUB_CATEGORY, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_excb_clean$TCSP, bp_data_excb_clean$SUB_CATEGORY, p.adj = "bonf", exact = FALSE)
+
+```
+
+```{r bp excb summary 2, echo = FALSE, message = FALSE, fig.width = 6, fig.height = 4, fig.align = "center"}
+
+ggplot(bp_data_excb_clean, aes(fill = BASE_LOCATION, x = CODE)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Base Location", x = "", y = "Count", fill = "Type") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(bp_data_excb_clean, aes(fill = BASE_LOCATION, x = CLASSIFICATION)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Base Location", x = "", y = "Count", fill = "Type") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(bp_data_excb_clean, aes(fill = BASE_LOCATION, x = SUB_CATEGORY)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Base Location", x = "", y = "Count", fill = "Type") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+```
+
 ## Principal Component Analysis (PCA)
+
+```{r bp excb pca, echo = FALSE, message = FALSE}
+
+bp_excb_pca_data <- bp_data_excb_clean %>%
+  select(CODE, CONTEXT, CLASSIFICATION, SUB_CATEGORY, WEIGHT, LENGTH, WIDTH, ELONGATION, THICKNESS, TCSA, TCSP)
+
+bp_excb_pca <- PCA(bp_excb_pca_data, graph = FALSE, quali.sup = 1:4)
+
+```
+
+```{r bp excb pca table, echo = FALSE, message = FALSE, warning = FALSE}
+
+as.tibble(get_eig(bp_excb_pca), rownames = "rowname") %>%
+  rename(variance = variance.percent,
+         cumulative = cumulative.variance.percent)
+
+```
+
+```{r bp excb pca scree, echo = FALSE, message = FALSE, fig.width = 4, fig.height = 3, fig.align="center"}
+
+fviz_screeplot(bp_excb_pca, ylim = c(0,50), barfill = "grey50", barcolor = "grey50", geom = "bar") +
+  labs(title = "", x = "Dimension") + 
+  theme_minimal()
+
+```
+
+```{r bp excb pca contributions, echo = FALSE, message = FALSE, fig.align="center"}
+
+bp_excb_pca_var <- get_pca_var(bp_excb_pca)
+
+as_tibble(bp_excb_pca_var$contrib, rownames = "rowname") %>%
+    rename(`Dimension 1` = Dim.1,
+           `Dimension 2` = Dim.2,
+           `Dimension 3` = Dim.3,
+           `Dimension 4` = Dim.4,
+           `Dimension 5` = Dim.5) %>%
+  gather("Contribution", "n", 2:6) %>%
+  ggplot(aes(n, rowname, fill = rowname)) +
+  geom_col(show.legend = FALSE, width = 0.75) +
+  labs(title = "Contribution of Variables", x = "Contribution (%)", y = "Variable") +
+  scale_fill_grey() +
+  facet_wrap(~Contribution, nrow = 1) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18))
+```
+
+```{r bp excb pca graphs, echo = FALSE, message = FALSE, fig.width = 7, fig.height = 7, fig.align="center"}
+
+fviz_pca_biplot(bp_excb_pca, 
+                axes = c(1,2),
+                repel = FALSE,
+                habillage = bp_excb_pca_data$CLASSIFICATION,
+                palette = c("grey80", "grey40"),
+                label = "var",
+                addEllipses = TRUE) +
+  labs(title = "PCA 1 vs. PCA 2 (Classification)",
+       x = "Dimension 1 (62.35%)",
+       y = "Dimension 2 (18.96%)") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+fviz_pca_biplot(bp_excb_pca, 
+                axes = c(2,3),
+                repel = FALSE,
+                habillage = bp_excb_pca_data$CLASSIFICATION,
+                palette = c("grey80", "grey40"),
+                label = "var",
+                addEllipses = TRUE) +
+  labs(title = "PCA 1 vs. PCA 2 (Classification)",
+       x = "Dimension 2 (18.96%)",
+       y = "Dimension 3 (10.10%)") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+fviz_pca_biplot(bp_excb_pca, 
+                axes = c(1,2),
+                repel = FALSE,
+                habillage = bp_excb_pca_data$CODE,
+                palette = c("grey80", "grey70", "grey60", "grey50", "grey40", "grey30"),
+                label = "var",
+                addEllipses = TRUE) +
+  labs(title = "PCA 1 vs. PCA 2 (Code)",
+       x = "Dimension 1 (62.35%)",
+       y = "Dimension 2 (18.96%)") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+fviz_pca_biplot(bp_excb_pca, 
+                axes = c(2,3),
+                repel = FALSE,
+                habillage = bp_excb_pca_data$CODE,
+                palette = c("grey80", "grey70", "grey60", "grey50", "grey40", "grey30"),
+                label = "var",
+                addEllipses = TRUE) +
+  labs(title = "PCA 1 vs. PCA 2 (Code)",
+       x = "Dimension 2 (18.96%)",
+       y = "Dimension 3 (10.10%)") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+
+fviz_pca_biplot(bp_excb_pca, 
+                axes = c(1,2),
+                repel = FALSE,
+                habillage = bp_excb_pca_data$SUB_CATEGORY,
+                palette = c("grey80", "grey60", "grey40", "grey20"),
+                label = "var") +
+  labs(title = "PCA 1 vs. PCA 2 (Backed Point Variant)",
+       x = "Dimension 1 (62.35%)",
+       y = "Dimension 2 (18.96%)") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18))
+
+fviz_pca_biplot(bp_excb_pca, 
+                axes = c(2,3),
+                repel = FALSE,
+                habillage = bp_excb_pca_data$SUB_CATEGORY,
+                palette = c("grey80", "grey60", "grey40", "grey20"),
+                label = "var") +
+  labs(title = "PCA 1 vs. PCA 2 (Backed Point Variant)",
+       x = "Dimension 2 (18.96%)",
+       y = "Dimension 3 (10.10%)") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18))
+
+```
+
+```{r bp excb pca boxplots, echo = FALSE, message = FALSE, fig.width = 10, fig.height = 7, fig.align="center"}
+
+bp_excb_pca_x <- cbind(bp_excb_pca_data, bp_excb_pca$ind$coord) %>% 
+  select(CODE, CONTEXT, CLASSIFICATION, SUB_CATEGORY, Dim.1, Dim.2, Dim.3, Dim.4, Dim.5) %>%
+    rename(`Dimension 1` = Dim.1,
+           `Dimension 2` = Dim.2,
+           `Dimension 3` = Dim.3,
+           `Dimension 4` = Dim.4,
+           `Dimension 5` = Dim.5)
+
+bp_excb_pca_x %>%
+  gather("Value", "n", 5:9) %>%
+  ggplot(aes(Value, n, fill = CLASSIFICATION)) +
+  geom_boxplot() +
+  labs(title = "PCA 1:5 (Classification)",
+       x = "",
+       y = "Value",
+       fill = "Classification") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom") 
+
+bp_excb_pca_x %>%
+  gather("Value", "n", 5:9) %>%
+  ggplot(aes(Value, n, fill = CODE)) +
+  geom_boxplot() +
+  labs(title = "PCA 1:5 (Classification)",
+       x = "",
+       y = "Value",
+       fill = "Classification") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom") 
+
+bp_excb_pca_x %>%
+  gather("Value", "n", 5:9) %>%
+  ggplot(aes(Value, n, fill = SUB_CATEGORY)) +
+  geom_boxplot() +
+  labs(title = "PCA 1:5 (Classification)",
+       x = "",
+       y = "Value",
+       fill = "Classification") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom") 
+
+```
 
 # Analysis: Backed Points (inc. burinated pieces)
 
 ## Visual and Descriptive Summaries of Data
 
+```{r bp incb clean and display, echo = FALSE, message = FALSE}
+
+bp_data_incb_clean <- bp_data %>%
+  mutate(SUB_CATEGORY = fct_recode(SUB_CATEGORY, "Creswellian Point" = "Creswellian/Penknife Point"),
+         SUB_CATEGORY = fct_recode(SUB_CATEGORY, "Creswellian Point" = "Penknife Point"),
+         SUB_CATEGORY = fct_recode(SUB_CATEGORY, "Creswellian Point" = "Kent Point")) %>%
+  rename(BASE_LOCATION = TANG_ORIENTATION)
+
+bp_data_incb_clean %>% 
+  group_by(CONTEXT) %>% 
+  summarise(n_obs = n(),
+            min = round(min(WEIGHT),2),
+            max = round(max(WEIGHT),2),
+            mean = round(mean(WEIGHT),2),
+            med = round(median(WEIGHT),2),
+            sd = round(sd(WEIGHT),2),
+            var = round(var(WEIGHT),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 46. Descriptive Statistics: Backed Point Weight (g)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_incb_clean %>% 
+  group_by(CONTEXT) %>% 
+  summarise(n_obs = n(),
+            min = round(min(LENGTH),2),
+            max = round(max(LENGTH),2),
+            mean = round(mean(LENGTH),2),
+            med = round(median(LENGTH,2)),
+            sd = round(sd(LENGTH),2),
+            var = round(var(LENGTH),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 47. Descriptive Statistics: Backed Point Length (mm)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_incb_clean %>% 
+  group_by(CONTEXT) %>% 
+  summarise(n_obs = n(),
+            min = round(min(WIDTH),2),
+            max = round(max(WIDTH),2),
+            mean = round(mean(WIDTH),2),
+            med = round(median(WIDTH),2),
+            sd = round(sd(WIDTH),2),
+            var = round(var(WIDTH),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 48. Descriptive Statistics: Backed Point Width (mm)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+            
+bp_data_incb_clean %>% 
+  group_by(CONTEXT) %>% 
+  summarise(n_obs = n(),
+            min = round(min(ELONGATION),2),
+            max = round(max(ELONGATION),2),
+            mean = round(mean(ELONGATION),2),
+            med = round(median(ELONGATION),2),
+            sd = round(sd(ELONGATION),2),
+            var = round(var(ELONGATION),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 49. Descriptive Statistics: Backed Point Elongation Index (L/W)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_incb_clean %>% 
+  group_by(CONTEXT) %>% 
+  summarise(n_obs = n(),
+            min = round(min(THICKNESS),2),
+            max = round(max(THICKNESS),2),
+            mean = round(mean(THICKNESS),2),
+            med = round(median(THICKNESS),2),
+            sd = round(sd(THICKNESS),2),
+            var = round(var(THICKNESS),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 50. Descriptive Statistics: Backed Point Elongation Index (L/W)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_incb_clean %>% 
+  group_by(CONTEXT) %>% 
+  summarise(n_obs = n(),
+            min = round(min(TCSA),2),
+            max = round(max(TCSA),2),
+            mean = round(mean(TCSA),2),
+            med = round(median(TCSA),2),
+            sd = round(sd(TCSA),2),
+            var = round(var(TCSA),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 51. Descriptive Statistics: Tip Cross-Sectional Area (TCSA)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_incb_clean %>% 
+  group_by(CONTEXT) %>% 
+  summarise(n_obs = n(),
+            min = round(min(TCSP),2),
+            max = round(max(TCSP),2),
+            mean = round(mean(TCSP),2),
+            med = round(median(TCSP),2),
+            sd = round(sd(TCSP),2),
+            var = round(var(TCSP),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 52. Descriptive Statistics: Tip Cross-Sectional Perimeter (TCSP)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_incb_clean %>% 
+  group_by(CLASSIFICATION) %>% 
+  summarise(n_obs = n(),
+            min = round(min(WEIGHT),2),
+            max = round(max(WEIGHT),2),
+            mean = round(mean(WEIGHT),2),
+            med = round(median(WEIGHT),2),
+            sd = round(sd(WEIGHT),2),
+            var = round(var(WEIGHT),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 53. Descriptive Statistics: Backed Point Weight (g)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_incb_clean %>% 
+  group_by(CLASSIFICATION) %>% 
+  summarise(n_obs = n(),
+            min = round(min(LENGTH),2),
+            max = round(max(LENGTH),2),
+            mean = round(mean(LENGTH),2),
+            med = round(median(LENGTH,2)),
+            sd = round(sd(LENGTH),2),
+            var = round(var(LENGTH),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 54. Descriptive Statistics: Backed Point Length (mm)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_incb_clean %>% 
+  group_by(CLASSIFICATION) %>% 
+  summarise(n_obs = n(),
+            min = round(min(WIDTH),2),
+            max = round(max(WIDTH),2),
+            mean = round(mean(WIDTH),2),
+            med = round(median(WIDTH),2),
+            sd = round(sd(WIDTH),2),
+            var = round(var(WIDTH),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 55. Descriptive Statistics: Backed Point Width (mm)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+            
+bp_data_incb_clean %>% 
+  group_by(CLASSIFICATION) %>% 
+  summarise(n_obs = n(),
+            min = round(min(ELONGATION),2),
+            max = round(max(ELONGATION),2),
+            mean = round(mean(ELONGATION),2),
+            med = round(median(ELONGATION),2),
+            sd = round(sd(ELONGATION),2),
+            var = round(var(ELONGATION),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 56. Descriptive Statistics: Backed Point Elongation Index (L/W)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_incb_clean %>% 
+  group_by(CLASSIFICATION) %>% 
+  summarise(n_obs = n(),
+            min = round(min(THICKNESS),2),
+            max = round(max(THICKNESS),2),
+            mean = round(mean(THICKNESS),2),
+            med = round(median(THICKNESS),2),
+            sd = round(sd(THICKNESS),2),
+            var = round(var(THICKNESS),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 57. Descriptive Statistics: Backed Point Elongation Index (L/W)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_incb_clean %>% 
+  group_by(CLASSIFICATION) %>% 
+  summarise(n_obs = n(),
+            min = round(min(TCSA),2),
+            max = round(max(TCSA),2),
+            mean = round(mean(TCSA),2),
+            med = round(median(TCSA),2),
+            sd = round(sd(TCSA),2),
+            var = round(var(TCSA),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 58. Descriptive Statistics: Tip Cross-Sectional Area (TCSA)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_incb_clean %>% 
+  group_by(CLASSIFICATION) %>% 
+  summarise(n_obs = n(),
+            min = round(min(TCSP),2),
+            max = round(max(TCSP),2),
+            mean = round(mean(TCSP),2),
+            med = round(median(TCSP),2),
+            sd = round(sd(TCSP),2),
+            var = round(var(TCSP),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 59. Descriptive Statistics: Tip Cross-Sectional Perimeter (TCSP)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_incb_clean %>% 
+  group_by(SUB_CATEGORY) %>% 
+  summarise(n_obs = n(),
+            min = round(min(WEIGHT),2),
+            max = round(max(WEIGHT),2),
+            mean = round(mean(WEIGHT),2),
+            med = round(median(WEIGHT),2),
+            sd = round(sd(WEIGHT),2),
+            var = round(var(WEIGHT),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 60. Descriptive Statistics: Backed Point Weight (g)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_incb_clean %>% 
+  group_by(SUB_CATEGORY) %>% 
+  summarise(n_obs = n(),
+            min = round(min(LENGTH),2),
+            max = round(max(LENGTH),2),
+            mean = round(mean(LENGTH),2),
+            med = round(median(LENGTH,2)),
+            sd = round(sd(LENGTH),2),
+            var = round(var(LENGTH),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 61. Descriptive Statistics: Backed Point Length (mm)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_incb_clean %>% 
+  group_by(SUB_CATEGORY) %>% 
+  summarise(n_obs = n(),
+            min = round(min(WIDTH),2),
+            max = round(max(WIDTH),2),
+            mean = round(mean(WIDTH),2),
+            med = round(median(WIDTH),2),
+            sd = round(sd(WIDTH),2),
+            var = round(var(WIDTH),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 62. Descriptive Statistics: Backed Point Width (mm)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+            
+bp_data_incb_clean %>% 
+  group_by(SUB_CATEGORY) %>% 
+  summarise(n_obs = n(),
+            min = round(min(ELONGATION),2),
+            max = round(max(ELONGATION),2),
+            mean = round(mean(ELONGATION),2),
+            med = round(median(ELONGATION),2),
+            sd = round(sd(ELONGATION),2),
+            var = round(var(ELONGATION),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 63. Descriptive Statistics: Backed Point Elongation Index (L/W)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_incb_clean %>% 
+  group_by(SUB_CATEGORY) %>% 
+  summarise(n_obs = n(),
+            min = round(min(THICKNESS),2),
+            max = round(max(THICKNESS),2),
+            mean = round(mean(THICKNESS),2),
+            med = round(median(THICKNESS),2),
+            sd = round(sd(THICKNESS),2),
+            var = round(var(THICKNESS),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 64. Descriptive Statistics: Backed Point Elongation Index (L/W)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_incb_clean %>% 
+  group_by(SUB_CATEGORY) %>% 
+  summarise(n_obs = n(),
+            min = round(min(TCSA),2),
+            max = round(max(TCSA),2),
+            mean = round(mean(TCSA),2),
+            med = round(median(TCSA),2),
+            sd = round(sd(TCSA),2),
+            var = round(var(TCSA),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 65. Descriptive Statistics: Tip Cross-Sectional Area (TCSA)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+bp_data_incb_clean %>% 
+  group_by(SUB_CATEGORY) %>% 
+  summarise(n_obs = n(),
+            min = round(min(TCSP),2),
+            max = round(max(TCSP),2),
+            mean = round(mean(TCSP),2),
+            med = round(median(TCSP),2),
+            sd = round(sd(TCSP),2),
+            var = round(var(TCSP),2)) %>% 
+  gt() %>%
+  tab_header(title = "Table 66. Descriptive Statistics: Tip Cross-Sectional Perimeter (TCSP)", subtitle = md("&nbsp;")) %>%
+  opt_align_table_header(align = "left")
+
+```
+
+```{r bp incb summary 1, echo = FALSE, message = FALSE, fig.width = 6, fig.height = 4, fig.align = "center"}
+
+ggplot(bp_data_incb_clean, aes(CODE, WEIGHT, fill = CLASSIFICATION)) +
+         geom_boxplot(width = 0.3) +
+         labs(x = "", y = "Weight (g)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  scale_fill_grey(start = 0.4, end = 0.8) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(bp_data_incb_clean, aes(CODE, LENGTH, fill = CLASSIFICATION)) +
+         geom_boxplot(width = 0.3) +
+         labs(x = "", y = "Length (mm)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  scale_fill_grey(start = 0.4, end = 0.8) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(bp_data_incb_clean, aes(CODE, WIDTH, fill = CLASSIFICATION)) +
+         geom_boxplot(width = 0.3) +
+         labs(x = "", y = "Width (mm)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  scale_fill_grey(start = 0.4, end = 0.8) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(bp_data_incb_clean, aes(CODE, ELONGATION, fill = CLASSIFICATION)) +
+         geom_boxplot(width = 0.3) +
+         labs(x = "", y = "Elongation (L/W)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  scale_fill_grey(start = 0.4, end = 0.8) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(bp_data_incb_clean, aes(CODE, THICKNESS, fill = CLASSIFICATION)) +
+         geom_boxplot(width = 0.3) +
+         labs(x = "", y = "Thickness (mm)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  scale_fill_grey(start = 0.4, end = 0.8) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(bp_data_incb_clean, aes(CODE, TCSA, fill = CLASSIFICATION)) +
+         geom_boxplot(width = 0.3) +
+         labs(x = "", y = "Tip Cross-Sectional Area (TCSA)", fill = "Taxonomic Unit") +
+  theme_minimal() +
+  scale_fill_grey(start = 0.4, end = 0.8) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(bp_data_incb_clean, aes(CODE, TCSP, fill = CLASSIFICATION)) +
+         geom_boxplot(width = 0.3) +
+         labs(x = "", y = "Tip Cross-Sectional Area (TCSP)", fill = "Taxonomic Unit") +
+  theme_minimal() +
+  scale_fill_grey(start = 0.4, end = 0.8) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(bp_data_incb_clean, aes(SUB_CATEGORY, WEIGHT)) +
+         geom_boxplot(width = 0.3, fill = "grey80") +
+         labs(x = "", y = "Weight (g)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(bp_data_incb_clean, aes(SUB_CATEGORY, LENGTH)) +
+         geom_boxplot(width = 0.3, fill = "grey80") +
+         labs(x = "", y = "Length (mm)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(bp_data_incb_clean, aes(SUB_CATEGORY, WIDTH)) +
+         geom_boxplot(width = 0.3, fill = "grey80") +
+         labs(x = "", y = "Width (mm)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(bp_data_incb_clean, aes(SUB_CATEGORY, ELONGATION)) +
+         geom_boxplot(width = 0.3, fill = "grey80") +
+         labs(x = "", y = "Elongation (L/W)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(bp_data_incb_clean, aes(SUB_CATEGORY, THICKNESS)) +
+         geom_boxplot(width = 0.3, fill = "grey80") +
+         labs(x = "", y = "Thickness (mm)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(bp_data_incb_clean, aes(SUB_CATEGORY, TCSA)) +
+         geom_boxplot(width = 0.3, fill = "grey80") +
+         labs(x = "", y = "Tip Cross-Sectional Area (TCSA)", fill = "Taxonomic Unit") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+
+ggplot(bp_data_incb_clean, aes(SUB_CATEGORY, TCSP)) +
+         geom_boxplot(width = 0.3, fill = "grey80") +
+         labs(x = "", y = "Tip Cross-Sectional Area (TCSP)", fill = "Taxonomic Unit") +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+                                   legend.position = "bottom")
+```
+
+```{r bp incb l w plot, echo = FALSE, message = FALSE, fig.width = 6, fig.height = 6, fig.align = "center"}
+
+ggplot(bp_data_incb_clean, aes(WIDTH, LENGTH, colour = CLASSIFICATION, shape = CLASSIFICATION)) +
+         geom_point() +
+         labs(x = "Backed Point Width (mm)", y = "Backed Point Length (mm)") +
+  stat_ellipse(type = "norm", linetype = 2) +
+  lims(x = c(0,40), y = c(0,80)) +
+  theme_minimal() + 
+  scale_colour_manual(values = c("grey70", "grey30")) +
+  theme(legend.position = "bottom")
+
+ggplot(bp_data_incb_clean, aes(WIDTH, LENGTH, colour = CODE, shape = CODE)) +
+         geom_point() +
+         labs(x = "Backed Point Width (mm)", y = "Backed Point Length (mm)") +
+  lims(x = c(0,40), y = c(0,80)) +
+  theme_minimal() + 
+  scale_colour_manual(values = c("grey90", "grey70", "grey50", "grey30", "grey20", "grey10")) +
+  scale_shape_manual(values = c(1,2,3,4,5,6)) +
+  theme(legend.position = "bottom")
+
+ggplot(bp_data_incb_clean, aes(WIDTH, LENGTH, colour = CODE, shape = SUB_CATEGORY)) +
+         geom_point() +
+         labs(x = "Backed Point Width (mm)", y = "Backed Point Length (mm)") + 
+  lims(x = c(0,40), y = c(0,80)) +
+  theme_minimal() + 
+  scale_colour_manual(values = c("grey90", "grey70", "grey50", "grey30", "grey20", "grey10")) +
+  scale_shape_manual(values = c(1,2,3,4,5))
+
+ggplot(bp_data_incb_clean, aes(WIDTH, LENGTH, colour = CLASSIFICATION, shape = SUB_CATEGORY)) +
+         geom_point() +
+         labs(x = "Backed Point Width (mm)", y = "Backed Point Length (mm)") + 
+  lims(x = c(0,40), y = c(0,80)) +
+  theme_minimal() + 
+  scale_colour_manual(values = c("grey70", "grey30")) +
+  scale_shape_manual(values = c(1,2,3,4,5))
+
+```
+
+```{r bp incb tests, echo = FALSE, message = FALSE, warning = FALSE}
+
+pairwise.wilcox.test(bp_data_incb_clean$WEIGHT, bp_data_incb_clean$CODE, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_incb_clean$LENGTH, bp_data_incb_clean$CODE, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_incb_clean$WIDTH, bp_data_incb_clean$CODE, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_incb_clean$ELONGATION, bp_data_incb_clean$CODE, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_incb_clean$THICKNESS, bp_data_incb_clean$CODE, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_incb_clean$TCSA, bp_data_incb_clean$CODE, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_incb_clean$TCSP, bp_data_incb_clean$CODE, p.adj = "bonf", exact = FALSE)
+
+pairwise.wilcox.test(bp_data_incb_clean$WEIGHT, bp_data_incb_clean$CLASSIFICATION, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_incb_clean$LENGTH, bp_data_incb_clean$CLASSIFICATION, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_incb_clean$WIDTH, bp_data_incb_clean$CLASSIFICATION, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_incb_clean$ELONGATION, bp_data_incb_clean$CLASSIFICATION, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_incb_clean$THICKNESS, bp_data_incb_clean$CLASSIFICATION, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_incb_clean$TCSA, bp_data_incb_clean$CLASSIFICATION, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_incb_clean$TCSP, bp_data_incb_clean$CLASSIFICATION, p.adj = "bonf", exact = FALSE)
+
+pairwise.wilcox.test(bp_data_incb_clean$WEIGHT, bp_data_incb_clean$SUB_CATEGORY, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_incb_clean$LENGTH, bp_data_incb_clean$SUB_CATEGORY, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_incb_clean$WIDTH, bp_data_incb_clean$SUB_CATEGORY, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_incb_clean$ELONGATION, bp_data_incb_clean$SUB_CATEGORY, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_incb_clean$THICKNESS, bp_data_incb_clean$SUB_CATEGORY, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_incb_clean$TCSA, bp_data_incb_clean$SUB_CATEGORY, p.adj = "bonf", exact = FALSE)
+pairwise.wilcox.test(bp_data_incb_clean$TCSP, bp_data_incb_clean$SUB_CATEGORY, p.adj = "bonf", exact = FALSE)
+
+```
+
+```{r bp incb summary 2, echo = FALSE, message = FALSE, fig.width = 6, fig.height = 4, fig.align = "center"}
+
+ggplot(bp_data_incb_clean, aes(fill = BASE_LOCATION, x = CODE)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Base Location", x = "", y = "Count", fill = "Type") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(bp_data_incb_clean, aes(fill = BASE_LOCATION, x = CLASSIFICATION)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Base Location", x = "", y = "Count", fill = "Type") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+ggplot(bp_data_incb_clean, aes(fill = BASE_LOCATION, x = SUB_CATEGORY)) +
+  geom_bar(position = position_dodge(preserve = "single"), stat="count") +
+  labs(title = "Base Location", x = "", y = "Count", fill = "Type") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+```
+
 ## Principal Component Analysis (PCA)
+
+```{r bp incb pca, echo = FALSE, message = FALSE}
+
+bp_incb_pca_data <- bp_data_incb_clean %>%
+  select(CODE, CONTEXT, CLASSIFICATION, SUB_CATEGORY, WEIGHT, LENGTH, WIDTH, ELONGATION, THICKNESS, TCSA, TCSP)
+
+bp_incb_pca <- PCA(bp_incb_pca_data, graph = FALSE, quali.sup = 1:4)
+
+```
+
+```{r bp incb pca table, echo = FALSE, message = FALSE, warning = FALSE}
+
+as.tibble(get_eig(bp_incb_pca), rownames = "rowname") %>%
+  rename(variance = variance.percent,
+         cumulative = cumulative.variance.percent)
+
+```
+
+```{r bp incb pca scree, echo = FALSE, message = FALSE, fig.width = 4, fig.height = 3, fig.align="center"}
+
+fviz_screeplot(bp_incb_pca, ylim = c(0,50), barfill = "grey50", barcolor = "grey50", geom = "bar") +
+  labs(title = "", x = "Dimension") + 
+  theme_minimal()
+
+```
+
+```{r bp incb pca contributions, echo = FALSE, message = FALSE, fig.align="center"}
+
+bp_incb_pca_var <- get_pca_var(bp_incb_pca)
+
+as_tibble(bp_incb_pca_var$contrib, rownames = "rowname") %>%
+    rename(`Dimension 1` = Dim.1,
+           `Dimension 2` = Dim.2,
+           `Dimension 3` = Dim.3,
+           `Dimension 4` = Dim.4,
+           `Dimension 5` = Dim.5) %>%
+  gather("Contribution", "n", 2:6) %>%
+  ggplot(aes(n, rowname, fill = rowname)) +
+  geom_col(show.legend = FALSE, width = 0.75) +
+  labs(title = "Contribution of Variables", x = "Contribution (%)", y = "Variable") +
+  scale_fill_grey() +
+  facet_wrap(~Contribution, nrow = 1) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18))
+```
+
+```{r bp incb pca graphs, echo = FALSE, message = FALSE, fig.width = 7, fig.height = 7, fig.align="center"}
+
+fviz_pca_biplot(bp_incb_pca, 
+                axes = c(1,2),
+                repel = FALSE,
+                habillage = bp_incb_pca_data$CLASSIFICATION,
+                palette = c("grey80", "grey40"),
+                label = "var",
+                addEllipses = TRUE) +
+  labs(title = "PCA 1 vs. PCA 2 (Classification)",
+       x = "Dimension 1 (62.99%)",
+       y = "Dimension 2 (15.56%)") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+fviz_pca_biplot(bp_incb_pca, 
+                axes = c(2,3),
+                repel = FALSE,
+                habillage = bp_incb_pca_data$CLASSIFICATION,
+                palette = c("grey80", "grey40"),
+                label = "var",
+                addEllipses = TRUE) +
+  labs(title = "PCA 1 vs. PCA 2 (Classification)",
+       x = "Dimension 2 (15.56%)",
+       y = "Dimension 3 (11.42%)") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+fviz_pca_biplot(bp_incb_pca, 
+                axes = c(1,2),
+                repel = FALSE,
+                habillage = bp_incb_pca_data$CODE,
+                palette = c("grey80", "grey70", "grey60", "grey50", "grey40", "grey30"),
+                label = "var",
+                addEllipses = TRUE) +
+  labs(title = "PCA 1 vs. PCA 2 (Code)",
+       x = "Dimension 1 (62.99%)",
+       y = "Dimension 2 (15.56%)") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+fviz_pca_biplot(bp_incb_pca, 
+                axes = c(2,3),
+                repel = FALSE,
+                habillage = bp_incb_pca_data$CODE,
+                palette = c("grey80", "grey70", "grey60", "grey50", "grey40", "grey30"),
+                label = "var",
+                addEllipses = TRUE) +
+  labs(title = "PCA 1 vs. PCA 2 (Code)",
+       x = "Dimension 2 (15.56%)",
+       y = "Dimension 3 (11.42%)") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom")
+
+
+fviz_pca_biplot(bp_incb_pca, 
+                axes = c(1,2),
+                repel = FALSE,
+                habillage = bp_incb_pca_data$SUB_CATEGORY,
+                palette = c("grey90", "grey70", "grey50", "grey30", "grey10"),
+                label = "var") +
+  labs(title = "PCA 1 vs. PCA 2 (Backed Point Variant)",
+       x = "Dimension 1 (62.99%)",
+       y = "Dimension 2 (15.56%)") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18))
+
+fviz_pca_biplot(bp_incb_pca, 
+                axes = c(2,3),
+                repel = FALSE,
+                habillage = bp_incb_pca_data$SUB_CATEGORY,
+                palette = c("grey90", "grey70", "grey50", "grey30", "grey10"),
+                label = "var") +
+  labs(title = "PCA 1 vs. PCA 2 (Backed Point Variant)",
+       x = "Dimension 2 (15.56%)",
+       y = "Dimension 3 (11.42%)") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18))
+
+```
+
+```{r bp incb pca boxplots, echo = FALSE, message = FALSE, fig.width = 10, fig.height = 7, fig.align="center"}
+
+bp_incb_pca_x <- cbind(bp_incb_pca_data, bp_incb_pca$ind$coord) %>% 
+  select(CODE, CONTEXT, CLASSIFICATION, SUB_CATEGORY, Dim.1, Dim.2, Dim.3, Dim.4, Dim.5) %>%
+    rename(`Dimension 1` = Dim.1,
+           `Dimension 2` = Dim.2,
+           `Dimension 3` = Dim.3,
+           `Dimension 4` = Dim.4,
+           `Dimension 5` = Dim.5)
+
+bp_incb_pca_x %>%
+  gather("Value", "n", 5:9) %>%
+  ggplot(aes(Value, n, fill = CLASSIFICATION)) +
+  geom_boxplot() +
+  labs(title = "PCA 1:5 (Classification)",
+       x = "",
+       y = "Value",
+       fill = "Classification") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom") 
+
+bp_incb_pca_x %>%
+  gather("Value", "n", 5:9) %>%
+  ggplot(aes(Value, n, fill = CODE)) +
+  geom_boxplot() +
+  labs(title = "PCA 1:5 (Classification)",
+       x = "",
+       y = "Value",
+       fill = "Classification") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom") 
+
+bp_incb_pca_x %>%
+  gather("Value", "n", 5:9) %>%
+  ggplot(aes(Value, n, fill = SUB_CATEGORY)) +
+  geom_boxplot() +
+  labs(title = "PCA 1:5 (Classification)",
+       x = "",
+       y = "Value",
+       fill = "Classification") +
+  scale_fill_grey(start = 0.3, end = 0.9) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 18),
+        legend.position = "bottom") 
+
+```
 
 # Analysis: Tanged Points (exc. burinated pieces)
 
