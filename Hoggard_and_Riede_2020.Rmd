@@ -93,11 +93,13 @@ Previously classified Bromme material
 
 10) **Segebro** (Malmö, Sweden): (ADD HERE)
 
+Both Häcklingen and Bienenbüttel will be first categorised as Federmesser (the default judged unit), and then explored further.  
+
 In understanding the underlying *chaînes opératoires*, and in adopting a common terminology for identifying technological signatures and characteristics, attributes originate from the Nordic Blade Technology Network (REFERENCE). Minor amendments, and the extension of categories in a small number of instances were necessary to reflect Final Palaeolithic variability e.g. dorsal scar directionality. First, technological and morphological characteristics are first examined through **visual and descriptive summaries of data**. The significance of differences in the distribution of continuous variables across assemblages were assessed using **pairwise Mann--Whitney** testing (with Bonferroni-corrected *p* values). A **Gini-Simpson** index is then employed to examine intrasite variability while a **Morisita-Horn diversity index** is used to examine inter-assemblage dissimilarity; past applications in Crema (2014), Maiorano et al. (2020) and Leplongeon et al. (2020). **Multiple Correspondence Analysis (MCA)** is then employed for all categorical technological data, and for each data type (core, blade, backed point, tanged point); this will examine the degree of association between individual contexts and their technological make-up. **Principal Component Analysis (PCA)** is performed for all quantitative (morphometric) data, again for each data type; this will also examine individual contexts and their classification. PCA is analogous to MCA but for quantitative variables.  
 
 (WHAT PHYLOGENETIC ANALYSIS SHOULD BE EMPLOYED: ML FOR QUANTITIVE VARIABLES AND PARSIMONY ANALYSES FOR QUALITATIVE?!)
 
-All data and supporting material used throughout this exercise is stored on a GitHub open-access repository: <https://github.com/CSHoggard/-tech-data>.
+All ordination methods in this analysis were conducted using the FactoMiner (Le et al. 2008), factoextra (Kassambara and Mundt, 2020) and the tidymodels packages (Kuhn et al. 2020), while diversity measures were calculated using the diverse (Guevara et al. 2016) and vegan (Oksanan et al. 2020) packages. A number of other packages were used to aid data wrangling, transformation and visualising, including rio (Chan et al. 2018), tidyverse (Wickham et al. 2019), gt (Iannone et al. 2020), broom (Robinson et al. 2020), tidytext (Silge and Robinson, 2016) and doBy (Højsgaard and Halekoh, 2020). All data, R code and supporting material (including figures) in this article can be found on the Open Science Framework (doi <https://osf.io/3h2rq/>)
 
 
 ```{r data import, echo = FALSE, message = FALSE}
@@ -152,7 +154,6 @@ data %>%
   tab_header(title = "Table 1. Artefact Breakdown", subtitle = "Context") %>%
   opt_align_table_header(align = "left")
 ```
-
 
 ```{r breakdown, echo = FALSE, message = FALSE}
 data %>% 
