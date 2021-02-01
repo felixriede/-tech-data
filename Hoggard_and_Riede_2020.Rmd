@@ -1,5 +1,5 @@
 ---
-title: 'Understanding Typologically Awkward Final Palaeolithic Assemblages'
+title: 'Awkward Assemblages and Points of Confusion: Understanding "Typologically Awkward" Final Palaeolithic Assemblages'
 author:
 - Dr. Christian Steven Hoggard (University of Southampton, UK.)
 - Prof. Felix Riede (Aarhus University, DK.)
@@ -29,45 +29,76 @@ library(tidytext)
 
 # Introduction
 
-The Late Glacial, defined as occurring from the first pronounced warming after the Last Glacial Maximum (LGM) to the beginning of the Holocene period (c. 16,000-11,700 cal BP), is traditionally viewed as a period of great cultural diversity in northern Europe, with groups belonging to the Magdalenian and Epigravettian beginning to migrate northwards (Gamble et al. 2005; Riede, 2014; Wygal and Heidenreich, 2014). During this phase, groups occupying particular regions in northern Europe began to develop consistent differences in their toolkits, with variances in shouldered points (e.g. the Creswellian and Hamburgian: Burdukiewicz, 1986), backed points (e.g. the Federmessergruppen and Azilian: Schild, 1996), large tanged points (e.g. the Bromme: Taute, 1968) and small tanged points (e.g. the Ahrensburgian and Swiderian: Taute, 1968; Kobusiewicz, 2002).
+The Late Glacial, defined as occurring from the first pronounced warming following the Last Glacial Maximum (LGM) to the beginning of the Holocene (c. 16,000-11,700 cal BP), is traditionally viewed as a period of great cultural diversity in northern Europe, with groups belonging to the Magdalenian and Epigravettian beginning to migrate northwards (Gamble et al. 2005; Riede, 2014; Wygal and Heidenreich, 2014). During this phase, groups occupying particular regions in northern Europe began to develop consistent differences in their toolkits, with variances in shouldered points (e.g. the Hamburgian: Burdukiewicz, 1986), backed points (e.g. the Federmessergruppen and Azilian: Schild, 1996), large tanged points (e.g. the Bromme: Taute, 1968) and small tanged points (e.g. the Ahrensburgian and Swiderian: Taute, 1968; Kobusiewicz, 2002).
+As highlighted by Ivanovaite et al. (2019), these regional cultural entities provide the framework for understanding and inferring patterns and processes of migration, adaptation, and potentially even emerging ethnicity for this period. Cultural units are not static, and once their attendant territories are defined, cultures can move around, their economic focus can change, and cultures can interact. It is for this reason that the identification of robust archaeological taxonomic units are a fundamental precondition in our archaeological understanding of this period; without these units, the goal of understanding such past processes cannot be realised (Roberts and Vander Linden, 2011).  
 
-As highlighted by Ivanovaite et al (2019), these regional cultural entities provide the framework for understanding and inferring patterns and processes of migration, adaptation, and potentially even emerging ethnicity for this period. Cultural units are not static, and once their attendant territories are defined, cultures can move around, their economic focus can change, and cultures can interact. It is for this reason that robust archaeological taxonomic units are a fundamental precondition; without these units, the goal of understanding such past processes cannot be realised (Roberts and Vander Linden, 2011).
+Yet, techno-typological classifications for the European Palaeolithic (and further afield) have been repeatedly critiqued (Otte and Keeley, 1990; Neeley and Barton, 1994; Barton and Neeley, 1996; Felgenhauer, 1996; Clark, 1999, Vasil'ev, 2001; 2009; Tomášková, 2013; Clark and Riel-Salvatore, 2006; Shea, 2014; Lisitsyn, 2017; Ivanovaitė and Riede, 2018; Riede et al. 2019; Reynolds and Riede, 2019; Ivanovaite et al. 2019). Otte and Keeley (1990) note that many of the taxonomic units for the Final Palaeolithic, the *fossils directeurs* for ethno-geographic variability, are usually rooted in early antiquarian excavations, consisting of only a few key sites (as reflected in the practice of naming archaeological units after *loci classici*), while Sauer and Riede (2019) have highlighted that, for the Final Palaeolithic of Central Europe, units appear to reflect differing research histories more than empirical variation between assemblages. A more acerbic critique has been voiced by Houtsma et al. 1996: 143), arguing that '[o]nly when researchers of the Late Palaeolithic habitation of the Northwest European Plain escape the constraints of contemporary national borders and the paradigmatic straight-jackets of provincialism and regional chauvinism, which lead to insularity, will we be in a position to gain analytical control of the totality of extant data partitioned into uniform and mutually comparable sets of demonstrably relevant attributes' (Houtsma et al. 1996: 143). With a lack of genetic material available to contribute to the understanding of the chronologies, movements and behaviours of Final Palaeolithic communities, stone tool variants remain the premier proxies for inferring population structure.  
 
-Yet, techno-typological classifications for the European Palaeolithic (and further afield) have been repeatedly critiqued (Otte and Keeley, 1990; Neeley and Barton, 1994; Barton and Neeley, 1996; Felgenhauer, 1996; Clark, 1999, Vasil'ev, 2001; 2009; Tomášková, 2013; Clark and Riel-Salvatore, 2006; Shea, 2014; Lisitsyn, 2017; Ivanovaitė and Riede, 2018; Reynolds and Riede, 2019). Otte and Keeley (1990) note that many of the taxonomic units for the Final Palaeolithic, and subsequently *fossiles directeurs* for ethno-geographic variability, are usually based on early antiquarian excavations but of a few key sites (reflected in the practice of naming them after after *loci classici*), while Sauer and Riede (2019) highlight that, for the Final Palaeolithic of Central Europe, units appear to reflect differing research histories more than empirical variation between assemblages. A more acerbic critique has been voiced by Houtsma and colleagues, who argued that '[o]nly when researchers of the Late Palaeolithic habitation of the Northwest European Plain escape the constraints of contemporary national borders and the paradigmatic straight-jackets of provincialism and regional chauvinism, which lead to insularity, will we be in a position to gain analytical control of the totality of extant data partitioned into uniform and mutually comparable sets of demonstrably relevant attributes' (Houtsma et al. 1996: 143). With a lack of genetic material available to contribute to the understanding of the chronologies, movements and behaviours of these communities, stone tool variants remain the premier proxies for inferring population structure.
+Attempts are currently underway to provide a more objective framework for the Final Palaeolithic, founded on conceptualising material culture as an underwritten system of information transmission across generations, through the production of reproducible, objective phylogenetic assessments of archaeological taxonomic units (Riede et al. 2019; Ivanovaite et al. 2019). This article, through the same theoretical framework, considers this problem on a micro-level, specifically that of ‘typologically awkward’ assemblages, i.e. archaeological contexts with multiple techno-typological identifiers and reflecting one cultural units. In considering the Final Palaeolithic contexts of Häcklingen and Bienenbuttel (Germany), this article will highlight how an empirical technological and phylogenetic assessment can shed light on their positioning within the wider landscape and context, and further highlight some of the issues in techno-typological classifications.  
 
-Attempts are underway to provide a more objective framework for the Final Palaeolithic, founded on conceptualising material culture as underwritten by a system of information transmission across generations, and producing reproducible, objective phylogenetic assessments of archaeological taxonomic units (Riede et al. 2019; Ivanovaite et al. 2019). This article, through the same theoretical framework, considers a parallel issue, specifically that of 'typologically awkward' assemblages, i.e. archaeological contexts which do not reflect strictly one cultural unit. A variety of pereceived Federmesser and Bromme contexts, some with previously catalogued artefact types from other cultural units, are here investigated, through extensive technological and morphological analyses, in order to understand their true degree of variation of these liminal lithic assemblages.
 
-All data and supporting material used throughout this exercise is stored on a GitHub open-access repository: <https://github.com/CSHoggard/-tech-data>.
+# Site Overviews: Häcklingen and Bienenbuttel
 
-Only complete examples are examined here, and total 599 artefacts. See Table 1 and Table 2 for more information.
+## Bienenbüttel FStNr. 15 (Lower Saxony, Germany)
+
+Bienenbüttel-15 is situated on the north-east bank of the Ilmenau river, between the villages of Bienenbüttel and Wichmannsburg, and is approximately 11km to the south-east of Häcklingen (discussed below). Following test cuttings in autumn 1997, a more detailed investigation commenced in 1998 by the Bezirksarchiiologie Lüneburg Ausgrabungen (Lüneburg Distict Archaeological Unit), following proposed building development in the area.  
+
+Excavations revealed a wealth of Neolithic material including post features, ceramic material in addition to a cooking pit; later prehistoric material from the Bronze Age was also recovered (Richter 2001). Below, a number of backed points were identified, in addition a number of scrapers, blade cores, burins and blades. A number of  fragmented and complete Federmesser and Creswellian points (Figure 1) were identified in addition to three Zonhoven points (sensu Schwabedissen 1954), blades typical of the Ahrensburgian featuring sloping retouched tips. One Hamburgian point, belonging to the Havelte Group (sensu Bohmers 1956 and Stapert 1997) was also identified among the assemblage. A clear temporal separation between the Final Palaeolithic and Neolithic material was acknowledged, with little mechanical redeposition assumed, however an absolute chronometric framework was not generated.  
+
+Richter (2001) first supposed, through the identification of retouched tips, and the end-scraper component of the assemblage that elements from the both Wehlen and Tjonger Federmesser sub-groups (*sensu* Schwabedissen 1954) are identified. However, with the clear presence of Creswellian (and Ahrensburg and Hamburgian elements), Richter (2001) queried the pre-existing framework, following similar doubts by Paddaya (1971) and Ikinger (1998), and stressed the lack of precise qualitative and quantitative analyses in understanding group structure (Richter, 2001: 34).  
+
+For further details on the site of Bienenbüttel FStNr. 15 please refer to Richter (2001).    
+
+## Häcklingen FStNr. 19 (Lower Saxony, Germany)  
+
+Excavations close to the village of Häcklingen, situated near the town of Lüneburg (Lower Saxony, Germany), first began from 1983-1985, following the identification of Palaeolithic and Neolithic material during routine surface inspection (Assendorp, 1997). Following the identification of Neolithic pit features, ceramic material, burned bone fragments and hazelnut shells, student excavations led by the University of Hamburg and University of Prague were undertaken towards the end of the twentieth century. 
+
+With ice wedge formations thought to have occurred at this site, as described elsewhere for northern Germany (Clausen, 1995, 1997; Zoller, 1981), and artefacts separated from discoloured areas in the soil, a vertical shift in archaeological material is hypothesised (Richter, 2001). This is evident in the examination of the Final Palaeolithic material, with patination and minor edge damage contrasting the fresh-edged and unrelocated Neolithic material, and contrasts the sequence at Bienenbüttel-15.  
+
+Among the Final Palaeolithic material were a variety of  tanged point and backed point forms, including Ahrensburgian, Lyngby and Chwalibogowice tanged points, in addition to a number of Penknife backed points (see Figure 1). Richter (2002) notes that classically (*sensu* Schwabedissen 1954) Häcklingen can be attributed to the Rissener sub-group of the Federmessergruppen, before highlighting that the Rissener categorisation, and the sub-categories of the Federmesser more generally, are unsatisfactory (Ikinger, 1998; Richter, 2001). This led to Richter (2002) questioning its place within the Tolk-Sprenge subdivision of the Lyngby culture (*sensu* Taute 1968), comparable with the Segebro-Bromme culture in Scandinavia: despite the presence of backed form variants, these are thought to occur (in their minority) within the Tolk-Sprenge (see Taute 1968 and Ikinger 1998). However, with a distinct chronometric framework lacking (similarly to Bienenbüttel), and as a result of mechanical taphonomic processes at Häcklingen, it is unknown whether the Final Palaeolithic material represents one or multiple occupation events.  
+
+Despite cross-contamination in layers, the typologically perspective awkward admixture of tanged and backed point variants at Häcklingen are particularly relevant to the robustness of these artefacts, and the combination of them as archaeological taxonomic units. 
+
+For further details on the site of Häcklingen FStNr. 19 please refer to Richter (2002).  
+
+[Figure 1: Select Backed and Tanged Points from Häcklingen FStNr. 19 and Bienenbüttel FStNr. 15 (redrawn after Richter 2001 and Richter 2002)]  
+
+
+## Techno-typological Classifications and Points of Contention
+
+The sites of Häcklingen and Bienenbüttel represent just two of a number of contexts, with a lack of chronometric dating, and known to feature a wealth of different named artefact units commonly thought to represent specific taxonomic groups. Others include XXXXXXX (FELIX ADD HERE). (ADD HERE WHY ITS IMPORTANT THAT THIS IS CLARIFIED)
+
 
 # Materials and Methods
 
-For this analysis, 10 archaeological contexts, constituting 15 unique horizons, are examined:
+To better understand the technological positioning of Häcklingen and Bienenbüttel, an empirical quantitative and qualitative analysis is performed on technological and morphological variables on a number of previously classified Federmesser and Bromme material. For this analysis, the following contexts (in addition to Häcklingen and Bienenbüttel) are considered:  
 
 Previously classified Federmesser material
 
-1)  **Bienenbüttel (FStNr. 15)** (Lower Saxony, Germany):
+3)  **Rietberg (1/2/5/Other/Spoil)** (North Rhine-Westphalia, Germany): (ADD HERE)
 
-2)  **Häcklingen (FStNr. 19)** (Lower Saxony, Germany):
-
-3)  **Rietberg (1/2/5/Other/Spoil)** (North Rhine-Westphalia, Germany):
-
-4)  **Rothenkirchen** (Hesse, Germany):
+4)  **Rothenkirchen** (Hesse, Germany): (ADD HERE)
 
 Previously classified Bromme material
 
-5)  **Brümmerhof (FStNr. 16)** (Lower Saxony, Germany): ADD CONTEXT HERE
+5)  **Brümmerhof (FStNr. 16)** (Lower Saxony, Germany): (ADD HERE)
 
-6)  **Højgård** (Zealand, Denmark): ADD CONTEXT HERE
+6)  **Højgård** (Zealand, Denmark): (ADD HERE)
 
-7)  **Sassenholz (FStNr. 78/82)** (Lower Saxony, Germany): ADD CONTEXT HERE
+7)  **Sassenholz (FStNr. 78/82)** (Lower Saxony, Germany): (ADD HERE)
 
 8)  **Skovmosen I** (Zealand, Denmark): A Final Palaeolithic assemblage comprising of tanged points, scrapers, burins, and primary reduction products including blades and cores (Boye, 2006; Hilgart, 2003; Eggers-Kaas et al. 2019). Can be traditionally placed within the Bromme culture (Hilgart, 2003; Boye, 2006; Brinch Petersen, 2009), however caution has been noted in its classification (Eggers-Kaas et al. 2019).
 
-9)  **Søvind** (Jutland, Denmark): ADD CONTEXT HERE
+9)  **Søvind** (Jutland, Denmark): (ADD HERE)
 
-10) **Segebro** (Malmö, Sweden): ADD CONTEXT HERE
+10) **Segebro** (Malmö, Sweden): (ADD HERE)
+
+In understanding the underlying *chaînes opératoires*, and in adopting a common terminology for identifying technological signatures and characteristics, attributes originate from the Nordic Blade Technology Network (REFERENCE). Minor amendments, and the extension of categories in a small number of instances were necessary to reflect Final Palaeolithic variability e.g. dorsal scar directionality. First, technological and morphological characteristics are first examined through **visual and descriptive summaries of data**. The significance of differences in the distribution of continuous variables across assemblages were assessed using **pairwise Mann--Whitney** testing (with Bonferroni-corrected *p* values). A **Gini-Simpson** index is then employed to examine intrasite variability while a **Morisita-Horn diversity index** is used to examine inter-assemblage dissimilarity; past applications in Crema (2014), Maiorano et al. (2020) and Leplongeon et al. (2020). **Multiple Correspondence Analysis (MCA)** is then employed for all categorical technological data, and for each data type (core, blade, backed point, tanged point); this will examine the degree of association between individual contexts and their technological make-up. **Principal Component Analysis (PCA)** is performed for all quantitative (morphometric) data, again for each data type; this will also examine individual contexts and their classification. PCA is analogous to MCA but for quantitative variables.  
+
+(WHAT PHYLOGENETIC ANALYSIS SHOULD BE EMPLOYED: ML FOR QUANTITIVE VARIABLES AND PARSIMONY ANALYSES FOR QUALITATIVE?!)
+
+All data and supporting material used throughout this exercise is stored on a GitHub open-access repository: <https://github.com/CSHoggard/-tech-data>.
+
 
 ```{r data import, echo = FALSE, message = FALSE}
 
@@ -122,7 +153,6 @@ data %>%
   opt_align_table_header(align = "left")
 ```
 
-Sassenholz makes up the greatest proportion of the database featuring 219 artefacts, followed by the Rietberg complex (111), Søvind (93) and Häcklingen (67).
 
 ```{r breakdown, echo = FALSE, message = FALSE}
 data %>% 
@@ -135,8 +165,6 @@ data %>%
   opt_align_table_header(align = "left")
 ```
 
-In total 383 originate from a presupposed Bromme context, representing 63.83% of all material. The Federmesser is here represented by 217 artefacts, representing 36.17% of all material.
-
 ```{r file creation, echo = FALSE, message = FALSE}
 blade_data <- filter(data, ARTEFACT == "Blade") %>% droplevels()
 core_data <- filter(data, ARTEFACT == "Core") %>% droplevels()
@@ -146,7 +174,6 @@ tp_data <- filter(data, ARTEFACT == "Tanged Point") %>% droplevels()
 
 # Technological attributes
 
-In understanding the underlying *chaînes opératoires*, and in adopting a common terminology for identifying technological signatures and characteristics, attributes originate from the Nordic Blade Technology Network (REFERENCE). Minor amendments, and the extension of categories in a small number of instances were necessary to reflect Final Palaeolithic variability e.g. dorsal scar directionality.
 
 The following attributes are recorded for all artefacts:
 
@@ -226,17 +253,6 @@ The following additional attributes are recorded for all **tanged and backed poi
 | *TCSP*                | Maximum tip cross-sectional perimeter (mm) *sensu* Shea (2006)|
 | *BURINATION*          | Presence of burination -- 1) **Yes (Y)**; 2) **No (N)**|
 
-# Methodology
-
-A variety of technological and morphological analyses are performed here:
-
-1)  Technological and morphological characteristics are first examined through **visual and descriptive summaries of data**. The significance of differences in the distribution of continuous variables across assemblages were assessed using **pairwise Mann--Whitney** testing (with Bonferroni-corrected *p* values).
-
-2)  A **Gini-Simpson** index is employed to examine intrasite variability while a **Morisita-Horn diversity index** is used to examine inter-assemblage dissimilarity; past applications in Crema (2014), Maiorano et al. (2020) and Leplongeon et al. (2020).
-
-3)  **Multiple Correspondence Analysis (MCA)** is then employed for all categorical technological data, and for each data type (core, blade, backed point, tanged point); this will examine the degree of association between individual contexts and their technological make-up.
-
-4)  **Principal Component Analysis (PCA)** is performed for all quantitative (morphometric) data, again for each data type; this will also examine individual contexts and their classification. PCA is analogous to MCA but for quantitative variables.
 
 # Analysis: Blades (exc. Crested Blades and Broken Pieces)
 
