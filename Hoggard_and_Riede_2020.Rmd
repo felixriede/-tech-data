@@ -151,7 +151,15 @@ data %>%
   count(Context) %>%
   pivot_wider(names_from = ARTEFACT, values_from = n) %>%
   gt() %>%
-  tab_header(title = "Table 1. Artefact Breakdown", subtitle = "Context") %>%
+  tab_header(title = "Table 1a. Artefact Breakdown", subtitle = "Context") %>%
+  opt_align_table_header(align = "left")
+
+data %>% 
+  group_by(ARTEFACT) %>%
+  count(CODE) %>%
+  pivot_wider(names_from = ARTEFACT, values_from = n) %>%
+  gt() %>%
+  tab_header(title = "Table 1b. Artefact Breakdown", subtitle = "Code") %>%
   opt_align_table_header(align = "left")
 ```
 
@@ -164,6 +172,7 @@ data %>%
   gt() %>%
   tab_header(title = "Table 2. Artefact Breakdown", subtitle = "Technology") %>%
   opt_align_table_header(align = "left")
+
 ```
 
 ```{r file creation, echo = FALSE, message = FALSE}
@@ -2206,7 +2215,7 @@ fviz_pca_biplot(core_pca,
 
 ```{r core pca boxplots, echo = FALSE, message = FALSE, fig.width = 10, fig.height = 7, fig.align="center"}
 
-blade_pca_x <- cbind(blade_pca_data, blade_pca$ind$coord) %>% 
+core_pca_x <- cbind(core_pca_data, core_pca$ind$coord) %>% 
   select(CODE, CONTEXT, CLASSIFICATION, Dim.1, Dim.2, Dim.3, Dim.4, Dim.5) %>%
     rename(`Dimension 1` = Dim.1,
            `Dimension 2` = Dim.2,
@@ -2214,7 +2223,7 @@ blade_pca_x <- cbind(blade_pca_data, blade_pca$ind$coord) %>%
            `Dimension 4` = Dim.4,
            `Dimension 5` = Dim.5)
 
-blade_pca_x %>%
+core_pca_x %>%
   gather("Value", "n", 4:8) %>%
   ggplot(aes(Value, n, fill = CLASSIFICATION)) +
   geom_boxplot() +
@@ -2227,7 +2236,7 @@ blade_pca_x %>%
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         legend.position = "bottom") 
 
-blade_pca_x %>%
+core_pca_x %>%
   gather("Value", "n", 4:8) %>%
   ggplot(aes(Value, n, fill = CODE)) +
   geom_boxplot() +
