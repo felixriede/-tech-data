@@ -1,8 +1,8 @@
 ---
-title: 'Awkward Assemblages and Points of Confusion: Understanding "Typologically Awkward" Final Palaeolithic Assemblages'
+title: 'Awkward Assemblages and Points of Confusion: Understanding "Typologically Awkward" Assemblages in the Final Palaeolithic'
 author:
-- Dr. Christian Steven Hoggard (University of Southampton, UK.)
-- Prof. Felix Riede (Aarhus University, DK.)
+- Christian Steven Hoggard (University of Southampton, UK.)
+- Felix Riede (Aarhus University, DK.)
 date: "`r format(Sys.time(), '%B %Y')`"
 output:
   pdf_document: default
@@ -213,9 +213,11 @@ The following additional attributes are recorded for all **blades**:
 
 | Attribute             | Variable(s)|
 |-----------------------|----------------------------------------------------------------|
-| *WEIGHT*              | Weight (g)|                                                                   | *LENGTH*              | Length (mm)|                                                                  
+| *WEIGHT*              | Weight (g)|                                                                   
+| *LENGTH*              | Length (mm)|                                                                  
 | *WIDTH*               | Width (mm)|                                                                   
-| *THICKNESS*           | Thickness (mm)|                                                               | *ELONGATION*          | Elongation Index (Length/Width)|                                              
+| *THICKNESS*           | Thickness (mm)|                                                               
+| *ELONGATION*          | Elongation Index (Length/Width)|                                              
 | *PLAT_DEPTH*          | Platform Depth (mm)|                                                          
 | *DORS_BLADE_PROF*     | Dorsal blade characterisation - 1: **Full Cortical Dorsal Face (FC)**; 2: **Two Dorsal Faces - One Cortex (TDOC)**; 3: **Three Dorsal Faces - One Cortex (THDOC)**; 4: **Two Dorsal Faces - No Cortex (TDNC)**; 5: **Three Dorsal Faces - No Cortex (THDNC)**; 6: **Multiple Dorsal Faces (MDF)**; 7: **Bilateral Crested Blade (BCB)**; 8: **Crested Blade - One Flaked And One Uncortical (CBOU)**; 9: **Crested Blade - Three Flaked Faces (CBTHF)**; 10: **Crested Blade - One Flaked And One Cortical (CBOFOC)**; 11: **Crested Blade - Flaked And Trimmed (CBFT)**|
 | *BLADE_DET*           | Blade determination - 1: **Ideal (ID)**; 2: **Feathered (FE)**; 3: **Plunged (PL)**; 4: **Hinged (HI)**       
@@ -2825,7 +2827,7 @@ ggplot(bp_data_excb_clean, aes(WIDTH, LENGTH, colour = CODE, shape = SUB_CATEGOR
   lims(x = c(0,40), y = c(0,80)) +
   theme_minimal() + 
   scale_colour_manual(values = c("grey90", "grey80", "grey70", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10")) +
-  scale_shape_manual(values = c(1,2,3,4))
+  scale_shape_manual(values = c(1,2,3))
 
 ggplot(bp_data_excb_clean, aes(WIDTH, LENGTH, colour = CLASSIFICATION, shape = SUB_CATEGORY)) +
          geom_point() +
@@ -2833,7 +2835,7 @@ ggplot(bp_data_excb_clean, aes(WIDTH, LENGTH, colour = CLASSIFICATION, shape = S
   lims(x = c(0,40), y = c(0,80)) +
   theme_minimal() + 
   scale_colour_manual(values = c("grey70", "grey30")) +
-  scale_shape_manual(values = c(1,2,3,4))
+  scale_shape_manual(values = c(1,2,3))
 
 ```
 
@@ -2863,7 +2865,7 @@ ggplot(bp_data_excb_clean, aes(TCSA, TCSP, colour = CODE, shape = SUB_CATEGORY))
   lims(x = c(0,100), y = c(0,50)) +
   theme_minimal() + 
   scale_colour_manual(values = c("grey90", "grey70", "grey50", "grey30", "grey20", "grey10")) +
-  scale_shape_manual(values = c(1,2,3,4))
+  scale_shape_manual(values = c(1,2,3))
 
 ggplot(bp_data_excb_clean, aes(TCSA, TCSP, colour = CLASSIFICATION, shape = SUB_CATEGORY)) +
          geom_point() +
@@ -2871,7 +2873,7 @@ ggplot(bp_data_excb_clean, aes(TCSA, TCSP, colour = CLASSIFICATION, shape = SUB_
   lims(x = c(0,100), y = c(0,50)) +
   theme_minimal() + 
   scale_colour_manual(values = c("grey70", "grey30")) +
-  scale_shape_manual(values = c(1,2,3,4))
+  scale_shape_manual(values = c(1,2,3))
 
 ```
 
