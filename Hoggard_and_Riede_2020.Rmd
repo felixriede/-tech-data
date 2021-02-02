@@ -93,8 +93,6 @@ Previously classified Bromme material
 
 10) **Segebro** (Malmö, Sweden): (ADD HERE)
 
-Both Häcklingen and Bienenbüttel will be first categorised as Federmesser (the default judged unit), and then explored further.  
-
 In understanding the underlying *chaînes opératoires*, and in adopting a common terminology for identifying technological signatures and characteristics, attributes originate from the Nordic Blade Technology Network (REFERENCE). Minor amendments, and the extension of categories in a small number of instances were necessary to reflect Final Palaeolithic variability e.g. dorsal scar directionality. First, technological and morphological characteristics are first examined through **visual and descriptive summaries of data**. The significance of differences in the distribution of continuous variables across assemblages were assessed using **pairwise Mann--Whitney** testing (with Bonferroni-corrected *p* values). A **Gini-Simpson** index is then employed to examine intrasite variability while a **Morisita-Horn diversity index** is used to examine inter-assemblage dissimilarity; past applications in Crema (2014), Maiorano et al. (2020) and Leplongeon et al. (2020). **Multiple Correspondence Analysis (MCA)** is then employed for all categorical technological data, and for each data type (core, blade, backed point, tanged point); this will examine the degree of association between individual contexts and their technological make-up. **Principal Component Analysis (PCA)** is performed for all quantitative (morphometric) data, again for each data type; this will also examine individual contexts and their classification. PCA is analogous to MCA but for quantitative variables.  
 
 (WHAT PHYLOGENETIC ANALYSIS SHOULD BE EMPLOYED: ML FOR QUANTITIVE VARIABLES AND PARSIMONY ANALYSES FOR QUALITATIVE?!)
@@ -444,40 +442,40 @@ blade_data_clean %>%
 ggplot(blade_data_clean, aes(CODE, WEIGHT, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Weight (g)", fill = "Taxonomic Unit") +
-  theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  theme_minimal() +
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
 ggplot(blade_data_clean, aes(CODE, LENGTH, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Length (mm)", fill = "Taxonomic Unit") +
-  theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  theme_minimal() +
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
 ggplot(blade_data_clean, aes(CODE, WIDTH, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Width (mm)", fill = "Taxonomic Unit") +
-  theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  theme_minimal() +
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
 ggplot(blade_data_clean, aes(CODE, ELONGATION, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Elongation (L/W)", fill = "Taxonomic Unit") +
-  theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  theme_minimal() +
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
 ggplot(blade_data_clean, aes(CODE, THICKNESS, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Thickness (mm)", fill = "Taxonomic Unit") +
-  theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  theme_minimal() +
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -485,18 +483,19 @@ ggplot(blade_data_clean, aes(CODE, PLAT_DEPTH, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Platform Depth (mm)", fill = "Taxonomic Unit") +
   theme_minimal() +
-  scale_fill_grey(start = 0.4, end = 0.8) + 
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 ```
+
 ```{r blade l w plot, echo = FALSE, message = FALSE, fig.width = 6, fig.height = 6, fig.align = "center"}
 ggplot(blade_data_clean, aes(WIDTH, LENGTH, colour = CLASSIFICATION, shape = CLASSIFICATION)) +
          geom_point() +
          labs(x = "Blade Width (mm)", y = "Blade Length (mm)") +
   stat_ellipse(type = "norm", linetype = 2) +
   lims(x = c(0,65), y = c(0,130)) +
-  theme_minimal() + 
-  scale_colour_grey(start = 0.4, end = 0.8) +
+  theme_minimal() +
+  scale_colour_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   geom_abline(intercept = 0, slope = 2, colour = "grey50") +
   theme(legend.position = "bottom")
 
@@ -505,7 +504,7 @@ ggplot(blade_data_clean, aes(WIDTH, LENGTH, colour = CODE, shape = CODE)) +
          labs(x = "Blade Width (mm)", y = "Blade Length (mm)") +
   lims(x = c(0,65), y = c(0,130)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey90", "grey80", "grey70", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10")) +
+  scale_colour_manual(values = c("#466995", "grey80", "#56A3A6", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10")) +
   scale_shape_manual(values = c(1,2,3,4,5,6,7,8,9)) + 
   geom_abline(intercept = 0, slope = 2, colour = "grey50") +
   theme(legend.position = "bottom")
@@ -1062,7 +1061,7 @@ as.tibble(get_eig(blade_pca), rownames = "rowname") %>%
 
 ```{r blade pca scree, echo = FALSE, message = FALSE, fig.width = 4, fig.height = 3, fig.align="center"}
 
-fviz_screeplot(blade_pca, xlim = c(1,5), ylim = c(0,50), barfill = "grey50", barcolor = "grey50", geom = "bar") +
+fviz_screeplot(blade_pca, xlim = c(1,4.75), ylim = c(0,50), barfill = "grey50", barcolor = "grey50", geom = "bar") +
   labs(title = "", x = "Dimension") + 
   theme_minimal()
 
@@ -1094,7 +1093,7 @@ fviz_pca_biplot(blade_pca,
                 axes = c(1,2),
                 repel = FALSE,
                 habillage = blade_pca_data$CLASSIFICATION,
-                palette = c("grey80", "grey40"),
+                palette = c("#466995", "grey80", "grey40", "#56A3A6"),
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 1 vs. PCA 2 (Classification)",
@@ -1108,7 +1107,7 @@ fviz_pca_biplot(blade_pca,
                 axes = c(2,3),
                 repel = FALSE,
                 habillage = blade_pca_data$CLASSIFICATION,
-                palette = c("grey80", "grey40"),
+                palette = c("#466995", "grey80", "grey40", "#56A3A6"),
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 2 vs. PCA 3 (Classification)",
@@ -1122,7 +1121,7 @@ fviz_pca_biplot(blade_pca,
                 axes = c(1,2),
                 repel = FALSE,
                 habillage = blade_pca_data$CODE,
-                palette = c("grey90", "grey80", "grey70", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10"),
+                palette = c("#466995", "grey80", "#56A3A6", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10"),
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 1 vs. PCA 2 (Context)",
@@ -1136,7 +1135,7 @@ fviz_pca_biplot(blade_pca,
                 axes = c(2,3),
                 repel = FALSE,
                 habillage = blade_pca_data$CODE,
-                palette = c("grey90", "grey80", "grey70", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10"),
+                palette = c("#466995", "grey80", "#56A3A6", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10"),
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 2 vs. PCA 3 (Classification)",
@@ -1146,6 +1145,7 @@ fviz_pca_biplot(blade_pca,
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         legend.position = "bottom")
 ```
+
 ```{r blade pca boxplots, echo = FALSE, message = FALSE, fig.width = 10, fig.height = 7, fig.align="center"}
 
 blade_pca_x <- cbind(blade_pca_data, blade_pca$ind$coord) %>% 
@@ -1164,7 +1164,7 @@ blade_pca_x %>%
        x = "",
        y = "Value",
        fill = "Classification") +
-  scale_fill_grey(start = 0.3, end = 0.9) +
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         legend.position = "bottom") 
@@ -1177,7 +1177,7 @@ blade_pca_x %>%
        x = "",
        y = "Value",
        fill = "Classification") +
-  scale_fill_grey(start = 0.3, end = 0.9) +
+  scale_fill_manual(values = c("#466995", "grey80", "#56A3A6", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10")) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         legend.position = "bottom") 
@@ -1272,7 +1272,7 @@ blade_mca_x <- cbind(blade_mca_data, blade_mca$ind$coord) %>%
 
 ggplot(blade_mca_x, aes(`Dimension 1`, `Dimension 2`, colour = CLASSIFICATION, shape = CLASSIFICATION)) +
   geom_point() +
-  scale_colour_manual(values = c("grey80", "grey40")) +
+  scale_colour_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   labs(title = "MCA 1 vs. MCA 2 (Classification)",
        x = "Dimension 1 (4.90%)",
        y = "Dimension 2 (4.31%)") +
@@ -1283,7 +1283,7 @@ ggplot(blade_mca_x, aes(`Dimension 1`, `Dimension 2`, colour = CLASSIFICATION, s
 
 ggplot(blade_mca_x, aes(`Dimension 2`, `Dimension 3`, colour = CLASSIFICATION, shape = CLASSIFICATION)) +
   geom_point() +
-  scale_colour_manual(values = c("grey80", "grey40")) +
+  scale_colour_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   labs(title = "MCA 2 vs. MCA 3 (Classification)",
        x = "Dimension 2 (4.31%)",
        y = "Dimension 3 (4.11%)") +
@@ -1294,7 +1294,7 @@ ggplot(blade_mca_x, aes(`Dimension 2`, `Dimension 3`, colour = CLASSIFICATION, s
   
 ggplot(blade_mca_x, aes(`Dimension 1`, `Dimension 2`, colour = CODE, shape = CODE)) +
   geom_point() +
-  scale_colour_manual(values = c("grey90", "grey80", "grey70", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10")) +
+  scale_colour_manual(values = c("#466995", "grey80", "#56A3A6", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10")) +
   scale_shape_manual(values = c(1,2,3,4,5,6,7,8,9)) +
   labs(title = "MCA 1 vs. MCA 2 (Code)",
        x = "Dimension 1 (4.90%)",
@@ -1306,7 +1306,7 @@ ggplot(blade_mca_x, aes(`Dimension 1`, `Dimension 2`, colour = CODE, shape = COD
 
 ggplot(blade_mca_x, aes(`Dimension 2`, `Dimension 3`, colour = CODE, shape = CODE)) +
   geom_point() +
-  scale_colour_manual(values = c("grey90", "grey80", "grey70", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10")) +
+  scale_colour_manual(values = c("#466995", "grey80", "#56A3A6", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10")) +
   scale_shape_manual(values = c(1,2,3,4,5,6,7,8,9)) +
   labs(title = "MCA 2 vs. MCA 3 (Code)",
        x = "Dimension 2 (4.31%)",
@@ -1328,7 +1328,7 @@ blade_mca_x %>%
        x = "",
        y = "Value",
        fill = "Classification") +
-  scale_fill_grey(start = 0.3, end = 0.9) +
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         legend.position = "bottom") 
@@ -1341,7 +1341,7 @@ blade_mca_x %>%
        x = "",
        y = "Value",
        fill = "Classification") +
-  scale_fill_grey(start = 0.3, end = 0.9) +
+  scale_fill_manual(values = c("#466995", "grey80", "#56A3A6", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10")) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         legend.position = "bottom") 
@@ -1493,7 +1493,7 @@ ggplot(core_data_clean, aes(CODE, WEIGHT, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Core Weight (g)", fill = "Taxonomic Unit") +
   theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -1501,7 +1501,7 @@ ggplot(core_data_clean, aes(CODE, CORE_LENGTH, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Core Length (mm)", fill = "Taxonomic Unit") +
   theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -1509,7 +1509,7 @@ ggplot(core_data_clean, aes(CODE, CORE_WIDTH, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Core Width (mm)", fill = "Taxonomic Unit") +
   theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -1517,7 +1517,7 @@ ggplot(core_data_clean, aes(CODE, CORE_BREADTH, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Core Breadth (mm)", fill = "Taxonomic Unit") +
   theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -1525,7 +1525,7 @@ ggplot(core_data_clean, aes(CODE, CORE_ELONGATION, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Core Elongation Index", fill = "Taxonomic Unit") +
   theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 ```
@@ -1536,7 +1536,7 @@ ggplot(core_data_clean, aes(CORE_WIDTH, CORE_LENGTH, colour = CLASSIFICATION, sh
          labs(x = "Core Width (mm)", y = "Core Length (mm)", fill = "Taxonomic Unit") +
   stat_ellipse(type = "norm", linetype = 2) +
   theme_minimal() + 
-  scale_colour_grey(start = 0.4, end = 0.8) +
+  scale_colour_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(legend.position = "bottom")
 
 ggplot(core_data_clean, aes(CORE_WIDTH, CORE_LENGTH, colour = CODE, shape = CODE)) +
@@ -1544,7 +1544,7 @@ ggplot(core_data_clean, aes(CORE_WIDTH, CORE_LENGTH, colour = CODE, shape = CODE
          labs(x = "Core Width (mm)", y = "Core Length (mm)", fill = "Taxonomic Unit") +
   theme_minimal() + 
   lims(x = c(0,90), y = c(0,180)) +
-  scale_colour_manual(values = c("grey90", "grey80", "grey70", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10")) +
+  scale_colour_manual(values = c("#466995", "#56A3A6", "grey80", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10")) +
   scale_shape_manual(values = c(1,2,3,4,5,6,7,8,9)) + 
   theme(legend.position = "bottom")
 
@@ -2161,7 +2161,7 @@ fviz_pca_biplot(core_pca,
                 axes = c(1,2),
                 repel = FALSE,
                 habillage = core_pca_data$CLASSIFICATION,
-                palette = c("grey80", "grey40"),
+                palette = c("#466995", "grey40", "grey80", "#56A3A6"),
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 1 vs. PCA 2 (Classification)",
@@ -2175,7 +2175,7 @@ fviz_pca_biplot(core_pca,
                 axes = c(2,3),
                 repel = FALSE,
                 habillage = core_pca_data$CLASSIFICATION,
-                palette = c("grey80", "grey40"),
+                palette = c("#466995", "grey40", "grey80", "#56A3A6"),
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 2 vs. PCA 3 (Classification)",
@@ -2189,7 +2189,7 @@ fviz_pca_biplot(core_pca,
                 axes = c(1,2),
                 repel = FALSE,
                 habillage = core_pca_data$CODE,
-                palette = c("grey90", "grey80", "grey70", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10"),
+                palette = c("#466995", "#56A3A6", "grey80", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10"),
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 1 vs. PCA 2 (Context)",
@@ -2203,7 +2203,7 @@ fviz_pca_biplot(core_pca,
                 axes = c(2,3),
                 repel = FALSE,
                 habillage = core_pca_data$CODE,
-                palette = c("grey90", "grey80", "grey70", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10"),
+                palette = c("#466995", "#56A3A6", "grey80", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10"),
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 2 vs. PCA 3 (Context)",
@@ -2233,7 +2233,7 @@ core_pca_x %>%
        x = "",
        y = "Value",
        fill = "Classification") +
-  scale_fill_grey(start = 0.3, end = 0.9) +
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         legend.position = "bottom") 
@@ -2246,7 +2246,7 @@ core_pca_x %>%
        x = "",
        y = "Value",
        fill = "Classification") +
-  scale_fill_grey(start = 0.3, end = 0.9) +
+  scale_fill_manual(values = c("#466995", "#56A3A6", "grey80", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10")) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         legend.position = "bottom") 
@@ -2329,7 +2329,7 @@ core_mca_x <- cbind(core_mca_data, core_mca$ind$coord) %>%
 
 ggplot(core_mca_x, aes(`Dimension 1`, `Dimension 2`, colour = CLASSIFICATION, shape = CLASSIFICATION)) +
   geom_point() +
-  scale_colour_manual(values = c("grey80", "grey40")) +
+  scale_colour_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   labs(title = "MCA 1 vs. MCA 2 (Classification)",
        x = "Dimension 1 (14.53%)",
        y = "Dimension 2 (12.36%)") +
@@ -2340,7 +2340,7 @@ ggplot(core_mca_x, aes(`Dimension 1`, `Dimension 2`, colour = CLASSIFICATION, sh
 
 ggplot(core_mca_x, aes(`Dimension 2`, `Dimension 3`, colour = CLASSIFICATION, shape = CLASSIFICATION)) +
   geom_point() +
-  scale_colour_manual(values = c("grey80", "grey40")) +
+  scale_colour_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   labs(title = "MCA 2 vs. MCA 3 (Classification)",
        x = "Dimension 2 (12.36%)",
        y = "Dimension 3 (9.51%)") +
@@ -2351,7 +2351,7 @@ ggplot(core_mca_x, aes(`Dimension 2`, `Dimension 3`, colour = CLASSIFICATION, sh
   
 ggplot(core_mca_x, aes(`Dimension 1`, `Dimension 2`, colour = CODE, shape = CODE)) +
   geom_point() +
-  scale_colour_manual(values = c("grey90", "grey80", "grey70", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10")) +
+  scale_colour_manual(values = c("#466995", "#56A3A6", "grey80", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10")) +
   scale_shape_manual(values = c(1,2,3,4,5,6,7,8,9)) +
   labs(title = "MCA 1 vs. MCA 2 (Code)",
        x = "Dimension 1 (14.53%)",
@@ -2363,7 +2363,7 @@ ggplot(core_mca_x, aes(`Dimension 1`, `Dimension 2`, colour = CODE, shape = CODE
 
 ggplot(core_mca_x, aes(`Dimension 2`, `Dimension 3`, colour = CODE, shape = CODE)) +
   geom_point() +
-  scale_colour_manual(values = c("grey90", "grey80", "grey70", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10")) +
+  scale_colour_manual(values = c("#466995", "#56A3A6", "grey80", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10")) +
   scale_shape_manual(values = c(1,2,3,4,5,6,7,8,9)) +
   labs(title = "MCA 2 vs. MCA 3 (Code)",
        x = "Dimension 2 (12.36%)",
@@ -2384,7 +2384,7 @@ core_mca_x %>%
        x = "",
        y = "Value",
        fill = "Classification") +
-  scale_fill_grey(start = 0.3, end = 0.9) +
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         legend.position = "bottom") 
@@ -2397,7 +2397,7 @@ core_mca_x %>%
        x = "",
        y = "Value",
        fill = "Classification") +
-  scale_fill_grey(start = 0.3, end = 0.9) +
+  scale_fill_manual(values = c("#466995", "#56A3A6", "grey80", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10")) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         legend.position = "bottom") 
@@ -2699,7 +2699,7 @@ ggplot(bp_data_excb_clean, aes(CODE, WEIGHT, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Weight (g)", fill = "Taxonomic Unit") +
   theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -2707,7 +2707,7 @@ ggplot(bp_data_excb_clean, aes(CODE, LENGTH, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Length (mm)", fill = "Taxonomic Unit") +
   theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -2715,7 +2715,7 @@ ggplot(bp_data_excb_clean, aes(CODE, WIDTH, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Width (mm)", fill = "Taxonomic Unit") +
   theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -2723,7 +2723,7 @@ ggplot(bp_data_excb_clean, aes(CODE, ELONGATION, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Elongation (L/W)", fill = "Taxonomic Unit") +
   theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -2731,7 +2731,7 @@ ggplot(bp_data_excb_clean, aes(CODE, THICKNESS, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Thickness (mm)", fill = "Taxonomic Unit") +
   theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -2739,7 +2739,7 @@ ggplot(bp_data_excb_clean, aes(CODE, TCSA, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Tip Cross-Sectional Area (TCSA)", fill = "Taxonomic Unit") +
   theme_minimal() +
-  scale_fill_grey(start = 0.4, end = 0.8) + 
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -2747,7 +2747,7 @@ ggplot(bp_data_excb_clean, aes(CODE, TCSP, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Tip Cross-Sectional Area (TCSP)", fill = "Taxonomic Unit") +
   theme_minimal() +
-  scale_fill_grey(start = 0.4, end = 0.8) + 
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -2809,7 +2809,7 @@ ggplot(bp_data_excb_clean, aes(WIDTH, LENGTH, colour = CLASSIFICATION, shape = C
   stat_ellipse(type = "norm", linetype = 2) +
   lims(x = c(0,40), y = c(0,80)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey70", "grey30")) +
+  scale_colour_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(legend.position = "bottom")
 
 ggplot(bp_data_excb_clean, aes(WIDTH, LENGTH, colour = CODE, shape = CODE)) +
@@ -2817,8 +2817,8 @@ ggplot(bp_data_excb_clean, aes(WIDTH, LENGTH, colour = CODE, shape = CODE)) +
          labs(x = "Backed Point Width (mm)", y = "Backed Point Length (mm)") +
   lims(x = c(0,40), y = c(0,80)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey90", "grey80", "grey70", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10")) +
-  scale_shape_manual(values = c(1,2,3,4,5,6,7,8,9)) +
+  scale_colour_manual(values = c("#466995", "grey80", "#56A3A6", "grey60", "grey40", "grey20")) +
+  scale_shape_manual(values = c(1,2,3,4,5,6)) +
   theme(legend.position = "bottom")
 
 ggplot(bp_data_excb_clean, aes(WIDTH, LENGTH, colour = CODE, shape = SUB_CATEGORY)) +
@@ -2826,15 +2826,15 @@ ggplot(bp_data_excb_clean, aes(WIDTH, LENGTH, colour = CODE, shape = SUB_CATEGOR
          labs(x = "Backed Point Width (mm)", y = "Backed Point Length (mm)") + 
   lims(x = c(0,40), y = c(0,80)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey90", "grey80", "grey70", "grey60", "grey50", "grey40", "grey30", "grey20", "grey10")) +
+  scale_colour_manual(values = c("#466995", "grey80", "#56A3A6", "grey60", "grey40", "grey20")) +
   scale_shape_manual(values = c(1,2,3))
 
 ggplot(bp_data_excb_clean, aes(WIDTH, LENGTH, colour = CLASSIFICATION, shape = SUB_CATEGORY)) +
          geom_point() +
          labs(x = "Backed Point Width (mm)", y = "Backed Point Length (mm)") + 
   lims(x = c(0,40), y = c(0,80)) +
-  theme_minimal() + 
-  scale_colour_manual(values = c("grey70", "grey30")) +
+  theme_minimal() +
+  scale_colour_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   scale_shape_manual(values = c(1,2,3))
 
 ```
@@ -2847,7 +2847,7 @@ ggplot(bp_data_excb_clean, aes(TCSA, TCSP, colour = CLASSIFICATION, shape = CLAS
   stat_ellipse(type = "norm", linetype = 2) +
   lims(x = c(0,100), y = c(0,50)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey70", "grey30")) +
+  scale_colour_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(legend.position = "bottom")
 
 ggplot(bp_data_excb_clean, aes(TCSA, TCSP, colour = CODE, shape = CODE)) +
@@ -2855,7 +2855,7 @@ ggplot(bp_data_excb_clean, aes(TCSA, TCSP, colour = CODE, shape = CODE)) +
          labs(x = "TCSA (mm²)", y = "TCSP (mm)") +
   lims(x = c(0,100), y = c(0,50)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey90", "grey70", "grey50", "grey30", "grey20", "grey10")) +
+  scale_colour_manual(values = c("#466995", "grey80", "#56A3A6", "grey60", "grey40", "grey20")) +
   scale_shape_manual(values = c(1,2,3,4,5,6)) +
   theme(legend.position = "bottom")
 
@@ -2864,7 +2864,7 @@ ggplot(bp_data_excb_clean, aes(TCSA, TCSP, colour = CODE, shape = SUB_CATEGORY))
          labs(x = "TCSA (mm²)", y = "TCSP (mm)") + 
   lims(x = c(0,100), y = c(0,50)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey90", "grey70", "grey50", "grey30", "grey20", "grey10")) +
+  scale_colour_manual(values = c("#466995", "grey80", "#56A3A6", "grey60", "grey40", "grey20")) +
   scale_shape_manual(values = c(1,2,3))
 
 ggplot(bp_data_excb_clean, aes(TCSA, TCSP, colour = CLASSIFICATION, shape = SUB_CATEGORY)) +
@@ -2872,7 +2872,7 @@ ggplot(bp_data_excb_clean, aes(TCSA, TCSP, colour = CLASSIFICATION, shape = SUB_
          labs(x = "TCSA (mm²)", y = "TCSP (mm)") + 
   lims(x = c(0,100), y = c(0,50)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey70", "grey30")) +
+  scale_colour_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   scale_shape_manual(values = c(1,2,3))
 
 ```
@@ -2989,7 +2989,7 @@ fviz_pca_biplot(bp_excb_pca,
                 axes = c(1,2),
                 repel = FALSE,
                 habillage = bp_excb_pca_data$CLASSIFICATION,
-                palette = c("grey80", "grey40"),
+                palette = c("#466995", "grey40", "grey80", "#56A3A6"),
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 1 vs. PCA 2 (Classification)",
@@ -3003,7 +3003,7 @@ fviz_pca_biplot(bp_excb_pca,
                 axes = c(2,3),
                 repel = FALSE,
                 habillage = bp_excb_pca_data$CLASSIFICATION,
-                palette = c("grey80", "grey40"),
+                palette = c("#466995", "grey40", "grey80", "#56A3A6"),
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 2 vs. PCA 3 (Classification)",
@@ -3017,7 +3017,7 @@ fviz_pca_biplot(bp_excb_pca,
                 axes = c(1,2),
                 repel = FALSE,
                 habillage = bp_excb_pca_data$CODE,
-                palette = c("grey80", "grey70", "grey60", "grey50", "grey40", "grey30"),
+                palette = c("#466995", "grey80", "#56A3A6", "grey60", "grey40", "grey20"),
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 1 vs. PCA 2 (Code)",
@@ -3031,7 +3031,7 @@ fviz_pca_biplot(bp_excb_pca,
                 axes = c(2,3),
                 repel = FALSE,
                 habillage = bp_excb_pca_data$CODE,
-                palette = c("grey80", "grey70", "grey60", "grey50", "grey40", "grey30"),
+                palette = c("#466995", "grey80", "#56A3A6", "grey60", "grey40", "grey20"),
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 2 vs. PCA 3 (Code)",
@@ -3086,7 +3086,7 @@ bp_excb_pca_x %>%
        x = "",
        y = "Value",
        fill = "Classification") +
-  scale_fill_grey(start = 0.3, end = 0.9) +
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         legend.position = "bottom") 
@@ -3099,7 +3099,7 @@ bp_excb_pca_x %>%
        x = "",
        y = "Value",
        fill = "Classification") +
-  scale_fill_grey(start = 0.3, end = 0.9) +
+  scale_fill_manual(values = c("#466995", "grey80", "#56A3A6", "grey60", "grey40", "grey20")) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         legend.position = "bottom") 
@@ -3412,7 +3412,7 @@ ggplot(bp_data_incb_clean, aes(CODE, WEIGHT, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Weight (g)", fill = "Taxonomic Unit") +
   theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -3420,7 +3420,7 @@ ggplot(bp_data_incb_clean, aes(CODE, LENGTH, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Length (mm)", fill = "Taxonomic Unit") +
   theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -3428,7 +3428,7 @@ ggplot(bp_data_incb_clean, aes(CODE, WIDTH, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Width (mm)", fill = "Taxonomic Unit") +
   theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -3436,7 +3436,7 @@ ggplot(bp_data_incb_clean, aes(CODE, ELONGATION, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Elongation (L/W)", fill = "Taxonomic Unit") +
   theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -3444,7 +3444,7 @@ ggplot(bp_data_incb_clean, aes(CODE, THICKNESS, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Thickness (mm)", fill = "Taxonomic Unit") +
   theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -3452,7 +3452,7 @@ ggplot(bp_data_incb_clean, aes(CODE, TCSA, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Tip Cross-Sectional Area (TCSA)", fill = "Taxonomic Unit") +
   theme_minimal() +
-  scale_fill_grey(start = 0.4, end = 0.8) + 
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -3460,7 +3460,7 @@ ggplot(bp_data_incb_clean, aes(CODE, TCSP, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Tip Cross-Sectional Area (TCSP)", fill = "Taxonomic Unit") +
   theme_minimal() +
-  scale_fill_grey(start = 0.4, end = 0.8) + 
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -3522,7 +3522,7 @@ ggplot(bp_data_incb_clean, aes(TCSA, TCSP, colour = CLASSIFICATION, shape = CLAS
   stat_ellipse(type = "norm", linetype = 2) +
   lims(x = c(0,100), y = c(0,50)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey70", "grey30")) +
+  scale_colour_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(legend.position = "bottom")
 
 ggplot(bp_data_incb_clean, aes(TCSA, TCSP, colour = CODE, shape = CODE)) +
@@ -3530,7 +3530,7 @@ ggplot(bp_data_incb_clean, aes(TCSA, TCSP, colour = CODE, shape = CODE)) +
          labs(x = "TCSA (mm²)", y = "TCSP (mm)") +
   lims(x = c(0,100), y = c(0,50)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey90", "grey70", "grey50", "grey30", "grey20", "grey10")) +
+  scale_colour_manual(values = c("#466995", "grey80", "#56A3A6", "grey60", "grey40", "grey20")) +
   scale_shape_manual(values = c(1,2,3,4,5,6)) +
   theme(legend.position = "bottom")
 
@@ -3539,7 +3539,7 @@ ggplot(bp_data_incb_clean, aes(TCSA, TCSP, colour = CODE, shape = SUB_CATEGORY))
          labs(x = "TCSA (mm²)", y = "TCSP (mm)") + 
   lims(x = c(0,100), y = c(0,50)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey90", "grey70", "grey50", "grey30", "grey20", "grey10")) +
+  scale_colour_manual(values = c("#466995", "grey80", "#56A3A6", "grey60", "grey40", "grey20")) +
   scale_shape_manual(values = c(1,2,3,4,5))
 
 ggplot(bp_data_incb_clean, aes(TCSA, TCSP, colour = CLASSIFICATION, shape = SUB_CATEGORY)) +
@@ -3547,7 +3547,7 @@ ggplot(bp_data_incb_clean, aes(TCSA, TCSP, colour = CLASSIFICATION, shape = SUB_
          labs(x = "TCSA (mm²)", y = "TCSP (mm)") + 
   lims(x = c(0,100), y = c(0,50)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey70", "grey30")) +
+  scale_colour_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   scale_shape_manual(values = c(1,2,3,4,5))
 
 ```
@@ -3560,7 +3560,7 @@ ggplot(bp_data_incb_clean, aes(WIDTH, LENGTH, colour = CLASSIFICATION, shape = C
   stat_ellipse(type = "norm", linetype = 2) +
   lims(x = c(0,40), y = c(0,80)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey70", "grey30")) +
+  scale_colour_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme(legend.position = "bottom")
 
 ggplot(bp_data_incb_clean, aes(WIDTH, LENGTH, colour = CODE, shape = CODE)) +
@@ -3568,7 +3568,7 @@ ggplot(bp_data_incb_clean, aes(WIDTH, LENGTH, colour = CODE, shape = CODE)) +
          labs(x = "Backed Point Width (mm)", y = "Backed Point Length (mm)") +
   lims(x = c(0,40), y = c(0,80)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey90", "grey70", "grey50", "grey30", "grey20", "grey10")) +
+  scale_colour_manual(values = c("#466995", "grey80", "#56A3A6", "grey60", "grey40", "grey20")) +
   scale_shape_manual(values = c(1,2,3,4,5,6)) +
   theme(legend.position = "bottom")
 
@@ -3577,7 +3577,7 @@ ggplot(bp_data_incb_clean, aes(WIDTH, LENGTH, colour = CODE, shape = SUB_CATEGOR
          labs(x = "Backed Point Width (mm)", y = "Backed Point Length (mm)") + 
   lims(x = c(0,40), y = c(0,80)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey90", "grey70", "grey50", "grey30", "grey20", "grey10")) +
+  scale_colour_manual(values = c("#466995", "grey80", "#56A3A6", "grey60", "grey40", "grey20")) +
   scale_shape_manual(values = c(1,2,3,4,5))
 
 ggplot(bp_data_incb_clean, aes(WIDTH, LENGTH, colour = CLASSIFICATION, shape = SUB_CATEGORY)) +
@@ -3585,8 +3585,8 @@ ggplot(bp_data_incb_clean, aes(WIDTH, LENGTH, colour = CLASSIFICATION, shape = S
          labs(x = "Backed Point Width (mm)", y = "Backed Point Length (mm)") + 
   lims(x = c(0,40), y = c(0,80)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey70", "grey30")) +
-  scale_shape_manual(values = c(1,2,3,4,5))
+  scale_colour_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
+  scale_shape_manual(values = c(1,2,3,4))
 
 ```
 
@@ -3702,7 +3702,7 @@ fviz_pca_biplot(bp_incb_pca,
                 axes = c(1,2),
                 repel = FALSE,
                 habillage = bp_incb_pca_data$CLASSIFICATION,
-                palette = c("grey80", "grey40"),
+                palette = c("#466995", "grey40", "grey80", "#56A3A6"),
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 1 vs. PCA 2 (Classification)",
@@ -3716,7 +3716,7 @@ fviz_pca_biplot(bp_incb_pca,
                 axes = c(2,3),
                 repel = FALSE,
                 habillage = bp_incb_pca_data$CLASSIFICATION,
-                palette = c("grey80", "grey40"),
+                palette = c("#466995", "grey40", "grey80", "#56A3A6"),
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 2 vs. PCA 3 (Classification)",
@@ -3730,7 +3730,7 @@ fviz_pca_biplot(bp_incb_pca,
                 axes = c(1,2),
                 repel = FALSE,
                 habillage = bp_incb_pca_data$CODE,
-                palette = c("grey80", "grey70", "grey60", "grey50", "grey40", "grey30"),
+                palette = c("#466995", "grey80", "#56A3A6", "grey60", "grey40", "grey20"),
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 1 vs. PCA 2 (Code)",
@@ -3744,7 +3744,7 @@ fviz_pca_biplot(bp_incb_pca,
                 axes = c(2,3),
                 repel = FALSE,
                 habillage = bp_incb_pca_data$CODE,
-                palette = c("grey80", "grey70", "grey60", "grey50", "grey40", "grey30"),
+                palette = c("#466995", "grey80", "#56A3A6", "grey60", "grey40", "grey20"),
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 2 vs. PCA 3 (Code)",
@@ -3799,7 +3799,7 @@ bp_incb_pca_x %>%
        x = "",
        y = "Value",
        fill = "Classification") +
-  scale_fill_grey(start = 0.3, end = 0.9) +
+  scale_fill_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         legend.position = "bottom") 
@@ -3812,7 +3812,7 @@ bp_incb_pca_x %>%
        x = "",
        y = "Value",
        fill = "Classification") +
-  scale_fill_grey(start = 0.3, end = 0.9) +
+  scale_fill_manual(values = c("#466995", "grey80", "#56A3A6", "grey60", "grey40", "grey20")) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         legend.position = "bottom") 
@@ -4122,7 +4122,7 @@ ggplot(tp_data_excb_clean, aes(CODE, WEIGHT, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Weight (g)", fill = "Taxonomic Unit") +
   theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  scale_fill_manual(values = c("grey40", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -4130,7 +4130,7 @@ ggplot(tp_data_excb_clean, aes(CODE, LENGTH, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Length (mm)", fill = "Taxonomic Unit") +
   theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  scale_fill_manual(values = c("grey40", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -4138,7 +4138,7 @@ ggplot(tp_data_excb_clean, aes(CODE, WIDTH, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Width (mm)", fill = "Taxonomic Unit") +
   theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  scale_fill_manual(values = c("grey40", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -4146,7 +4146,7 @@ ggplot(tp_data_excb_clean, aes(CODE, ELONGATION, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Elongation (L/W)", fill = "Taxonomic Unit") +
   theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  scale_fill_manual(values = c("grey40", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -4154,7 +4154,7 @@ ggplot(tp_data_excb_clean, aes(CODE, THICKNESS, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Thickness (mm)", fill = "Taxonomic Unit") +
   theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  scale_fill_manual(values = c("grey40", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -4162,7 +4162,7 @@ ggplot(tp_data_excb_clean, aes(CODE, TCSA, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Tip Cross-Sectional Area (TCSA)", fill = "Taxonomic Unit") +
   theme_minimal() +
-  scale_fill_grey(start = 0.4, end = 0.8) + 
+  scale_fill_manual(values = c("grey40", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -4170,7 +4170,7 @@ ggplot(tp_data_excb_clean, aes(CODE, TCSP, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Tip Cross-Sectional Area (TCSP)", fill = "Taxonomic Unit") +
   theme_minimal() +
-  scale_fill_grey(start = 0.4, end = 0.8) + 
+  scale_fill_manual(values = c("grey40", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -4232,7 +4232,7 @@ ggplot(tp_data_excb_clean, aes(TCSA, TCSP, colour = CLASSIFICATION, shape = CLAS
   stat_ellipse(type = "norm", linetype = 2) +
   lims(x = c(0,75), y = c(0,40)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey70", "grey30")) +
+  scale_colour_manual(values = c("grey40", "#56A3A6")) +
   theme(legend.position = "bottom")
 
 ggplot(tp_data_excb_clean, aes(TCSA, TCSP, colour = CODE, shape = CODE)) +
@@ -4240,7 +4240,7 @@ ggplot(tp_data_excb_clean, aes(TCSA, TCSP, colour = CODE, shape = CODE)) +
          labs(x = "TCSA (mm²)", y = "TCSP (mm)") +
   lims(x = c(0,75), y = c(0,40)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey90", "grey70", "grey50", "grey30", "grey10")) +
+  scale_colour_manual(values = c("grey90", "#56A3A6", "grey50", "grey30", "grey10")) +
   scale_shape_manual(values = c(1,2,3,4,5)) +
   theme(legend.position = "bottom")
 
@@ -4249,7 +4249,7 @@ ggplot(tp_data_excb_clean, aes(TCSA, TCSP, colour = CODE, shape = SUB_CATEGORY))
          labs(x = "TCSA (mm²)", y = "TCSP (mm)") + 
   lims(x = c(0,75), y = c(0,40)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey90", "grey70", "grey50", "grey30", "grey10")) +
+  scale_colour_manual(values = c("grey90", "#56A3A6", "grey50", "grey30", "grey10")) +
   scale_shape_manual(values = c(1,2,3,4,5))
 
 ggplot(tp_data_excb_clean, aes(TCSA, TCSP, colour = CLASSIFICATION, shape = SUB_CATEGORY)) +
@@ -4257,7 +4257,7 @@ ggplot(tp_data_excb_clean, aes(TCSA, TCSP, colour = CLASSIFICATION, shape = SUB_
          labs(x = "TCSA (mm²)", y = "TCSP (mm)") + 
   lims(x = c(0,75), y = c(0,40)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey70", "grey30")) +
+  scale_colour_manual(values = c("grey40", "#56A3A6")) +
   scale_shape_manual(values = c(1,2,3,4,5))
 
 ```
@@ -4270,7 +4270,7 @@ ggplot(tp_data_excb_clean, aes(WIDTH, LENGTH, colour = CLASSIFICATION, shape = C
   stat_ellipse(type = "norm", linetype = 2) +
   lims(x = c(0,40), y = c(0,80)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey70", "grey30")) +
+  scale_colour_manual(values = c("grey40", "#56A3A6")) +
   theme(legend.position = "bottom")
 
 ggplot(tp_data_excb_clean, aes(WIDTH, LENGTH, colour = CODE, shape = CODE)) +
@@ -4278,7 +4278,7 @@ ggplot(tp_data_excb_clean, aes(WIDTH, LENGTH, colour = CODE, shape = CODE)) +
          labs(x = "Tanged Point Width (mm)", y = "Tanged Point Length (mm)") +
   lims(x = c(0,40), y = c(0,80)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey90", "grey70", "grey50", "grey30", "grey10")) +
+  scale_colour_manual(values = c("grey90", "#56A3A6", "grey50", "grey30", "grey10")) +
   scale_shape_manual(values = c(1,2,3,4,5)) +
   theme(legend.position = "bottom")
 
@@ -4287,7 +4287,7 @@ ggplot(tp_data_excb_clean, aes(WIDTH, LENGTH, colour = CODE, shape = SUB_CATEGOR
          labs(x = "Tanged Point Width (mm)", y = "Tanged Point Length (mm)") + 
   lims(x = c(0,40), y = c(0,80)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey90", "grey70", "grey50", "grey30", "grey10")) +
+  scale_colour_manual(values = c("grey90", "#56A3A6", "grey50", "grey30", "grey10")) +
   scale_shape_manual(values = c(1,2,3,4,5))
 
 ggplot(tp_data_excb_clean, aes(WIDTH, LENGTH, colour = CLASSIFICATION, shape = SUB_CATEGORY)) +
@@ -4295,7 +4295,7 @@ ggplot(tp_data_excb_clean, aes(WIDTH, LENGTH, colour = CLASSIFICATION, shape = S
          labs(x = "Tanged Point Width (mm)", y = "Tanged Point Length (mm)") + 
   lims(x = c(0,40), y = c(0,80)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey70", "grey30")) +
+  scale_colour_manual(values = c("grey40", "#56A3A6")) +
   scale_shape_manual(values = c(1,2,3,4,5))
 
 ```
@@ -4412,7 +4412,7 @@ fviz_pca_biplot(tp_excb_pca,
                 axes = c(1,2),
                 repel = FALSE,
                 habillage = tp_excb_pca_data$CLASSIFICATION,
-                palette = c("grey80", "grey40"),
+                palette = c("grey40", "#56A3A6"),
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 1 vs. PCA 2 (Classification)",
@@ -4426,7 +4426,7 @@ fviz_pca_biplot(tp_excb_pca,
                 axes = c(2,3),
                 repel = FALSE,
                 habillage = tp_excb_pca_data$CLASSIFICATION,
-                palette = c("grey80", "grey40"),
+                palette = c("grey40", "#56A3A6"),
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 2 vs. PCA 3 (Classification)",
@@ -4440,7 +4440,7 @@ fviz_pca_biplot(tp_excb_pca,
                 axes = c(1,2),
                 repel = FALSE,
                 habillage = tp_excb_pca_data$CODE,
-                palette = c("grey90", "grey70", "grey50", "grey30", "grey10"),
+                palette = c("grey90", "#56A3A6", "grey50", "grey30", "grey10"),
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 1 vs. PCA 2 (Code)",
@@ -4454,7 +4454,7 @@ fviz_pca_biplot(tp_excb_pca,
                 axes = c(2,3),
                 repel = FALSE,
                 habillage = tp_excb_pca_data$CODE,
-                palette = c("grey90", "grey70", "grey50", "grey30", "grey10"),
+                palette = c("grey90", "#56A3A6", "grey50", "grey30", "grey10"),
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 2 vs. PCA 3 (Code)",
@@ -4509,7 +4509,7 @@ tp_excb_pca_x %>%
        x = "",
        y = "Value",
        fill = "Classification") +
-  scale_fill_grey(start = 0.3, end = 0.9) +
+  scale_fill_manual(values = c("grey40", "#56A3A6")) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         legend.position = "bottom") 
@@ -4522,7 +4522,7 @@ tp_excb_pca_x %>%
        x = "",
        y = "Value",
        fill = "Classification") +
-  scale_fill_grey(start = 0.3, end = 0.9) +
+  scale_fill_manual(values = c("grey90", "#56A3A6", "grey50", "grey30", "grey10")) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         legend.position = "bottom") 
@@ -4831,7 +4831,7 @@ ggplot(tp_data_incb_clean, aes(CODE, WEIGHT, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Weight (g)", fill = "Taxonomic Unit") +
   theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  scale_fill_manual(values = c("grey40", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -4839,7 +4839,7 @@ ggplot(tp_data_incb_clean, aes(CODE, LENGTH, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Length (mm)", fill = "Taxonomic Unit") +
   theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  scale_fill_manual(values = c("grey40", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -4847,7 +4847,7 @@ ggplot(tp_data_incb_clean, aes(CODE, WIDTH, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Width (mm)", fill = "Taxonomic Unit") +
   theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  scale_fill_manual(values = c("grey40", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -4855,7 +4855,7 @@ ggplot(tp_data_incb_clean, aes(CODE, ELONGATION, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Elongation (L/W)", fill = "Taxonomic Unit") +
   theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  scale_fill_manual(values = c("grey40", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -4863,7 +4863,7 @@ ggplot(tp_data_incb_clean, aes(CODE, THICKNESS, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Thickness (mm)", fill = "Taxonomic Unit") +
   theme_minimal() + 
-  scale_fill_grey(start = 0.4, end = 0.8) +
+  scale_fill_manual(values = c("grey40", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -4871,7 +4871,7 @@ ggplot(tp_data_incb_clean, aes(CODE, TCSA, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Tip Cross-Sectional Area (TCSA)", fill = "Taxonomic Unit") +
   theme_minimal() +
-  scale_fill_grey(start = 0.4, end = 0.8) + 
+  scale_fill_manual(values = c("grey40", "#56A3A6")) + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -4879,7 +4879,7 @@ ggplot(tp_data_incb_clean, aes(CODE, TCSP, fill = CLASSIFICATION)) +
          geom_boxplot(width = 0.3) +
          labs(x = "", y = "Tip Cross-Sectional Area (TCSP)", fill = "Taxonomic Unit") +
   theme_minimal() +
-  scale_fill_grey(start = 0.4, end = 0.8) + 
+  scale_fill_manual(values = c("grey40", "#56A3A6")) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
                                    legend.position = "bottom")
 
@@ -4941,7 +4941,7 @@ ggplot(tp_data_incb_clean, aes(WIDTH, LENGTH, colour = CLASSIFICATION, shape = C
   stat_ellipse(type = "norm", linetype = 2) +
   lims(x = c(0,45), y = c(0,90)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey70", "grey30")) +
+  scale_colour_manual(values = c("grey40", "#56A3A6")) + 
   theme(legend.position = "bottom")
 
 ggplot(tp_data_incb_clean, aes(WIDTH, LENGTH, colour = CODE, shape = CODE)) +
@@ -4949,7 +4949,7 @@ ggplot(tp_data_incb_clean, aes(WIDTH, LENGTH, colour = CODE, shape = CODE)) +
          labs(x = "Tanged Point Width (mm)", y = "Tanged Point Length (mm)") +
   lims(x = c(0,45), y = c(0,90)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey90", "grey70", "grey50", "grey30", "grey10")) +
+  scale_colour_manual(values = c("grey90", "#56A3A6", "grey50", "grey30", "grey10")) +
   scale_shape_manual(values = c(1,2,3,4,5)) +
   theme(legend.position = "bottom")
 
@@ -4958,7 +4958,7 @@ ggplot(tp_data_incb_clean, aes(WIDTH, LENGTH, colour = CODE, shape = SUB_CATEGOR
          labs(x = "Tanged Point Width (mm)", y = "Tanged Point Length (mm)") + 
   lims(x = c(0,45), y = c(0,90)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey90", "grey70", "grey50", "grey30", "grey10")) +
+  scale_colour_manual(values = c("grey90", "#56A3A6", "grey50", "grey30", "grey10")) +
   scale_shape_manual(values = c(1,2,3,4,5))
 
 ggplot(tp_data_incb_clean, aes(WIDTH, LENGTH, colour = CLASSIFICATION, shape = SUB_CATEGORY)) +
@@ -4966,7 +4966,7 @@ ggplot(tp_data_incb_clean, aes(WIDTH, LENGTH, colour = CLASSIFICATION, shape = S
          labs(x = "Tanged Point Width (mm)", y = "Tanged Point Length (mm)") + 
   lims(x = c(0,45), y = c(0,90)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey70", "grey30")) +
+  scale_colour_manual(values = c("grey40", "#56A3A6")) + 
   scale_shape_manual(values = c(1,2,3,4,5))
 
 ```
@@ -4979,7 +4979,7 @@ ggplot(tp_data_incb_clean, aes(TCSA, TCSP, colour = CLASSIFICATION, shape = CLAS
   stat_ellipse(type = "norm", linetype = 2) +
   lims(x = c(0,150), y = c(0,75)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey70", "grey30")) +
+  scale_colour_manual(values = c("grey40", "#56A3A6")) + 
   theme(legend.position = "bottom")
 
 ggplot(tp_data_incb_clean, aes(TCSA, TCSP, colour = CODE, shape = CODE)) +
@@ -4987,7 +4987,7 @@ ggplot(tp_data_incb_clean, aes(TCSA, TCSP, colour = CODE, shape = CODE)) +
          labs(x = "TCSA (mm²)", y = "TCSP (mm)") +
   lims(x = c(0,150), y = c(0,75)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey90", "grey70", "grey50", "grey30", "grey10")) +
+  scale_colour_manual(values = c("grey90", "#56A3A6", "grey50", "grey30", "grey10")) +
   scale_shape_manual(values = c(1,2,3,4,5)) +
   theme(legend.position = "bottom")
 
@@ -4996,7 +4996,7 @@ ggplot(tp_data_incb_clean, aes(TCSA, TCSP, colour = CODE, shape = SUB_CATEGORY))
          labs(x = "TCSA (mm²)", y = "TCSP (mm)") + 
   lims(x = c(0,150), y = c(0,75)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey90", "grey70", "grey50", "grey30", "grey10")) +
+  scale_colour_manual(values = c("grey90", "#56A3A6", "grey50", "grey30", "grey10")) +
   scale_shape_manual(values = c(1,2,3,4,5))
 
 ggplot(tp_data_incb_clean, aes(TCSA, TCSP, colour = CLASSIFICATION, shape = SUB_CATEGORY)) +
@@ -5004,7 +5004,7 @@ ggplot(tp_data_incb_clean, aes(TCSA, TCSP, colour = CLASSIFICATION, shape = SUB_
          labs(x = "TCSA (mm²)", y = "TCSP (mm)") + 
   lims(x = c(0,150), y = c(0,75)) +
   theme_minimal() + 
-  scale_colour_manual(values = c("grey70", "grey30")) +
+  scale_colour_manual(values = c("grey40", "#56A3A6")) + 
   scale_shape_manual(values = c(1,2,3,4,5))
 
 ```
@@ -5121,7 +5121,7 @@ fviz_pca_biplot(tp_incb_pca,
                 axes = c(1,2),
                 repel = FALSE,
                 habillage = tp_incb_pca_data$CLASSIFICATION,
-                palette = c("grey80", "grey40"),
+                palette = c("grey40", "#56A3A6"),
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 1 vs. PCA 2 (Classification)",
@@ -5135,7 +5135,7 @@ fviz_pca_biplot(tp_incb_pca,
                 axes = c(2,3),
                 repel = FALSE,
                 habillage = tp_incb_pca_data$CLASSIFICATION,
-                palette = c("grey80", "grey40"),
+                palette = c("grey40", "#56A3A6"),
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 2 vs. PCA 3 (Classification)",
@@ -5149,7 +5149,7 @@ fviz_pca_biplot(tp_incb_pca,
                 axes = c(1,2),
                 repel = FALSE,
                 habillage = tp_incb_pca_data$CODE,
-                palette = c("grey90", "grey70", "grey50", "grey30", "grey10"),
+                palette = c("grey90", "#56A3A6", "grey50", "grey30", "grey10"),
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 1 vs. PCA 2 (Code)",
@@ -5163,7 +5163,7 @@ fviz_pca_biplot(tp_incb_pca,
                 axes = c(2,3),
                 repel = FALSE,
                 habillage = tp_incb_pca_data$CODE,
-                palette = c("grey90", "grey70", "grey50", "grey30", "grey10"),
+                palette = c("grey90", "#56A3A6", "grey50", "grey30", "grey10"),
                 label = "var",
                 addEllipses = TRUE) +
   labs(title = "PCA 2 vs. PCA 3 (Code)",
@@ -5218,7 +5218,7 @@ tp_incb_pca_x %>%
        x = "",
        y = "Value",
        fill = "Classification") +
-  scale_fill_grey(start = 0.3, end = 0.9) +
+  scale_fill_manual(values = c("grey40", "#56A3A6")) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         legend.position = "bottom") 
@@ -5231,7 +5231,7 @@ tp_incb_pca_x %>%
        x = "",
        y = "Value",
        fill = "Classification") +
-  scale_fill_grey(start = 0.3, end = 0.9) +
+  scale_fill_manual(values = c("grey90", "#56A3A6", "grey50", "grey30", "grey10")) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, size = 18),
         legend.position = "bottom") 
