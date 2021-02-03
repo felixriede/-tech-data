@@ -25,6 +25,11 @@ library(vegan)
 library(tidymodels)
 library(broom)
 library(tidytext)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(ggrepel)
+library(ggspatial)
+library(extrafont)
 ```
 
 # Introduction
@@ -71,7 +76,7 @@ The sites of Häcklingen and Bienenbüttel represent just two of a number of con
 
 # Materials and Methods
 
-To better understand the technological positioning of Häcklingen and Bienenbüttel, an empirical quantitative and qualitative analysis is performed on technological and morphological variables on a number of previously classified Federmesser and Bromme material. For this analysis, the following contexts (in addition to Häcklingen and Bienenbüttel) are considered:  
+To better understand the technological positioning of Häcklingen and Bienenbüttel, an empirical quantitative and qualitative analysis is performed on technological and morphological variables on a number of previously classified Federmesser and Bromme material. For this analysis, the following contexts (in addition to Häcklingen and Bienenbüttel) are considered (see Figure 1):  
 
 Previously classified Federmesser material
 
@@ -142,6 +147,38 @@ data[cols] <- lapply(data[cols], factor)
 
 ```
 
+```{r maps, echo=FALSE, message=FALSE, fig.width = 8, fig.height = 8, fig.align = "center"}
+
+world <- ne_countries(scale = "large", returnclass = "sf")
+
+data.map <- data %>%
+  distinct(CODE, LONGITUDE, LATITUDE, .keep_all = TRUE) %>%
+  select(CODE, CONTEXT, LONGITUDE, LATITUDE, CLASSIFICATION) %>%
+  mutate(CONTEXT = recode(CONTEXT, "Rietberg (Spoil)" = "Rietberg (1/2/5/Spoil/Other)",
+                          "Sassenholz (FStNr. 82)" = "Sassenholz (FStNr. 78/82)"))
+
+ggplot(data = world) +
+  geom_sf(fill = "grey97") +
+  geom_point(data = data.map, aes(x = LONGITUDE, y = LATITUDE, colour = CLASSIFICATION), size = 3) +
+  coord_sf(xlim = c(6,15), ylim = c(50.5,57)) +
+  labs(colour = "Classification", x = "Longitude", y = "Latitude") +
+  geom_text_repel(data = data.map, aes(x = LONGITUDE, y = LATITUDE, label = CONTEXT, family = "Roboto Light")) + 
+  scale_colour_manual(values = c("#466995", "grey40", "grey80", "#56A3A6")) + 
+   annotation_north_arrow(location = "tr", which_north = "true", 
+        pad_x = unit(0.25, "in"), pad_y = unit(0.25, "in"),
+        style = north_arrow_fancy_orienteering) +
+  annotation_scale(location = "bl", width_hint = 0.4, text_family = "Roboto Light") +
+  theme_minimal() + 
+  theme(legend.position = "bottom",
+        legend.title = element_text(family = "Roboto Light"),
+        legend.text = element_text(family = "Roboto Light"),
+        axis.title.x = element_text(family = "Roboto Light"),
+        axis.title.y = element_text(family = "Roboto Light"),
+        axis.text.x = element_text(family = "Roboto Light"),
+        axis.text.y = element_text(family = "Roboto Light"))
+
+```
+
 ```{r overview, echo = FALSE, message = FALSE}
 data %>% 
   rename(Context = CONTEXT) %>%
@@ -150,7 +187,7 @@ data %>%
   pivot_wider(names_from = ARTEFACT, values_from = n) %>%
   gt() %>%
   tab_header(title = "Table 1a. Artefact Breakdown", subtitle = "Context") %>%
-  opt_align_table_header(align = "left")
+  opt_align_table_header(align = "left") 
 
 data %>% 
   group_by(ARTEFACT) %>%
