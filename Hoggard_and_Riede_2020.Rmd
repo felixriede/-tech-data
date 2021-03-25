@@ -32,7 +32,7 @@ library(ggspatial)
 library(extrafont)
 ```
 
-# Introduction
+# Introduction (Text needs updating)
 
 The Late Glacial, defined as occurring from the first pronounced warming following the Last Glacial Maximum (LGM) to the beginning of the Holocene (c. 16,000-11,700 cal BP), is traditionally viewed as a period of great cultural diversity in northern Europe, with groups belonging to the Magdalenian and Epigravettian beginning to migrate northwards (Gamble et al. 2005; Riede, 2014; Wygal and Heidenreich, 2014). During this phase, groups occupying particular regions in northern Europe began to develop consistent differences in their toolkits, with variances in shouldered points (e.g. the Hamburgian: Burdukiewicz, 1986), backed points (e.g. the Federmessergruppen and Azilian: Schild, 1996), large tanged points (e.g. the Bromme: Taute, 1968) and small tanged points (e.g. the Ahrensburgian and Swiderian: Taute, 1968; Kobusiewicz, 2002).
 As highlighted by Ivanovaite et al. (2019), these regional cultural entities provide the framework for understanding and inferring patterns and processes of migration, adaptation, and potentially even emerging ethnicity for this period. Cultural units are not static, and once their attendant territories are defined, cultures can move around, their economic focus can change, and cultures can interact. It is for this reason that the identification of robust archaeological taxonomic units are a fundamental precondition in our archaeological understanding of this period; without these units, the goal of understanding such past processes cannot be realised (Roberts and Vander Linden, 2011).  
