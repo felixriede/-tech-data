@@ -2,8 +2,8 @@
 title: 'Points of Confusion: Understanding "Typologically
   Awkward" Assemblages in the Final Palaeolithic'
 author:
-- Christian Steven Hoggard (University of Southampton, UK.)
-- Felix Riede (Aarhus University, DK.)
+- Christian Steven Hoggard (University of Southampton, UK)
+- Felix Riede (Aarhus University, DK)
 date: "`r format(Sys.time(), '%B %Y')`"
 output:
   word_document: default
